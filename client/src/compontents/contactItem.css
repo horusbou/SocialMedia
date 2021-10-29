@@ -1,0 +1,16 @@
+.contact-item{
+  width:100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  cursor: pointer;
+  padding:5px 0;
+  transition: 0.4s all;
+}
+.contact-item .username{
+  width:60%;
+  font-size: 18px;
+}
+.contact-item:hover{
+  background-color:#e7e7e7;
+}

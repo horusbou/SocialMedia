@@ -1,0 +1,41 @@
+{
+	"name": "ENSA",
+	"version": "1.0.0",
+	"main": "index.js",
+	"license": "MIT",
+	"type": "module",
+	"scripts": {
+		"start": "ts-node-dev server.ts "
+	},
+	"devDependencies": {
+		"@types/bcryptjs": "^2.4.2",
+		"@types/express": "^4.17.13",
+		"@types/file-saver": "^2.0.3",
+		"@types/jsonwebtoken": "^8.5.5",
+		"@types/lodash": "^4.14.175",
+		"@types/multer": "^1.4.7",
+		"@types/mysql": "^2.15.19",
+		"@types/node": "^16.9.1",
+		"@types/pino": "^6.3.11",
+		"@types/validator": "^13.6.3",
+		"dayjs": "^1.10.7",
+		"express": "^4.17.1",
+		"logger": "^0.0.1",
+		"pino": "^6.13.2",
+		"pino-pretty": "^7.0.0",
+		"ts-node": "^10.2.1",
+		"ts-node-dev": "^1.1.8",
+		"typescript": "^4.4.3"
+	},
+	"dependencies": {
+		"bcryptjs": "^2.4.3",
+		"file-saver": "^2.0.5",
+		"image-downloader": "^4.0.3",
+		"images-downloader": "^1.0.3",
+		"jsonwebtoken": "^8.5.1",
+		"lodash": "^4.17.21",
+		"multer": "^1.4.3",
+		"mysql2": "^2.3.0",
+		"sequelize": "^6.6.5"
+	}
+}

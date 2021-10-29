@@ -1,0 +1,69 @@
+.post-item {
+	/* width: 400px; */
+	border-bottom: solid black 1px;
+	display: flex;
+	align-items: flex-start;
+	padding: 5px 10px;
+	z-index: 0;
+}
+.post-item:hover {
+	z-index: 0;
+}
+.retweeted p {
+	font-size: 10px;
+	padding: 5px 10px;
+}
+.post-item .avatar {
+	margin-right: 10px;
+}
+.post-item .post-body {
+	padding: 0 5px 5px 5px;
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+}
+.post-item .post-body .post-content {
+	margin-bottom: 5px;
+}
+.post-item .post-body .post-content .content-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.post-item .post-body .post-content .content-header .header-data .name {
+	display: inline-block;
+	margin-right: 5px;
+	text-transform: capitalize;
+	font-weight: 800;
+}
+.post-item .post-body .post-content .content-header .header-data .username {
+	font-size: 15px;
+	color: #a9b9b9;
+}
+.post-item .post-body .post-content .content-header .header-more {
+	font-size: 20px;
+	cursor: pointer;
+}
+.post-item .post-body .post-actions {
+	flex: 1;
+	display: flex;
+}
+.post-item .post-body .post-actions .icon {
+	flex: 1;
+	display: flex;
+	align-items: center;
+}
+.post-item .post-body .post-actions .icon > .countes {
+	margin-left: 5px;
+	height: 20px;
+}
+.post-item .post-body .post-actions .icon > .likecolor {
+	color: red;
+}
+.post-item .post-body .post-actions .icon > .retweetcolor {
+	color: green;
+}
+.post-item .post-body .post-actions .icon .icon-item {
+	font-size: 20px;
+	cursor: pointer;
+}
