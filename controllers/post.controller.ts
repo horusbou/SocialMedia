@@ -25,31 +25,39 @@ export const getAllPosts = async (
 
 	const timelinePosts = await Timeline.findAll({
 		raw: true,
+		// include: [
+		// 	{
+		// 		model: Post,
+		// 		as: 'Posts',
+		// 		include: [
+		// 			{
+		// 				model: Retweet,
+		// 				as: 'Retweets',
+		// 			},
+		// 		],
+		// 	},
+		// ],
 		include: [
 			{
 				model: Post,
 				as: 'Posts',
-				include: [
-					{
-						model: Retweet,
-						as: 'Retweets',
-					},
-				],
+				include: [{ model: Like, as: 'Likes' }],
 			},
 		],
 		order: [
 			[Post, 'updatedAt', 'Desc'],
-			[Post, Retweet, 'updatedAt', 'Desc'],
+			// [Post, Retweet, 'updatedAt', 'Desc'],
 		],
 		where: {
-			// [Op.or]: [{ '$Posts.timelineId$': timeline.timelineId }],
-			[Op.or]: [
-				{ '$Posts.timelineId$': timeline.timelineId },
-				{ '$Posts.Retweets.timelineId$': timeline.timelineId },
-			],
+			timelineId: timeline.timelineId,
+			// [Op.or]: [
+			// 	{ '$Posts.timelineId$': timeline.timelineId },
+			// 	{ '$Posts.Retweets.timelineId$': timeline.timelineId },
+			// ],
 		},
 	});
-
+	let retweets = await timeline.getRetweets();
+	// console.log('timelinePosts=>', timelinePosts);
 	let editedPosts: any = [];
 	for (let post of timelinePosts) {
 		let userData = omit(
@@ -59,35 +67,73 @@ export const getAllPosts = async (
 			'createdAt',
 			'updatedAt'
 		);
-
-		editedPosts.push({
-			isRetweeted: post['Posts.Retweets.retweet_id'],
-			tweetBody: JSON.parse(`${post['Posts.tweetBody']}`),
-			post_id: post['Posts.Retweets.retweet_id'] || post['Posts.post_id'],
-			like: post['Posts.like'],
-			retweet: post['Posts.retweet'],
-			createdAt: post['Posts.createdAt'],
-			updatedAt: post['Posts.updatedAt'],
-			owner: userData,
+		// console.log('post=>', post);
+		let found = retweets.find((el: any) => {
+			return el.dataValues.retweet_id === post['Posts.post_id'];
 		});
-		if (
-			post['Posts.Retweets.retweet_id'] &&
-			editedPosts.find((el: any) => el.post_id !== post['Posts.post_id'])
-		) {
+		// let userLikedPosts = await timelinePosts.getLikes({ raw: true });
+		// let likedByUser = userLikedPosts.find((el: any) => {
+		// 	return (
+		// 		el.dataValues.timelineId === timeline.timelineId &&
+		// 		el.dataValues.postId === post['Posts.post_id']
+		// 	);
+		// });
+		let userLikedPoste = false;
+		if (post['Posts.Likes.userId'] === user.dataValues.user_id) {
+			userLikedPoste = true;
+		}
+		if (found) {
+			editedPosts.push({
+				isRetweeted: post['Posts.Retweets.retweet_id'],
+				tweetBody: JSON.parse(`${post['Posts.tweetBody']}`),
+				post_id: post['Posts.Retweets.retweet_id'] || post['Posts.post_id'],
+				like: post['Posts.like'],
+				userLikedPost: userLikedPoste,
+				retweet: post['Posts.retweet'],
+				createdAt: post['Posts.createdAt'],
+				updatedAt: post['Posts.updatedAt'],
+				owner: userData,
+			});
+		} else {
 			editedPosts.push({
 				isRetweeted: null,
 				tweetBody: JSON.parse(`${post['Posts.tweetBody']}`),
 				post_id: post['Posts.post_id'],
 				like: post['Posts.like'],
+				userLikedPost: userLikedPoste,
 				retweet: post['Posts.retweet'],
 				createdAt: post['Posts.createdAt'],
 				updatedAt: post['Posts.updatedAt'],
 				owner: userData,
 			});
 		}
+		// 	editedPosts.push({
+		// 		isRetweeted: post['Posts.Retweets.retweet_id'],
+		// 		tweetBody: JSON.parse(`${post['Posts.tweetBody']}`),
+		// 		post_id: post['Posts.Retweets.retweet_id'] || post['Posts.post_id'],
+		// 		like: post['Posts.like'],
+		// 		retweet: post['Posts.retweet'],
+		// 		createdAt: post['Posts.createdAt'],
+		// 		updatedAt: post['Posts.updatedAt'],
+		// 		owner: userData,
+		// 	});
+		// 	if (
+		// 		post['Posts.Retweets.retweet_id'] &&
+		// 		editedPosts.find((el: any) => el.post_id !== post['Posts.post_id'])
+		// 	) {
+		// 		editedPosts.push({
+		// 			isRetweeted: null,
+		// 			tweetBody: JSON.parse(`${post['Posts.tweetBody']}`),
+		// 			post_id: post['Posts.post_id'],
+		// 			like: post['Posts.like'],
+		// 			retweet: post['Posts.retweet'],
+		// 			createdAt: post['Posts.createdAt'],
+		// 			updatedAt: post['Posts.updatedAt'],
+		// 			owner: userData,
+		// 		});
+		// 	}
 	}
-	// console.log('editedPosts==>', editedPosts.length);
-	// console.log('timelinePosts==>', timelinePosts);
+	// console.log(editedPosts);
 	res.status(200).json(editedPosts);
 };
 
@@ -135,17 +181,19 @@ export const postRetweet = async (req: Request, res: Response) => {
 	console.log(postId);
 	try {
 		//@ts-ignore
-		const user = await User.findByPk(req.user.user_id);
+		const user = await User.findByPk(req.user.dataValues.user_id);
 		const post = await Post.findByPk(postId);
 		if (!user) return res.json({ message: 'user not found' });
 		const timeline = await user.getTimeline();
 		const retweeted = await timeline.createRetweet({ postId });
 		console.log(retweeted);
+		console.log(user);
 		await timeline.createPost({
-			postId: retweeted.retweet_id,
+			post_id: retweeted.retweet_id,
 			tweetBody: post.tweetBody,
 			like: post.like,
 			retweet: post.retweet,
+			userId: user.dataValues.user_id,
 		});
 		return res.status(200).json({ message: 'done' });
 	} catch (error) {
@@ -235,6 +283,7 @@ export const updatePost = (req: Request, res: Response, next: NextFunction) => {
 };
 export const postLike = async (req: Request, res: Response) => {
 	const { postId } = req.params;
+	console.log('postId=>', postId);
 	try {
 		//@ts-ignore
 		const userId = req.user.dataValues.user_id;
@@ -243,6 +292,14 @@ export const postLike = async (req: Request, res: Response) => {
 		const found = likes.find(
 			(el: any) => el.userId === userId && el.postId === postId
 		);
+
+		// const retweets = await Retweet.findAll({ where: { postId } });
+		// const posts = [];
+		// for (let retweetedPost of retweets) {
+		// 	posts.push(await Post.findByPk(retweetedPost.dataValues.retweet_id));
+		// }
+		// posts.push(post);
+		console.log('found=>', found, 'post=>', post);
 		if (found?.likesId) {
 			const like = await Like.findByPk(found.likesId);
 			await post.update({ like: post.dataValues.like - 1 });

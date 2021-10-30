@@ -16,7 +16,7 @@ import { Link } from 'react-router-dom';
 import Client from '../services/Client';
 
 export default function PostItem(props) {
-	const [isLiked, setLike] = useState(false);
+	const [isLiked, setLike] = useState(false || props.userLiked);
 	const [isRetweeted, setIsRetweeted] = useState(false);
 	const [likeCountes, setLikeCountes] = useState(props.likes);
 	const [retweetCountes, setretweetCountes] = useState(props.retweet);

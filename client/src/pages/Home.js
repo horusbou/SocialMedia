@@ -54,6 +54,7 @@ export default function Home(props) {
 							tweetBody={item.tweetBody}
 							likes={item.like}
 							retweet={item.retweet}
+							userLiked={item.userLikedPost}
 						/>
 				  ))
 				: null}
