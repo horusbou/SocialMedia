@@ -7,6 +7,8 @@ const requiresUser = async (
 	next: NextFunction
 ) => {
 	const user = get(req, 'user');
+	//@ts-ignore
+	// console.log('\n\n' + req.user + '\n\n');
 	if (!user) {
 		return res.sendStatus(403);
 	}

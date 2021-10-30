@@ -11,5 +11,5 @@ router.put('/posts/:postId', requiresUser, postController.updatePost);
 router.get('/p/:username', requiresUser, postController.profilePosts);
 router.post('/retweets/:postId', requiresUser, postController.postRetweet);
 router.get('/retweets/:postId', requiresUser, postController.getRetweet);
-router.put('/like/:postId', requiresUser, postController.postLike);
+router.post('/like/:postId', requiresUser, postController.postLike);
 export default router;

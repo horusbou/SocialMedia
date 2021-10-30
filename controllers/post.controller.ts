@@ -63,7 +63,7 @@ export const getAllPosts = async (
 		editedPosts.push({
 			isRetweeted: post['Posts.Retweets.retweet_id'],
 			tweetBody: JSON.parse(`${post['Posts.tweetBody']}`),
-			post_id: post['Posts.post_id'],
+			post_id: post['Posts.Retweets.retweet_id'] || post['Posts.post_id'],
 			like: post['Posts.like'],
 			retweet: post['Posts.retweet'],
 			createdAt: post['Posts.createdAt'],
@@ -132,12 +132,21 @@ export const getRetweet = async (req: Request, res: Response) => {
 
 export const postRetweet = async (req: Request, res: Response) => {
 	const { postId } = req.params;
+	console.log(postId);
 	try {
 		//@ts-ignore
 		const user = await User.findByPk(req.user.user_id);
+		const post = await Post.findByPk(postId);
 		if (!user) return res.json({ message: 'user not found' });
 		const timeline = await user.getTimeline();
-		await timeline.createRetweet({ postId });
+		const retweeted = await timeline.createRetweet({ postId });
+		console.log(retweeted);
+		await timeline.createPost({
+			postId: retweeted.retweet_id,
+			tweetBody: post.tweetBody,
+			like: post.like,
+			retweet: post.retweet,
+		});
 		return res.status(200).json({ message: 'done' });
 	} catch (error) {
 		res.status(400).json({ message: error });
@@ -226,12 +235,10 @@ export const updatePost = (req: Request, res: Response, next: NextFunction) => {
 };
 export const postLike = async (req: Request, res: Response) => {
 	const { postId } = req.params;
-	console.log('postId=>', postId);
 	try {
 		//@ts-ignore
 		const userId = req.user.dataValues.user_id;
 		const post = await Post.findByPk(postId);
-		log.info('post=>', post);
 		const likes = await post.getLikes({ raw: true });
 		const found = likes.find(
 			(el: any) => el.userId === userId && el.postId === postId
@@ -241,7 +248,7 @@ export const postLike = async (req: Request, res: Response) => {
 			await post.update({ like: post.dataValues.like - 1 });
 			await post.removeLike(like);
 			await like.destroy();
-			return res.json({ message: 'deleted' });
+			return res.status(200).json({ message: 'deleted' });
 		} else {
 			//@ts-ignore
 			await post.createLike({ userId });

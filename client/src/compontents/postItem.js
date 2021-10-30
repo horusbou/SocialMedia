@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './postItem.css';
 import { MenuItem, Avatar } from '@chakra-ui/react';
 import {
@@ -118,9 +118,9 @@ export default function PostItem(props) {
 									color="#f91880"
 									onClick={() => {
 										setLikeCountes(likeCountes - 1);
-										// axios.post(`/likes/${props._id}`);
+										// axios.put(`/likes/${props._id}`);
 										// console.log('Props Id==>\n', props._id, '\n');
-										// Client.likePost(props._id);
+										Client.likePost(props._id);
 										setPostId(props._id);
 										return setLike(!isLiked);
 									}}
@@ -132,6 +132,7 @@ export default function PostItem(props) {
 										setLikeCountes(likeCountes + 1);
 										//  axios.post(`/likes/${props._id}`);
 										// await Client.likePost(props._id);
+										Client.likePost(props._id);
 										setPostId(props._id);
 										return setLike(!isLiked);
 									}}

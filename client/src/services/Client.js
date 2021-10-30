@@ -87,12 +87,16 @@ class Client {
 		});
 	}
 	likePost(postId) {
-		return axios.put('/like/' + postId, {
-			headers: {
-				'x-refresh': localStorage.getItem('refreshToken'),
-				Authorization: localStorage.getItem('accessToken'),
-			},
-		});
+		return axios.post(
+			`/like/${postId}`,
+			{},
+			{
+				headers: {
+					'x-refresh': localStorage.getItem('refreshToken'),
+					Authorization: localStorage.getItem('accessToken'),
+				},
+			}
+		);
 	}
 	checkStatus(response) {
 		if (response.status >= 200 && response.status < 300) {
