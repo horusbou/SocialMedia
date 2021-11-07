@@ -4,6 +4,7 @@ import db from './util/database';
 import multer from 'multer';
 import path from 'path';
 import PostRoutes from './routes/post.routes';
+import UserRoutes from './routes/user.routes';
 import authRoutes from './routes/auth.routes';
 import { Post as PostModel } from './models/PostModel';
 import { User as UserModel } from './models/UserModel';
@@ -11,6 +12,7 @@ import { Retweet as RetweetModel } from './models/RetweetModel';
 import { Timeline as TimelineModel } from './models/TimelineModel';
 import { Like as LikeModel } from './models/LikesModel';
 import deserializeUser from './middleware/deserializeUser';
+
 //associations
 UserModel.hasOne(TimelineModel, {
 	onDelete: 'RESTRICT',
@@ -89,6 +91,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(PostRoutes);
 app.use(authRoutes);
+app.use(UserRoutes);
 
 // db.sync({ force: true })
 db.sync()
