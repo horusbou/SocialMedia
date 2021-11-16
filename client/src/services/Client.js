@@ -5,7 +5,11 @@ class Client {
 		this.userData = {};
 	}
 	isLoggedIn() {
-		return !!this.userData;
+		const accessToken = localStorage.getItem('accessToken');
+		const refreshToken = localStorage.getItem('refreshToken');
+		console.log(accessToken, refreshToken);
+		if (accessToken && refreshToken) return true;
+		return false;
 	}
 	setClientData({ sessionData, userData }) {
 		this.sessionData = sessionData;
@@ -56,6 +60,7 @@ class Client {
 	logout() {
 		localStorage.removeItem('accessToken');
 		localStorage.removeItem('refreshToken');
+		this.removeClientData();
 	}
 	getUser() {
 		return axios
