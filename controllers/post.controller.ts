@@ -223,7 +223,7 @@ export const postPost = (req: Request, res: Response, next: NextFunction) => {
 	}
 	const { tweet, gifSrc } = req.body;
 	//@ts-ignore
-	console.log('userData=>', req.user);
+	// console.log('userData=>', req.user);
 	//@ts-ignore
 	User.findByPk(req.user.dataValues.user_id).then((user: any) => {
 		if (!user) return res.send('user not found');

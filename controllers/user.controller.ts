@@ -143,5 +143,6 @@ export async function getFollowings(req: Request, res: Response) {
 		(follow: any) => follow.source.dataValues
 	);
 	res.json({
-        ,followers });
+		followers,
+	});
 }
