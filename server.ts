@@ -15,44 +15,44 @@ import deserializeUser from './middleware/deserializeUser';
 
 //associations
 UserModel.hasOne(TimelineModel, {
-	onDelete: 'RESTRICT',
-	onUpdate: 'RESTRICT',
-	foreignKey: 'userId',
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT',
+    foreignKey: 'userId',
 });
 TimelineModel.hasMany(PostModel, {
-	foreignKey: 'timelineId',
+    foreignKey: 'timelineId',
 });
 PostModel.belongsTo(TimelineModel, {
-	foreignKey: 'timelineId',
+    foreignKey: 'timelineId',
 });
 
 //
 TimelineModel.hasMany(RetweetModel, {
-	foreignKey: 'timelineId',
+    foreignKey: 'timelineId',
 });
 RetweetModel.belongsTo(TimelineModel, {
-	foreignKey: 'timelineId',
+    foreignKey: 'timelineId',
 });
 
 PostModel.hasMany(LikeModel, {
-	foreignKey: 'postId',
+    foreignKey: 'postId',
 });
 LikeModel.belongsTo(PostModel, {
-	foreignKey: 'postId',
+    foreignKey: 'postId',
 });
 
 PostModel.hasMany(RetweetModel, {
-	foreignKey: 'postId',
+    foreignKey: 'postId',
 });
 RetweetModel.belongsTo(PostModel, {
-	foreignKey: 'postId',
+    foreignKey: 'postId',
 });
 
 PostModel.belongsTo(UserModel, {
-	foreignKey: 'userId',
+    foreignKey: 'userId',
 });
 UserModel.hasMany(PostModel, {
-	foreignKey: 'userId',
+    foreignKey: 'userId',
 });
 
 // UserModel.hasMany(RetweetModel, {
@@ -64,24 +64,24 @@ UserModel.hasMany(PostModel, {
 
 //setting up multer
 const fileStorage = multer.diskStorage({
-	destination: (req, file, cb) => {
-		cb(null, './uploads');
-	},
-	filename: (req, file, cb) => {
-		const uniqueSuffix = Date.now() + '_' + Math.round(Math.random() * 1e9);
-		cb(null, uniqueSuffix + file.originalname);
-	},
+    destination: (req, file, cb) => {
+        cb(null, './uploads');
+    },
+    filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '_' + Math.round(Math.random() * 1e9);
+        cb(null, uniqueSuffix + file.originalname);
+    },
 });
 
 const app = express();
 
 app.use(function (req: Request, res: Response, next: NextFunction) {
-	res.header('Access-Control-Allow-Origin', '*'); // update to match the domain you will make the request from
-	res.header(
-		'Access-Control-Allow-Headers',
-		'Origin, X-Requested-With, Content-Type, Accept'
-	);
-	next();
+    res.header('Access-Control-Allow-Origin', '*'); // update to match the domain you will make the request from
+    res.header(
+        'Access-Control-Allow-Headers',
+        'Origin, X-Requested-With, Content-Type, Accept'
+    );
+    next();
 });
 app.use(deserializeUser);
 app.use(multer({ storage: fileStorage }).array('file'));
@@ -95,9 +95,9 @@ app.use(UserRoutes);
 
 // db.sync({ force: true })
 db.sync()
-	// db.sync({ alter: true })
-	.then(() => {
-		app.listen(3001, () => {
-			log.info('this is up runnning');
-		});
-	});
+    // db.sync({ alter: true })
+    .then(() => {
+        app.listen(3001, () => {
+            log.info('this is up runnning');
+        });
+    });
