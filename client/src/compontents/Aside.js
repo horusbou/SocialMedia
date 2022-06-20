@@ -5,6 +5,7 @@ import {Icon} from '@chakra-ui/react'
 import {AiOutlineHome,AiOutlineBell,AiOutlineBook,AiOutlineUser} from "react-icons/ai";
 
 export default function Aside({username}){
+    console.log(username)
   return (
     <div className="aside">
     <div className="logo"><Link to="/home" ><Icon className="icon" /></Link></div>

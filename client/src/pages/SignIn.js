@@ -32,7 +32,7 @@ const SignIn = () => {
 	const handleSubmit = (evt) => {
 		evt.preventDefault();
 		setLoginInProgress(true);
-		client.login({ email, password }).then((data) => setShouldRedirect(true));
+		client.login({ email, password }).then(() => setShouldRedirect(true));
 	};
 	if (shouldRedirect) return <Redirect to="/home" />;
 	return (

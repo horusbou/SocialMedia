@@ -33,11 +33,14 @@ export default function Profile(props) {
 				<div className="profile-header-bg-image"></div>
 				<div className="profile-header-content">
 					<div className="avatar">
-						<Avatar
+                        {userData.firstName?<Avatar
 							name={`${userData.firstName} ${userData.lastName}`}
 							size="2xl"
 							src={userData.userAvatar}
-						/>
+						/>:<Avatar
+                        size="2xl"
+                    />}
+
 					</div>
 					<div className="userData">
 						<div className="userame">
@@ -49,7 +52,7 @@ export default function Profile(props) {
 							</span>
 						</div>
 						<div className="bio">
-							<span>{userData.bio || "here i'm"}</span>
+							<span>{userData.bio}</span>
 						</div>
 					</div>
 				</div>

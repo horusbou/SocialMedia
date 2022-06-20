@@ -86,10 +86,10 @@ export default function PictureGif(props) {
 					<Grid
 						h="300px"
 						templateRows={`repeat(${filesSrc.length > 2 ? 2 : 1}, ${
-							filesSrc.length > 2 ? '50%' : '50%'
+							filesSrc.length > 2 ? '50%' : '100%' // change it from 50 to 100
 						})`}
 						templateColumns={`repeat(${filesSrc.length === 1 ? 1 : 2}, ${
-							filesSrc.length === 1 ? '50%' : '80%'
+							filesSrc.length === 1 ? '100%' : '80%'
 						})`}
 						gap={4}
 					>
@@ -97,6 +97,7 @@ export default function PictureGif(props) {
 							return (
 								<GridItem
 									w="100%"
+                                    h="100%"
 									style={gridStryles(filesSrc.length, i)}
 									className="image-border  image-border-images"
 									key={i}

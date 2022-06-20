@@ -13,6 +13,7 @@ import {
 import { ChevronLeftIcon } from '@chakra-ui/icons';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import Client from '../services/Client';
 
 export default function SignupForm() {
 	const [showPassword, setShowPassword] = useState(false);
@@ -45,7 +46,7 @@ export default function SignupForm() {
 				'password must match'
 			),
 		}),
-		onSubmit: (values) => console.log(values),
+		onSubmit: (values) => Client.signUp(values),
 	});
 	return (
 		<Box
@@ -59,7 +60,6 @@ export default function SignupForm() {
 						Sign Up
 					</Text>
 				</Box>
-
 				<Flex
 					direction="column"
 					justify="space-between"
@@ -72,12 +72,13 @@ export default function SignupForm() {
 					m="auto"
 					mt="50px"
 				>
-					<Link to="/">
-						<Flex align="center" mt={-15} h={8} ml={-4}>
+					<Flex align="center" mt={-15} h={8} w="80px" ml={-2}>
+						<Link to="/">
 							<Icon as={ChevronLeftIcon} w={8} h={8} />
-							Home
-						</Flex>
-					</Link>
+						Home
+						</Link>
+					</Flex>
+
 					<Flex justify="space-between" align="center">
 						<Box>
 							<Input
@@ -114,13 +115,18 @@ export default function SignupForm() {
 							isInvalid={formik.touched.email && formik.errors.email}
 						/>
 					</Box>
-					{/* <Box>
+					<Box>
 						<Input
+							id="username"
+							name="username"
 							placeholder="Username"
 							type="text"
-							// onChange={(evt) => setUsername(evt.target.value)}
+							onChange={formik.handleChange}
+							onBlur={formik.handleBlur}
+							value={formik.values.username}
+							isInvalid={formik.touched.username && formik.errors.username}
 						/>
-					</Box> */}
+					</Box>
 					<InputGroup size="md">
 						<Input
 							id="password"
