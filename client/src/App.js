@@ -33,22 +33,20 @@ const PublicRoute = (props)=>{
       <Route
         {...rest}
         render={(props) =>
-          !Client.isLoggedIn() ? (<Component {...rest} />) : (<Redirect to="/login" />)
+          !Client.isLoggedIn() ? (<Component {...rest} />) : (<Redirect to="/s" />)
         }
       />
     );
 }
 
-
 function App() {
 
 const [username, setUsername] = useState('');
 function getUserName(username){
-    console.log("username ", username)
     setUsername(username)
 }
 
-  const privateRoutes = ['/home', '/notifications', '/bookmarks', '/:username'];
+  const privateRoutes = ['/home', '/notifications', '/bookmarks', `/${username}`];
   return (
 
     <div className="app">
@@ -58,25 +56,27 @@ function getUserName(username){
             path={privateRoutes}
             Component={Aside}
             username={username}
-          />
+            />
           <Switch>
           <PublicRoute
                 exact
                 path="/signup"
                 Component={SignUp}
            />
-    <PublicRoute
+
+          <PublicRoute
                 exact
                 path="/"
                 Component={SignIn}
            />
+
             <PrivateRoute
               exact
               path="/home"
               getUserName={getUserName}
               Component={Home}
             />
-            <PrivateRoute path="/:username" Component={Profile} />
+            <PrivateRoute path={`/:username`} Component={Profile} />
 
           </Switch>
           <PrivateRoute
