@@ -31,7 +31,7 @@ export async function createUserhandler(req: Request, res: Response) {
         const user = await UserModel.create(userData);
         await user.createTimeline();
         console.log('user sent to NEO4J\n\n', user, '\n\n\n');
-        createUserWithNeo4j(user);
+        createUserWithNeo4j(user.dataValues);
         return res.send(omit(user.toJSON(), 'password'));
     } catch (error) {
         log.error(error);
