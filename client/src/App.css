@@ -1,21 +1,31 @@
-
 body{
   overflow-y: hidden;
+
 }
 .app{
+    background-color: #1C1C1C;
+}
+.appBody{
+  width:90%;
+  margin:0 auto;
   box-sizing: border-box;
   display: flex;
+  justify-content: space-around ;
   flex-direction: row;
   height: 100vh;
-/*  max-width: 1300px;*/
+
 }
-.body{
-  flex:0.6;
+.main{
+  overflow: hidden;
+  width: 600px;
   scroll-behavior: smooth;
   overflow-y: scroll;
   -ms-overflow-style:none;
   scrollbar-width: none;
+  border-right:solid rgba(255, 255, 255, 0.3) 1px;
+  border-left:solid rgba(255, 255, 255, 0.3) 1px;
+
 }
-.body::-webkit-scrollbar{
+.main::-webkit-scrollbar{
     display: none;
 }

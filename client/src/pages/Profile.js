@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect} from 'react';
 import { useParams } from 'react-router-dom';
-import { Avatar, Spinner, Heading, Flex, Box, Text } from '@chakra-ui/react';
-import PostItem from '../compontents/postItem';
+import { Avatar, Heading, Flex, Box, Text,Button } from '@chakra-ui/react';
+import {PostItem,PageTitle,LoadingSpinner} from '../compontents';
 import './Profile.css';
 import Client from '../services/Client';
 
-export default function Profile(props) {
+export default function Profile() {
+
 	const [userData, setUserData] = useState([]);
 	const [profilePosts, setProfilePosts] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
@@ -26,14 +27,20 @@ export default function Profile(props) {
 			});
 		}
 	}, [username]);
+    useEffect(() => {
+        document.title = `${username}`;
+      },[username]);
+
 
 	return (
-		<div className="profile body">
+		<div className="profile main">
+            <PageTitle title="Profile"/>
 			<div className="profile-header">
 				<div className="profile-header-bg-image"></div>
 				<div className="profile-header-content">
 					<div className="avatar">
-                        {userData.firstName?<Avatar
+                        {userData.firstName?
+                        <Avatar
 							name={`${userData.firstName} ${userData.lastName}`}
 							size="2xl"
 							src={userData.userAvatar}
@@ -56,19 +63,16 @@ export default function Profile(props) {
 						</div>
 					</div>
 				</div>
-				<div className="profile-header-footer"></div>
+				<div className="profile-header-footer">
+                    <Button>Contact</Button>
+                    <Button onClick={()=>{
+                    Client.postFollow(userData.user_id);
+                }}>Follow</Button>
+                </div>
 			</div>
 			<div className="profile-content">
 				{isLoading ? (
-					<div className="spinner">
-						<Spinner
-							thickness="4px"
-							speed="0.65s"
-							emptyColor="gray.200"
-							color="blue.500"
-							size="md"
-						/>
-					</div>
+					<LoadingSpinner />
 				) : (
 					<>
 						{!!profilePosts

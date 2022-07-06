@@ -3,8 +3,8 @@ import { ChakraProvider } from '@chakra-ui/react';
 import Home from './pages/Home';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/Signup';
-import Aside from './compontents/Aside';
-import Contact from './compontents/Contact';
+import {Nav,Followers,UserDetailsProvider} from './compontents';
+// import Contact from './compontents/Contact';
 import Profile from './pages/Profile';
 import { useState } from 'react';
 import {
@@ -33,7 +33,7 @@ const PublicRoute = (props)=>{
       <Route
         {...rest}
         render={(props) =>
-          !Client.isLoggedIn() ? (<Component {...rest} />) : (<Redirect to="/s" />)
+          !Client.isLoggedIn() ? (<Component {...rest} />) : (<Redirect to="/home" />)
         }
       />
     );
@@ -42,21 +42,25 @@ const PublicRoute = (props)=>{
 function App() {
 
 const [username, setUsername] = useState('');
+
 function getUserName(username){
     setUsername(username)
 }
 
   const privateRoutes = ['/home', '/notifications', '/bookmarks', `/${username}`];
-  return (
 
+  return (
     <div className="app">
+    <div className="appBody">
       <ChakraProvider>
+        <UserDetailsProvider>
         <Router>
         <PrivateRoute
             path={privateRoutes}
-            Component={Aside}
+            Component={Nav}
             username={username}
             />
+
           <Switch>
           <PublicRoute
                 exact
@@ -77,16 +81,18 @@ function getUserName(username){
               Component={Home}
             />
             <PrivateRoute path={`/:username`} Component={Profile} />
-
           </Switch>
           <PrivateRoute
             path={privateRoutes}
-            username={username}
-            Component={Contact}
+            Component={Followers}
           />
         </Router>
+        </UserDetailsProvider>
+
       </ChakraProvider>
     </div>
+    </div>
+
   );
 }
 

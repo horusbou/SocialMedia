@@ -1,10 +1,10 @@
 import express from 'express';
 import requiresUser from '../middleware/requiresUser';
 import {
-	postFollow,
-	postUnfollow,
-	getFollowers,
-	getFollowings,
+    postFollow,
+    postUnfollow,
+    getFollowers,
+    getFollowings,
 } from '../controllers/user.controller';
 const router = express.Router();
 router.post('/follow', requiresUser, postFollow);

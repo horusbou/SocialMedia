@@ -1,0 +1,37 @@
+::-webkit-scrollbar {
+    width: 0;
+    background: transparent;
+}
+
+.gif-controller {
+    box-shadow: 4px 4px 20px black;
+	box-sizing: border-box;
+	border-radius: 15px;
+	background-color: #1C1C1C;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 100;
+	width: 420px;
+	height: 300px;
+	scrollbar-color: #6969dd #e0e0e0;
+}
+
+.closeButton {
+	position: absolute;
+	top: -7px;
+	left: -10px;
+}
+
+.gif-content {
+	padding: 10px 20px;
+	width: 420px;
+	height: 300px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	border-radius: 8px;
+}
+.search-bar {
+	margin: 10px auto;
+    color:white;
+}

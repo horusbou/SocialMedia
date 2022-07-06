@@ -1,0 +1,81 @@
+.post-item {
+	/* width: 400px; */
+	border-bottom: solid #565656 1px;
+	display: flex;
+	align-items: flex-start;
+	padding: 5px 10px;
+	z-index: 0;
+}
+.post-item:hover {
+	z-index: 0;
+}
+.retweeted p {
+	font-size: 10px;
+	padding: 5px 10px;
+}
+.post-item .avatar {
+	margin-right: 10px;
+}
+.post-item .post-body {
+	padding: 0 5px 5px 5px;
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+}
+.post-item .post-body .post-content {
+    color:#F1F1F1;
+	margin-bottom: 5px;
+}
+.post-item .post-body .post-content .content-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.post-item .post-body .post-content .content-header .header-data{
+    display: flex;
+    flex-direction: column;
+
+}
+.post-item .post-body .post-content .content-header .header-data .name {
+	text-transform: capitalize;
+    font-family:'PoppinsBold';
+    font-size: 15px;
+    color:white;
+}
+.post-item .post-body .post-content .content-header .header-data .username {
+    font-family: 'OpenSansLight';
+	font-size: 15px;
+    color:'#FFFFFF'
+}
+.post-item .post-body .post-content .content-header .header-more {
+	font-size: 20px;
+	cursor: pointer;
+}
+.post-item .post-body .post-content .content-body{
+    font-family: OpenSansRegular;
+    font-size: 15px;
+    padding:10px 0px;
+}
+.post-item .post-body .post-actions {
+	flex: 1;
+	display: flex;
+}
+.post-item .post-body .post-actions .icon {
+	flex: 1;
+	display: flex;
+	align-items: center;
+}
+.post-item .post-body .post-actions .icon > .countes {
+	margin-left: 5px;
+	height: 20px;
+}
+.post-item .post-body .post-actions .icon > .likecolor {
+	color: red;
+}
+.post-item .post-body .post-actions .icon > .retweetcolor {
+	color: green;
+}
+.post-item .post-body .post-actions .icon .icon-item {
+	font-size: 20px;
+	cursor: pointer;
+}

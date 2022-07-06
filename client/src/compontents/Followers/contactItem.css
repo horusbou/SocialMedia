@@ -1,0 +1,45 @@
+.contact-item{
+    height: 50px;
+    border-radius: 15px;
+    margin: 5px auto ;
+}
+.item-body{
+  width:90%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: 0.4s all;
+  justify-content: space-between;
+}
+.userDataContainer{
+    display: flex;
+    align-items: center;
+}
+.userData{
+    display: flex;
+    flex-direction: column;
+}
+.userData .username{
+    font-family: OpenSansRegular;
+    font-size: 14px;
+}
+.userData .online{
+    color:#a9b9b9;
+    font-family: OpenSansLight;
+    font-size: 10px;
+}
+.departement{
+    font-family: OpenSansRegular;
+    font-size: 12px;
+    color:#a9b9b9;
+}
+.item-body .avatar{
+    border:solid green 2px;
+    margin:auto 10px;
+    width: 44px;
+    height: 44px;
+}
+.contact-item .item-body .username{
+  color:#a9b9b9;
+}

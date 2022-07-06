@@ -24,3 +24,10 @@
   text-align: center;
   margin:5px auto;
 }
+.profile-header-footer{
+    width:80%;
+    margin:10px auto ;
+    display:flex;
+    justify-content: space-around;
+    align-items: center;
+}

@@ -21,10 +21,7 @@ export const getAllPosts = async (
 ) => {
     //@ts-ignore
     const user = await User.findByPk(req.user.user_id);
-
-
     const timeline = await user.getTimeline();
-
     const timelinePosts = await Timeline.findAll({
         raw: true,
         include: [

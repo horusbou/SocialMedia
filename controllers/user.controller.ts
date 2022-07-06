@@ -109,7 +109,6 @@ export async function postUnfollow(req: Request, res: Response) {
     }
 }
 export async function getFollowers(req: Request, res: Response) {
-    const { targetId } = req.body;
     //@ts-ignore
     const userId = req.user.user_id;
     const user = await UserInstance.findOne({

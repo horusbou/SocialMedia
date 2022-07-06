@@ -20,7 +20,7 @@ class Client {
         return user;
       });
   }
-  static getAllPosts() {
+  static async getAllPosts() {
     return axios
       .get('/posts', {
         headers: {
@@ -80,6 +80,22 @@ class Client {
         Authorization: localStorage.getItem('accessToken'),
       },
     });
+  }
+  static getFollowings(){
+    return axios.get('/followings',{
+        headers: {
+          'x-refresh': localStorage.getItem('refreshToken'),
+          Authorization: localStorage.getItem('accessToken'),
+        },
+      });
+  }
+  static postFollow(targetId){
+    return axios.post('/follow',targetId,{
+        headers: {
+          'x-refresh': localStorage.getItem('refreshToken'),
+          Authorization: localStorage.getItem('accessToken'),
+        },
+      });
   }
   static likePost(postId) {
     return axios.post(

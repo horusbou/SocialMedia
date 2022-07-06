@@ -1,4 +1,28 @@
-body {
+@font-face {
+    font-family: "PoppinsMedium";
+    src: local("PoppinsMedium"),
+      url("./fonts/Poppins/Poppins-Medium.ttf") format("truetype");
+    font-weight: normal;
+  }
+  @font-face {
+    font-family: "PoppinsBold";
+    src: local("PoppinsBold"),
+      url("./fonts/Poppins/Poppins-Bold.ttf") format("truetype");
+    font-weight: normal;
+  }
+  @font-face {
+    font-family: "OpenSansLight";
+    src: local("OpenSansLight"),
+      url("./fonts/Open_Sans/static/OpenSans/OpenSans-Light.ttf") format("truetype");
+    font-weight: normal;
+  }
+  @font-face {
+    font-family: "OpenSansRegular";
+    src: local("OpenSansRegular"),
+      url("./fonts/Open_Sans/static/OpenSans/OpenSans-Regular.ttf") format("truetype");
+    font-weight: normal;
+  }
+  body {
 	margin: 0;
 	padding: 0;
 }

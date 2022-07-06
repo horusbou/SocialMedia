@@ -1,64 +1,59 @@
-import React from 'react';
-import AddPost from '../compontents/addPost';
-import PostItem from '../compontents/postItem';
-import { useEffect, useState } from 'react';
+import React,{ useEffect, useState} from 'react';
+import {
+    PostItem,
+    AddPost,
+    PageTitle,
+    LoadingSpinner
+} from '../compontents';
 import Client from '../services/Client';
 
-
-export default function Home(props) {
-  // eslint-disable-next-line
-//   const { userData, postData, isLoading } = props;
+export default function Home() {
 
 const [postData, setPostData] = useState([]);
-const [userData, setUserData] = useState({});
 const [isPosted, setIsPosted] = useState(false);
+const [loading,setLoading] = useState(false);
 
+//   useEffect(() => {
+//     console.log('hit')
+//     setLoading(true);
+//     Client.getAllPosts()
+//       .then((response) => {
+//         setPostData(response);
+//       }).then(()=>setLoading(false))
+//     // eslint-disable-next-line react-hooks/exhaustive-deps
+//   }, []);
 useEffect(() => {
-    Client.getUser().then((userData) => {
-      if (userData){
-          setUserData(userData);
-        props.getUserName(userData?.username)
-    }
-      else setUserData({});
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    document.title='Home'
+}, [])
+
 
   useEffect(() => {
+    if(!postData.length){
+        setLoading(true);
+    }
     Client.getAllPosts()
       .then((response) => {
         setPostData(response);
-      })
+      }).then(()=>setLoading(false))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isPosted]);
   return (
-    <div className="home body">
-      <div
-        className="pageTitle"
-        style={{
-          borderBottom: 'solid black 1px',
-          fontSize: 19,
-          fontWeight: 700,
-          marginBottom: 5,
-          padding: '5px 5px 5px 10px',
-        }}
-      >
-        Home
-      </div>
+    <div className="home main">
+        <PageTitle title="Home"/>
       <AddPost
-        fullName={`${userData.firstName} ${userData.lastName}`}
-        avatar={`${userData.userAvatar}`}
         addPost={() => {
-            setIsPosted(!false);
+            setIsPosted(!isPosted);
         }}
       />
-      {!!postData
+        { loading  && (<LoadingSpinner />)
+  }
+      {!!postData && !loading
         ? postData.map((item, i) => (
           <PostItem
             key={item.post_id + i}
             _id={item.post_id}
             isRetweeted={item.isRetweeted}
-            userId={userData.user_id}
+            userId={item.user_id}
             postOwner={item.owner.user_id}
             fullName={`${item.owner.firstName} ${item.owner.lastName}`}
             avatar={`${item.owner.userAvatar}`}

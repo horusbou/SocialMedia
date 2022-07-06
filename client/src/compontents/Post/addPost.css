@@ -1,0 +1,104 @@
+/* .post-item {
+	width: 50%;
+} */
+.hide {
+	border: solid black 1px;
+	padding: 0;
+	width: 0;
+	height: 0;
+	visibility: hidden;
+	overflow: hidden;
+}
+.warningBlock {
+	z-index: 100;
+	text-align: center;
+	border-radius: 5px;
+	position: absolute;
+	bottom: 20px;
+	left: 0;
+	right: 0;
+	margin-left: auto;
+	margin-right: auto;
+	width: 40%;
+	padding: 10px;
+	background-color: #1a202c;
+	color: white;
+}
+.warningBlock {
+	-moz-animation: cssAnimation 0s ease-in 5s forwards;
+	/* Firefox */
+	-webkit-animation: cssAnimation 0s ease-in 5s forwards;
+	/* Safari and Chrome */
+	-o-animation: cssAnimation 0s ease-in 5s forwards;
+	/* Opera */
+	animation: cssAnimation 0s ease-in 5s forwards;
+	-webkit-animation-fill-mode: forwards;
+	animation-fill-mode: forwards;
+}
+@keyframes cssAnimation {
+	to {
+		padding: 0;
+		width: 0;
+		height: 0;
+		overflow: hidden;
+	}
+}
+@-webkit-keyframes cssAnimation {
+	to {
+		padding: 0;
+		width: 0;
+		height: 0;
+		visibility: hidden;
+	}
+}
+.post-options {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.post-options .icons {
+	position: relative;
+	flex: 0.3;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+}
+.post-options .icons > input {
+	border: solid black 1px;
+	display: none;
+}
+.post-options .icons .icon-item {
+	margin-right: 50px;
+	font-size: 20px;
+	cursor: pointer;
+	color: #1d9bf0;
+}
+.post-options .icons .icon-item:focus {
+	box-shadow: none;
+}
+
+.post-content .conetnt-body .image-container {
+	margin: 20px 0;
+	/* width: 60%; */
+}
+.image-border-fit-content {
+	width: fit-content;
+}
+.image-border {
+	position: relative;
+}
+/* .image-border-images {
+	 width: fit-content;
+} */
+.image-border-images img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	/* object-fit: contain; */
+}
+.close-button {
+	position: absolute;
+	top: -0px;
+	left: -0px;
+}
