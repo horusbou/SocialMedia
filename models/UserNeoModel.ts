@@ -7,7 +7,7 @@ export interface UserInterface {
     firstName: string;
     lastName: string;
     email: string;
-    avatar: string;
+    userAvatar: string;
     bio: string;
     followers: number;
     following: number;
@@ -42,7 +42,7 @@ export const User = ModelFactory(
                 minLength: 3,
                 required: true,
             },
-            avatar: {
+            userAvatar: {
                 type: 'string',
                 require: true,
             },

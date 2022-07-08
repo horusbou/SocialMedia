@@ -89,7 +89,7 @@ export const AddPost = (props) => {
 			Client.postPost({
 				tweet,
 				gifSrc,
-			});
+			})
 		}
 
 		setTweet('');

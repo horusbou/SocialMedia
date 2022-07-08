@@ -4,7 +4,6 @@ import Home from './pages/Home';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/Signup';
 import {Nav,Followers,UserDetailsProvider} from './compontents';
-// import Contact from './compontents/Contact';
 import Profile from './pages/Profile';
 import { useState } from 'react';
 import {
@@ -33,7 +32,7 @@ const PublicRoute = (props)=>{
       <Route
         {...rest}
         render={(props) =>
-          !Client.isLoggedIn() ? (<Component {...rest} />) : (<Redirect to="/home" />)
+          !Client.isLoggedIn() ? (<Component {...rest} />) : (<Redirect to="/" />)
         }
       />
     );
@@ -41,13 +40,8 @@ const PublicRoute = (props)=>{
 
 function App() {
 
-const [username, setUsername] = useState('');
 
-function getUserName(username){
-    setUsername(username)
-}
-
-  const privateRoutes = ['/home', '/notifications', '/bookmarks', `/${username}`];
+  const privateRoutes = ['/home', '/notifications', '/bookmarks', `/:username`];
 
   return (
     <div className="app">
@@ -58,9 +52,7 @@ function getUserName(username){
         <PrivateRoute
             path={privateRoutes}
             Component={Nav}
-            username={username}
             />
-
           <Switch>
           <PublicRoute
                 exact
@@ -77,10 +69,9 @@ function getUserName(username){
             <PrivateRoute
               exact
               path="/home"
-              getUserName={getUserName}
               Component={Home}
             />
-            <PrivateRoute path={`/:username`} Component={Profile} />
+            <PrivateRoute exact path={`/:username`} Component={Profile} />
           </Switch>
           <PrivateRoute
             path={privateRoutes}

@@ -79,7 +79,7 @@ class Client {
         'x-refresh': localStorage.getItem('refreshToken'),
         Authorization: localStorage.getItem('accessToken'),
       },
-    });
+    })
   }
   static getFollowings(){
     return axios.get('/followings',{
@@ -90,7 +90,7 @@ class Client {
       });
   }
   static postFollow(targetId){
-    return axios.post('/follow',targetId,{
+    return axios.post('/follow',{targetId},{
         headers: {
           'x-refresh': localStorage.getItem('refreshToken'),
           Authorization: localStorage.getItem('accessToken'),

@@ -13,15 +13,6 @@ const [postData, setPostData] = useState([]);
 const [isPosted, setIsPosted] = useState(false);
 const [loading,setLoading] = useState(false);
 
-//   useEffect(() => {
-//     console.log('hit')
-//     setLoading(true);
-//     Client.getAllPosts()
-//       .then((response) => {
-//         setPostData(response);
-//       }).then(()=>setLoading(false))
-//     // eslint-disable-next-line react-hooks/exhaustive-deps
-//   }, []);
 useEffect(() => {
     document.title='Home'
 }, [])

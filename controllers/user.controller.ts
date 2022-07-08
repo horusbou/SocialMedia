@@ -1,5 +1,5 @@
 import { Response, Request, NextFunction } from 'express';
-import { User as UserModel, UserInterface } from '../models/UserModel';
+import { User as UserModel, UserInterface, UserI } from '../models/UserModel';
 import bcrypt from 'bcryptjs';
 import { omit } from 'lodash';
 import log from '../logger/log';
@@ -7,6 +7,7 @@ import { QueryBuilder, QueryRunner } from 'neogma';
 import neogma from '../util/neo4j';
 import { User as UserInstance } from '../models/UserNeoModel';
 import { body, validationResult } from 'express-validator';
+import axios from 'axios'
 
 const queryRunner = new QueryRunner({
     /* --> a driver needs to be passed */
@@ -34,7 +35,9 @@ export async function createUserhandler(req: Request, res: Response) {
     }
     const salt = await bcrypt.genSalt(10);
     const hashed = await bcrypt.hash(req.body.password, salt);
-    const userData = { ...req.body };
+    const userData: UserI = { ...req.body };
+
+    userData.userAvatar = `https://robohash.org/${userData.firstName + userData.lastName + userData.username}.png`;
     userData.password = hashed;
     try {
         const user = await UserModel.create(userData);
@@ -69,14 +72,16 @@ export async function getUserData(req: Request, res: Response) {
 
 export async function postFollow(req: Request, res: Response) {
     const { targetId } = req.body;
+    console.log("req.body", req.body)
     //@ts-ignore
     const user_id = req.user.user_id;
+    console.log(targetId, user_id);
     try {
         const user = await UserModel.findByPk(user_id);
         await UserInstance.relateTo({
             alias: 'Follows',
             where: {
-                source: { user_id },
+                source: { user_id: user_id },
                 target: { user_id: targetId },
             },
         });

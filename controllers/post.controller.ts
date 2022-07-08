@@ -164,15 +164,12 @@ export const profilePosts = (req: Request, res: Response) => {
     });
 };
 export const postPost = (req: Request, res: Response, next: NextFunction) => {
-    let pictures: string | string[];
+    let pictures: string | string[] = '';
     if (req.files) {
         pictures = (req.files as Express.Multer.File[]).map((file) => file.path);
-    } else {
-        pictures = '';
     }
     const { tweet, gifSrc } = req.body;
-    //@ts-ignore
-    // console.log('userData=>', req.user);
+
     //@ts-ignore
     User.findByPk(req.user.user_id).then((user: any) => {
         if (!user) return res.send('user not found');
@@ -185,7 +182,7 @@ export const postPost = (req: Request, res: Response, next: NextFunction) => {
                     userId: req.user.user_id,
                 });
             })
-            .then(() => res.json({ message: 'done' }))
+            .then((data: any) => res.json({ post: data.dataValues, message: 'done' }))
             .catch((err: Error) => res.status(500).json({ err: err }));
     });
 };

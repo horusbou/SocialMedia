@@ -4,6 +4,17 @@ import { Optional } from 'sequelize';
 export interface UserCreationAttributes
     extends Optional<UserInterface, 'user_id'> { }
 
+export interface UserI {
+    user_id: string;
+    username: string;
+    firstName: string;
+    lastName: string;
+    userAvatar: string | '';
+    email: string;
+    password: string;
+    bio: string;
+}
+
 export interface UserInterface extends Model {
     user_id: string;
     username: string;

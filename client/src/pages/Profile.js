@@ -66,6 +66,7 @@ export default function Profile() {
 				<div className="profile-header-footer">
                     <Button>Contact</Button>
                     <Button onClick={()=>{
+                        // console.log(userData.user_id)
                     Client.postFollow(userData.user_id);
                 }}>Follow</Button>
                 </div>
