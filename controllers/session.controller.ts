@@ -1,22 +1,27 @@
-import { Response, Request } from 'express';
+import { Response, Request, NextFunction } from 'express';
 import { get } from 'lodash';
 import { createSession, createAccessToken } from '../services/session.service';
 import { sign } from '../util/jwt.utils';
 import bcrypt from 'bcryptjs';
 import { User as UserModel, UserInterface } from '../models/UserModel';
+import HttpException from '../util/HttpException';
 
 import {
     Session as SessionModel,
     SessionInterface,
 } from '../models/SessionModel';
 
-export async function createUserSessionhandler(req: Request, res: Response) {
+export async function createUserSessionhandler(req: Request, res: Response, next: NextFunction) {
     const { email, password } = req.body;
     //validate email and password
     const userData = await UserModel.findOne({ raw: true, where: { email } });
-    if (!userData) return res.status(401).send('Invalid username or password');
+    if (!userData) {
+        return next(new HttpException(404, "Invalid Email or Password"));
+    }
     const matched = await bcrypt.compare(password, userData.password);
-    if (!matched) return res.status(401).send('Invalid username or password');
+    if (!matched) {
+        return next(new HttpException(404, "Invalid Email or Password"));
+    }
     delete userData.password;
     const user = userData;
     //create Session

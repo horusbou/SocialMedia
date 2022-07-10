@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction } from 'express';
+import express, { Request, Response, NextFunction, ErrorRequestHandler } from 'express';
 import log from './logger/log';
 import db from './util/database';
 import multer from 'multer';
@@ -12,13 +12,15 @@ import { Retweet as RetweetModel } from './models/RetweetModel';
 import { Timeline as TimelineModel } from './models/TimelineModel';
 import { Like as LikeModel } from './models/LikesModel';
 import deserializeUser from './middleware/deserializeUser';
-
+import HttpException from './util/HttpException';
 //associations
 UserModel.hasOne(TimelineModel, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
     foreignKey: 'userId',
 });
+TimelineModel.belongsTo(UserModel);
+
 TimelineModel.hasMany(PostModel, {
     foreignKey: 'timelineId',
 });
@@ -31,7 +33,7 @@ TimelineModel.hasMany(RetweetModel, {
     foreignKey: 'timelineId',
 });
 RetweetModel.belongsTo(TimelineModel, {
-    foreignKey: 'timelineId',
+    foreignKey: 'timelineId',//timeline of user retweeted
 });
 
 PostModel.hasMany(LikeModel, {
@@ -47,13 +49,12 @@ PostModel.hasMany(RetweetModel, {
 RetweetModel.belongsTo(PostModel, {
     foreignKey: 'postId',
 });
-
-PostModel.belongsTo(UserModel, {
-    foreignKey: 'userId',
-});
-UserModel.hasMany(PostModel, {
-    foreignKey: 'userId',
-});
+// PostModel.belongsTo(UserModel, {
+//     foreignKey: 'userId',
+// });
+// UserModel.hasMany(PostModel, {
+//     foreignKey: 'userId',
+// });
 
 // UserModel.hasMany(RetweetModel, {
 // 	foreignKey: 'userId',
@@ -92,7 +93,14 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(PostRoutes);
 app.use(authRoutes);
 app.use(UserRoutes);
-
+app.use((err: HttpException, req: Request, res: Response, next: NextFunction) => {
+    const status = err.status || 500;
+    const message = err.message || 'Something went wrong';
+    return res.status(status).send({
+        status,
+        message
+    })
+})
 // db.sync({ force: true })
 db.sync()
     // db.sync({ alter: true })

@@ -3,7 +3,7 @@
 	border-bottom: solid #565656 1px;
 	display: flex;
 	align-items: flex-start;
-	padding: 5px 10px;
+	padding: 10px 10px;
 	z-index: 0;
 }
 .post-item:hover {
@@ -29,12 +29,11 @@
 .post-item .post-body .post-content .content-header {
 	display: flex;
 	justify-content: space-between;
-	align-items: center;
+	align-items:center;
 }
 .post-item .post-body .post-content .content-header .header-data{
     display: flex;
     flex-direction: column;
-
 }
 .post-item .post-body .post-content .content-header .header-data .name {
 	text-transform: capitalize;
@@ -46,10 +45,6 @@
     font-family: 'OpenSansLight';
 	font-size: 15px;
     color:'#FFFFFF'
-}
-.post-item .post-body .post-content .content-header .header-more {
-	font-size: 20px;
-	cursor: pointer;
 }
 .post-item .post-body .post-content .content-body{
     font-family: OpenSansRegular;

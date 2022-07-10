@@ -6,7 +6,6 @@ import './contactItem.css'
 export default function ContactItem(props) {
 
   const {userAvatar,username,firstName,lastName}=props;
-  console.log(props)
   return (
         <div className="contact-item">
         <Link to={`/${username}`}>

@@ -5,7 +5,7 @@ import {PostItem,PageTitle,LoadingSpinner} from '../compontents';
 import './Profile.css';
 import Client from '../services/Client';
 
-export default function Profile() {
+export default function Profile(props) {
 
 	const [userData, setUserData] = useState([]);
 	const [profilePosts, setProfilePosts] = useState([]);
@@ -66,8 +66,7 @@ export default function Profile() {
 				<div className="profile-header-footer">
                     <Button>Contact</Button>
                     <Button onClick={()=>{
-                        // console.log(userData.user_id)
-                    Client.postFollow(userData.user_id);
+                        Client.postFollow(userData.user_id).then(()=>props.FetchFollowers());
                 }}>Follow</Button>
                 </div>
 			</div>

@@ -28,7 +28,6 @@ export const PostItem = (props) => {
     console.log("POST ID", postId)
     await Client.likePost(postId);
   }
-
   return (
     <>
       {isEdited && (
@@ -51,7 +50,8 @@ export const PostItem = (props) => {
                 <span className="name">{props.fullName}</span>
                 <span className="username">@{props.username}</span>
               </Link>
-              {props.postOwner === props.userId ? (
+              {/*props.postOwner === props.userId */}
+              {true? (
                 <MoreOption Icon="..." children={['Edit', 'Delete']}>
                   <MenuItem onClick={() => setisEdited(true)}>
                     <p>Edit Post</p>

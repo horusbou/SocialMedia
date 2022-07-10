@@ -12,10 +12,8 @@ export const Followers= (props)=>{
         Client.getFollowings().then(following=>{
             setFollowings(following.data.following);
         })
+    },[props.FetchFollowers])
 
-    },[])
-
-console.log("followings",followings);
   return (<div className="contact-aside">
     <Header />
   <div className="header">

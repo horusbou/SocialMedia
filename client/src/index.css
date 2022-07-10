@@ -11,6 +11,12 @@
     font-weight: normal;
   }
   @font-face {
+    font-family: "PoppinsSemiBold";
+    src: local("PoppinsSemiBold"),
+      url("./fonts/Poppins/Poppins-SemiBold.ttf") format("truetype");
+    font-weight: normal;
+  }
+  @font-face {
     font-family: "OpenSansLight";
     src: local("OpenSansLight"),
       url("./fonts/Open_Sans/static/OpenSans/OpenSans-Light.ttf") format("truetype");
@@ -20,6 +26,12 @@
     font-family: "OpenSansRegular";
     src: local("OpenSansRegular"),
       url("./fonts/Open_Sans/static/OpenSans/OpenSans-Regular.ttf") format("truetype");
+    font-weight: normal;
+  }
+  @font-face {
+    font-family: "OpenSansBold";
+    src: local("OpenSansBold"),
+      url("./fonts/Open_Sans/static/OpenSans/OpenSans-Bold.ttf") format("truetype");
     font-weight: normal;
   }
   body {

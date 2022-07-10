@@ -5,7 +5,8 @@
 	"license": "MIT",
 	"type": "module",
 	"scripts": {
-		"start": "ts-node-dev server.ts "
+		"start": "ts-node-dev server.ts ",
+        "seed": "ts-node-dev ./util/seede.ts"
 	},
 	"devDependencies": {
 		"@types/axios": "^0.14.0",

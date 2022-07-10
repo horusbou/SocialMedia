@@ -36,8 +36,11 @@ class Client {
   static signUp(values) {
     return axios.post('/users', values);
   }
-  static login({ email, password }) {
-    return axios.post('/sessions', { email, password }).then((result) => {
+  static  login({ email, password }) {
+    return axios.post('/sessions', { email, password })
+    .then(this.checkStatus)
+    .then(this.parseJson)
+    .then((result) => {
       const accessToken = result.data.accessToken;
       const refreshToken = result.data.refreshToken;
       if (refreshToken && accessToken) {
@@ -46,7 +49,15 @@ class Client {
         localStorage.setItem('accessToken', `Bearer ${accessToken}`);
         localStorage.setItem('refreshToken', refreshToken);
       }
-    });
+    })
+    .catch(error=>{
+        if (error.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            throw error.response.data;
+        }
+        throw error
+    })
   }
   static logout() {
     localStorage.removeItem('accessToken');
@@ -110,18 +121,20 @@ class Client {
     );
   }
   static checkStatus(response) {
+    console.log("\n\nresponse\n\n",response)
     if (response.status >= 200 && response.status < 300) {
       return response;
     } else {
       const error = new Error(`HTTP Error ${response.statusText}`);
       error.status = response.statusText;
       error.response = response;
-      console.log(error);
+      console.log("error=>",error);
       throw error;
     }
   }
 
   static parseJson(response) {
+    console.log("\n\nresponse\n\n",response)
     return response.json();
   }
 }

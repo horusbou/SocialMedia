@@ -7,10 +7,11 @@ import {MdOutlineMailOutline,MdNotifications} from 'react-icons/md'
 //MdOutlineMarkEmailUnread
 import { userContext } from '../context'
 
-export const Header =({avatarUrl})=>{
-    const user = useContext(userContext);
+export const Header =()=>{
 
-    return (<div className="options">
+const user = useContext(userContext);
+
+return (<div className="options">
      <Button backgroundColor={colors.pink}
         _hover={{backgroundColor:colors.pink}}
         height='38px'

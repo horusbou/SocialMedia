@@ -5,13 +5,13 @@ import SignIn from './pages/SignIn';
 import SignUp from './pages/Signup';
 import {Nav,Followers,UserDetailsProvider} from './compontents';
 import Profile from './pages/Profile';
-import { useState } from 'react';
 import {
   BrowserRouter as Router,
   Route,
   Switch,
   Redirect,
 } from 'react-router-dom';
+import { useState } from 'react';
 import Client from './services/Client';
 
 const PrivateRoute = (props) => {
@@ -32,7 +32,7 @@ const PublicRoute = (props)=>{
       <Route
         {...rest}
         render={(props) =>
-          !Client.isLoggedIn() ? (<Component {...rest} />) : (<Redirect to="/" />)
+          !Client.isLoggedIn() ? (<Component {...rest} />) : (<Redirect to="/home" />)
         }
       />
     );
@@ -40,9 +40,8 @@ const PublicRoute = (props)=>{
 
 function App() {
 
-
+    const [FetchFollowers,setFetchFollowers] = useState(false);
   const privateRoutes = ['/home', '/notifications', '/bookmarks', `/:username`];
-
   return (
     <div className="app">
     <div className="appBody">
@@ -71,11 +70,17 @@ function App() {
               path="/home"
               Component={Home}
             />
-            <PrivateRoute exact path={`/:username`} Component={Profile} />
+            <PrivateRoute
+            exact
+            path={`/:username`}
+            FetchFollowers={()=>{setFetchFollowers(!FetchFollowers)}}
+            Component={Profile}/>
+
           </Switch>
           <PrivateRoute
             path={privateRoutes}
             Component={Followers}
+            FetchFollowers={FetchFollowers}
           />
         </Router>
         </UserDetailsProvider>

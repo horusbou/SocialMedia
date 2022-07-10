@@ -1,0 +1,57 @@
+.container{
+    margin:auto;
+}
+.leftside{
+    color:white;
+    padding:30px 30px;
+}
+.rightside{
+    color:white;
+    padding:30px 30px;
+}
+
+.loginPage .login h1{
+    font-size: 30px;
+    font-family: PoppinsBold;
+    color:black;
+    margin: 10px 0 40px 0 ;
+}
+.loginPage .options{
+    width:100%;
+    display: flex;
+    justify-content: center;
+    color:black;
+}
+.loginPage .options p:nth-child(1){
+    margin-right: 10px;
+}
+.loginPage .options p:nth-child(2){
+    color:#F43B86;
+    cursor: pointer;
+}
+
+.leftside header {
+    margin:70px 0 100px 0;
+}
+.leftside header h1{
+    font-size: 60px;
+}
+.leftside main h3{
+    font-family: OpenSansBold;
+    font-size: 30px;
+    margin-bottom: 20px;
+}
+.leftside main .description{
+    font-family: OpenSansLight;
+    font-size: 18px;
+}
+.leftside main .description p {
+    margin:20px 0;
+}
+.forgetPassword{
+    font-family: OpenSansRegular;
+    font-size: 16px;
+    color:#F43B86;
+    text-transform: capitalize;
+    text-align: center;
+}

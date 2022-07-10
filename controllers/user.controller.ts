@@ -7,7 +7,6 @@ import { QueryBuilder, QueryRunner } from 'neogma';
 import neogma from '../util/neo4j';
 import { User as UserInstance } from '../models/UserNeoModel';
 import { body, validationResult } from 'express-validator';
-import axios from 'axios'
 
 const queryRunner = new QueryRunner({
     /* --> a driver needs to be passed */
@@ -16,17 +15,22 @@ const queryRunner = new QueryRunner({
     logger: console.log,
 });
 
-const createUserWithNeo4j = async (userData: UserInterface) => {
-    const user = await UserInstance.createOne({
-        user_id: userData.user_id,
-        username: userData.username,
-        firstName: userData.firstName,
-        lastName: userData.lastName,
-        email: userData.email,
-        bio: userData.bio,
-        avatar: userData.userAvatar
-    });
-    await user.save();
+export const createUserWithNeo4j = async (userData: UserI) => {
+    try {
+        const user = await UserInstance.createOne({
+            user_id: userData.user_id,
+            username: userData.username,
+            firstName: userData.firstName,
+            lastName: userData.lastName,
+            email: userData.email,
+            bio: userData.bio || '',
+            userAvatar: userData.userAvatar,
+        });
+        await user.save();
+    } catch (error) {
+        console.log(error)
+    }
+
 };
 export async function createUserhandler(req: Request, res: Response) {
     const errors = validationResult(req);
@@ -36,13 +40,15 @@ export async function createUserhandler(req: Request, res: Response) {
     const salt = await bcrypt.genSalt(10);
     const hashed = await bcrypt.hash(req.body.password, salt);
     const userData: UserI = { ...req.body };
-
+    userData.username = userData.username.toLowerCase();
     userData.userAvatar = `https://robohash.org/${userData.firstName + userData.lastName + userData.username}.png`;
     userData.password = hashed;
+    console.log({ userData })
     try {
         const user = await UserModel.create(userData);
+        console.log({ user })
         await user.createTimeline();
-        createUserWithNeo4j(user.dataValues);
+        createUserWithNeo4j(userData);
         return res.send(omit(user.toJSON(), 'password'));
     } catch (error) {
         log.error(error);

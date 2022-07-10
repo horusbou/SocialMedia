@@ -4,6 +4,8 @@ import { Post, PostIterface } from '../models/PostModel';
 import { Retweet } from '../models/RetweetModel';
 import { Timeline } from '../models/TimelineModel';
 import { omit } from 'lodash';
+import { getFollowers } from '../services/userNeo.service';
+
 import {
     User,
     UserInterface,
@@ -21,7 +23,14 @@ export const getAllPosts = async (
 ) => {
     //@ts-ignore
     const user = await User.findByPk(req.user.user_id);
-    const timeline = await user.getTimeline();
+
+    const timeline = await user.getTimeline({ raw: true });
+
+    // console.log(timeline)
+    //@ts-ignore
+    // console.log(await getFollowers(req.user.user_id))
+    // const posts = await Post.findAll({ raw: true, where: { timelineId: timeline.timelineId } })
+
     const timelinePosts = await Timeline.findAll({
         raw: true,
         include: [

@@ -48,15 +48,18 @@ export const User = ModelFactory(
             },
             bio: {
                 type: 'string',
+                require: false,
             },
 
             followers: {
                 type: 'number',
-                default: 0
+                default: 0,
+                require: false,
             },
             following: {
                 type: 'number',
-                default: 0
+                default: 0,
+                require: false,
             },
         },
         primaryKeyField: 'user_id',
