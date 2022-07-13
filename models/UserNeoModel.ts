@@ -1,17 +1,6 @@
 import neo4jdb from '../util/neo4j';
 const { ModelFactory, ModelRelatedNodesI, NeogmaInstance } = require('neogma');
 
-export interface UserInterface {
-    user_id: string;
-    username: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    userAvatar: string;
-    bio: string;
-    followers: number;
-    following: number;
-}
 
 export const User = ModelFactory(
     {
@@ -27,12 +16,12 @@ export const User = ModelFactory(
                 minLength: 3,
                 required: true,
             },
-            firstName: {
+            firstname: {
                 type: 'string',
                 minLength: 3,
                 required: true,
             },
-            lastName: {
+            lastname: {
                 type: 'string',
                 minLength: 3,
                 required: true,
@@ -73,14 +62,3 @@ export const User = ModelFactory(
     },
     neo4jdb
 );
-
-User.prototype.getFollwers = function (this: UserInterface) {
-    return this.followers;
-};
-User.prototype.getFollowing = function () {
-    return this.following;
-};
-User.prototype.addFollwers = async function () {
-    const follwers: number = this.getFollwers();
-    await this.update({ followers: follwers + 1 });
-};

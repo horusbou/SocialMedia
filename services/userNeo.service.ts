@@ -1,4 +1,3 @@
-import { UserI } from '../models/UserModel';
 import { User as UserInstance } from '../models/UserNeoModel';
 
 export async function getFollowers(user_id: string) {

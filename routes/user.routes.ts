@@ -7,6 +7,7 @@ import {
     getFollowings,
 } from '../controllers/user.controller';
 const router = express.Router();
+
 router.post('/follow', requiresUser, postFollow);
 router.post('/unfollow', requiresUser, postUnfollow);
 router.get('/followings', requiresUser, getFollowers);

@@ -1,12 +1,14 @@
 import { Response, Request, NextFunction } from 'express';
-import { User as UserModel, UserInterface, UserI } from '../models/UserModel';
 import bcrypt from 'bcryptjs';
 import { omit } from 'lodash';
 import log from '../logger/log';
 import { QueryBuilder, QueryRunner } from 'neogma';
 import neogma from '../util/neo4j';
-import { User as UserInstance } from '../models/UserNeoModel';
-import { body, validationResult } from 'express-validator';
+import { User as UserNeo4J } from '../models/UserNeoModel';
+import { validationResult } from 'express-validator';
+import HttpException from '../util/HttpException';
+import { User } from '../entity'
+import { UserInterface } from '../util/types'
 
 const queryRunner = new QueryRunner({
     /* --> a driver needs to be passed */
@@ -15,13 +17,13 @@ const queryRunner = new QueryRunner({
     logger: console.log,
 });
 
-export const createUserWithNeo4j = async (userData: UserI) => {
+export const createUserWithNeo4j = async (userData: UserInterface) => {
     try {
-        const user = await UserInstance.createOne({
+        const user = await UserNeo4J.createOne({
             user_id: userData.user_id,
             username: userData.username,
-            firstName: userData.firstName,
-            lastName: userData.lastName,
+            firstname: userData.firstname,
+            lastname: userData.lastname,
             email: userData.email,
             bio: userData.bio || '',
             userAvatar: userData.userAvatar,
@@ -32,39 +34,45 @@ export const createUserWithNeo4j = async (userData: UserI) => {
     }
 
 };
-export async function createUserhandler(req: Request, res: Response) {
+export async function createUserhandler(req: Request, res: Response, next: NextFunction) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
+
+    let userByEmail = await User.findOne({ where: { email: req.body.email } });
+    if (userByEmail !== null) {
+        return next(new HttpException(404, "Email already used", { "field": "email" }))
+    }
+    let userByUsername = await User.findOne({ where: { username: req.body.username } });
+    if (userByUsername !== null) {
+        return next(new HttpException(404, "Username already used", { field: "username" }))
+    }
     const salt = await bcrypt.genSalt(10);
     const hashed = await bcrypt.hash(req.body.password, salt);
-    const userData: UserI = { ...req.body };
+    const userData = { ...req.body };
+    log.info(userData);
     userData.username = userData.username.toLowerCase();
     userData.userAvatar = `https://robohash.org/${userData.firstName + userData.lastName + userData.username}.png`;
     userData.password = hashed;
-    console.log({ userData })
     try {
-        const user = await UserModel.create(userData);
-        console.log({ user })
-        await user.createTimeline();
-        createUserWithNeo4j(userData);
-        return res.send(omit(user.toJSON(), 'password'));
+        const user = User.create(userData);
+        await user.save();
+        createUserWithNeo4j(user);
+        return res.send(omit(user, 'password'));
     } catch (error) {
         log.error(error);
         return res.status(409).send(error.message);
     }
 }
 
-export async function getUserData(req: Request, res: Response) {
+
+export async function getUserData(req: Request, res: Response, next: NextFunction) {
     const { username } = req.params;
 
-    const user = await UserModel.findOne({
-        raw: true,
-        where: { username: `${username}` },
-    });
-    if (!user)
-        return res.status(200).json({
+    const user = await User.findOneBy({ username });
+    if (!user) {
+        const options = {
             user_id: null,
             username: 'untrovable',
             firstName: 'untrovable',
@@ -72,19 +80,19 @@ export async function getUserData(req: Request, res: Response) {
             userAvatar: '',
             email: 'untrovable',
             bio: 'untrovable',
-        });
+        };
+        return next(new HttpException(404, "username not found", options))
+    }
     return res.json(omit(user, 'password', 'createdAt', 'updatedAt'));
 }
 
 export async function postFollow(req: Request, res: Response) {
     const { targetId } = req.body;
-    console.log("req.body", req.body)
     //@ts-ignore
     const user_id = req.user.user_id;
     console.log(targetId, user_id);
     try {
-        const user = await UserModel.findByPk(user_id);
-        await UserInstance.relateTo({
+        await UserNeo4J.relateTo({
             alias: 'Follows',
             where: {
                 source: { user_id: user_id },
@@ -99,19 +107,18 @@ export async function postFollow(req: Request, res: Response) {
 }
 
 export async function postUnfollow(req: Request, res: Response) {
-    const { targetId } = req.body;
+    const { target_id } = req.body;
     //@ts-ignore
-    const userId = req.user.user_id;
-    if (targetId === userId) {
+    const user_id = req.user.user_id;
+    if (target_id === user_id) {
         return res.json({ message: "you can't follow this account" });
     }
     try {
-        const user = await UserModel.findByPk(userId);
-        const userNeo4j = await UserInstance.findOne({
-            where: { user_id: user.user_id },
+        await UserNeo4J.findOne({
+            where: { user_id: user_id },
         });
         const queryBuilder = new QueryBuilder().raw(
-            `match (n:User {user_id:'${userId}'})-[f:Follows]->(u:User {user_id:'${targetId}'}) delete f`
+            `match (n:User {user_id:'${user_id}'})-[f:Follows]->(u:User {user_id:'${target_id}'}) delete f`
         );
         queryBuilder.run(queryRunner);
         return res.status(200).json({ message: 'user Unfollowed!' });
@@ -122,7 +129,7 @@ export async function postUnfollow(req: Request, res: Response) {
 export async function getFollowers(req: Request, res: Response) {
     //@ts-ignore
     const userId = req.user.user_id;
-    const user = await UserInstance.findOne({
+    const user = await UserNeo4J.findOne({
         where: {
             user_id: userId
         },
@@ -139,7 +146,7 @@ export async function getFollowers(req: Request, res: Response) {
 export async function getFollowings(req: Request, res: Response) {
     //@ts-ignore
     const user_id = req.user.user_id;
-    const relationships = await UserInstance.findRelationships({
+    const relationships = await UserNeo4J.findRelationships({
         alias: 'Follows',
         where: {
             target: { user_id },

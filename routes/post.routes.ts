@@ -4,12 +4,13 @@ import requiresUser from '../middleware/requiresUser';
 
 const router = express.Router();
 
-router.get('/posts', requiresUser, postController.getAllPosts);
-router.post('/post', requiresUser, postController.postPost);
-router.delete('/posts/:postId', requiresUser, postController.deletePost);
-router.put('/posts/:postId', requiresUser, postController.updatePost);
-router.get('/p/:username', requiresUser, postController.profilePosts);
-router.post('/retweets/:postId', requiresUser, postController.postRetweet);
-router.get('/retweets/:postId', requiresUser, postController.getRetweet);
-router.post('/like/:postId', requiresUser, postController.postLike);
+router.get('/tweets', requiresUser, postController.getAllTweets);
+router.post('/tweet', requiresUser, postController.postTweet);
+router.get('/tweets/profile/:username', requiresUser, postController.profileTweets);
+router.post('/retweets/body/:postId', requiresUser, postController.postRetweetBody);
+router.post('/retweets/:postId', requiresUser, postController.postRetweetNoBody);
+// router.get('/retweets/:postId', requiresUser, postController.getRetweet);
+// router.post('/like/:postId', requiresUser, postController.postLike);
+// router.put('/tweets/:tweet_id', requiresUser, postController.updatePost);
+// router.delete('/tweets/:tweet_id', requiresUser, postController.deleteTweet);
 export default router;
