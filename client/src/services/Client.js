@@ -78,21 +78,23 @@ class Client {
       });
   }
   static getProfilePosts(username) {
-    return axios.get(`/p/${username}`, {
+    return axios.get(`/tweets/profile/${username}`, {
       headers: {
         'x-refresh': localStorage.getItem('refreshToken'),
         Authorization: localStorage.getItem('accessToken'),
       },
     });
   }
+
   static postPost(body) {
-    return axios.post('/post', body, {
+    return axios.post('/tweet', body, {
       headers: {
         'x-refresh': localStorage.getItem('refreshToken'),
         Authorization: localStorage.getItem('accessToken'),
       },
     })
   }
+
   static getFollowings(){
     return axios.get('/followings',{
         headers: {
@@ -109,9 +111,22 @@ class Client {
         },
       });
   }
-  static likePost(postId) {
+  static likePost(tweet_id) {
     return axios.post(
-      `/like/${postId}`,
+      `/tweets/${tweet_id}/like`,
+      {},
+      {
+        headers: {
+          'x-refresh': localStorage.getItem('refreshToken'),
+          Authorization: localStorage.getItem('accessToken'),
+        },
+      }
+    );
+  }
+
+  static unlikePost(tweet_id) {
+    return axios.post(
+      `/tweets/${tweet_id}/unlike`,
       {},
       {
         headers: {
