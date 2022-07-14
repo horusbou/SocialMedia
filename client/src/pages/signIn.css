@@ -9,7 +9,9 @@
     color:white;
     padding:30px 30px;
 }
-
+.signUp{
+    width:100%;
+}
 .loginPage .login h1{
     font-size: 30px;
     font-family: PoppinsBold;

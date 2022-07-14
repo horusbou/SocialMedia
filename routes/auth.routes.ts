@@ -14,11 +14,11 @@ import { body } from 'express-validator';
 const router = express.Router();
 
 
-//register User
-router.get('/users', getUserHandler);
+//get connected User
+router.get('/user', getUserHandler);
+
 //get userData
 router.get('/users/:username', requiresUser, getUserData);
-// routes.get('/users/:username', getUserData);
 
 //  POST /user
 router.post(

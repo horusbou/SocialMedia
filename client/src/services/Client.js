@@ -7,6 +7,13 @@ class Client {
     return false;
   }
 
+  static userValidation(username){
+    return axios
+    .get(`/userverification/${username}`)
+    .then((user) => {
+      return user;
+    }).catch(this.catchError);
+  }
   static getUserData(username) {
     return axios
       .get(`/users/${username}`, {
@@ -18,11 +25,11 @@ class Client {
       .then(this.checkStatus)
       .then((user) => {
         return user;
-      });
+      }).catch(this.catchError);
   }
   static async getAllPosts() {
     return axios
-      .get('/posts', {
+      .get('/tweets', {
         headers: {
           'x-refresh': localStorage.getItem('refreshToken'),
           Authorization: localStorage.getItem('accessToken'),
@@ -31,15 +38,16 @@ class Client {
       .then(this.checkStatus)
       .then((posts) => {
         return posts.data;
-      });
+      }).catch(this.catchError);
   }
   static signUp(values) {
-    return axios.post('/users', values);
+    return axios.post('/users', values).then((data)=>{
+        console.log(data)
+    }).catch(error=>{throw error});
   }
   static  login({ email, password }) {
     return axios.post('/sessions', { email, password })
     .then(this.checkStatus)
-    .then(this.parseJson)
     .then((result) => {
       const accessToken = result.data.accessToken;
       const refreshToken = result.data.refreshToken;
@@ -50,14 +58,7 @@ class Client {
         localStorage.setItem('refreshToken', refreshToken);
       }
     })
-    .catch(error=>{
-        if (error.response) {
-            // The request was made and the server responded with a status code
-            // that falls out of the range of 2xx
-            throw error.response.data;
-        }
-        throw error
-    })
+    .catch(this.catchError)
   }
   static logout() {
     localStorage.removeItem('accessToken');
@@ -66,7 +67,7 @@ class Client {
   }
   static getUser() {
     return axios
-      .get('/users', {
+      .get('/user', {
         headers: {
           'x-refresh': localStorage.getItem('refreshToken'),
           Authorization: localStorage.getItem('accessToken'),
@@ -120,22 +121,32 @@ class Client {
       }
     );
   }
+
   static checkStatus(response) {
-    console.log("\n\nresponse\n\n",response)
     if (response.status >= 200 && response.status < 300) {
       return response;
     } else {
       const error = new Error(`HTTP Error ${response.statusText}`);
       error.status = response.statusText;
       error.response = response;
-      console.log("error=>",error);
       throw error;
     }
   }
 
   static parseJson(response) {
-    console.log("\n\nresponse\n\n",response)
     return response.json();
   }
+  static catchError(error){
+    if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        throw error.response.data;
+    }
+    if(error.request){
+        // The client never received a response, and the request was never left
+        throw error.request
+    }
+    throw error
+}
 }
 export default Client;

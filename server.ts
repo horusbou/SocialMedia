@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction, ErrorRequestHandler } from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import log from './logger/log';
 import multer from 'multer';
 import path from 'path';

@@ -24,7 +24,7 @@ export class Comment extends BaseEntity {
     comment_body: {
         comment: string,
         gifSrc: string,
-        filesSrc: string,
+        filesSrc: string | string[],
     };
     @ManyToOne(() => Tweet, tweet => tweet.comments)
     @JoinColumn({ name: 'tweet_id' })
@@ -39,12 +39,4 @@ export class Comment extends BaseEntity {
     })
     user: User;
 
-
-    // @Column({ nullable: true })
-    // source_id: string;
-
-
-    // @ManyToOne(() => Comment, comment => comment.comment_id)
-    // @JoinColumn({ name: "source_id" })
-    // public sub_comment?: Comment;
 }

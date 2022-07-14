@@ -1,8 +1,9 @@
 import './App.css';
 import { ChakraProvider } from '@chakra-ui/react';
 import Home from './pages/Home';
-import SignIn from './pages/SignIn';
-import SignUp from './pages/Signup';
+// import SignIn from './pages/SignIn';
+// import SignUp from './pages/Signup';
+import LoginSignUp from './pages/index'
 import {Nav,Followers,UserDetailsProvider} from './compontents';
 import Profile from './pages/Profile';
 import {
@@ -55,15 +56,15 @@ function App() {
           <Switch>
           <PublicRoute
                 exact
-                path="/signup"
-                Component={SignUp}
+                path="/"
+                Component={LoginSignUp}
            />
 
-          <PublicRoute
+          {/* <PublicRoute
                 exact
                 path="/"
                 Component={SignIn}
-           />
+           /> */}
 
             <PrivateRoute
               exact

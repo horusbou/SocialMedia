@@ -4,7 +4,7 @@ import { omit } from 'lodash';
 import log from '../logger/log';
 import { QueryBuilder, QueryRunner } from 'neogma';
 import neogma from '../util/neo4j';
-import { User as UserNeo4J } from '../models/UserNeoModel';
+import { User as UserNeo4J } from '../entity/UserNeoModel';
 import { validationResult } from 'express-validator';
 import HttpException from '../util/HttpException';
 import { User } from '../entity'

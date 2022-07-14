@@ -1,5 +1,6 @@
-import { Entity, BaseEntity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from "typeorm";
+import { Entity, BaseEntity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, OneToOne } from "typeorm";
 import { Tweet } from "./tweet.entitie";
+import { User } from "./user.entitie";
 
 @Entity("like")
 export class Like extends BaseEntity {
@@ -9,7 +10,12 @@ export class Like extends BaseEntity {
     created_at: Date;
     @UpdateDateColumn()
     updated_at: Date;
+
     @ManyToOne(() => Tweet, tweet => tweet.likes)
     @JoinColumn({ name: 'tweet_id' })
     tweet: Tweet;
+
+    @OneToOne(() => User)
+    @JoinColumn({ name: 'user_id' })
+    user: User;
 }

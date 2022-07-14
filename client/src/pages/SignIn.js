@@ -19,13 +19,12 @@ import {Button} from '../compontents'
 import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router-dom';
 
-const SignIn = () => {
+const SignIn = (props) => {
 	const [showPassword, setShowPassword] = useState(false);
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [shouldRedirect, setShouldRedirect] = useState(false);
 	const [loginInProgress, setLoginInProgress] = useState(false);
-    const [signUpComponent,setSignUpComponent]= useState(false);
     const [emailError,setEmailError]= useState(false);
     const [passwordError,setPasswordError]= useState(false);
     const [error,setError]= useState(false);
@@ -49,43 +48,20 @@ const SignIn = () => {
 	};
 	if (shouldRedirect) return <Redirect to="/home" />;
 	return (
-		<div className='container'>
-            <Flex
-			flexDirection="row"
-			justifyContent="space-around"
-            alignContent={"center"}
-		>
-            <Flex width="40%"
-             flexDirection="column"
-             justifyContent="flex-start"
-               className="leftside"
-                >
-                <header>
-                    <h1>Alto.</h1>
-                </header>
-                <main>
-                    <h3>Welcome to Alto !</h3>
-                    <div className="description">
-                        <p>Where sharing and gathering experience is made easy.</p>
-                        <p>A platform dedicated to Ensa students and graduates to improve the experience of the.......  </p>
-                    </div>
-                </main>
-                </Flex>
-                {!signUpComponent? <Flex
+
+                <Flex
                 flexDirection={"column"}
                 justifyContent="center"
                 alignContent="center"
-
                 width="50%"
                 backgroundColor={colors.white}
                 className="rightside"
                 >
-
                 <Flex
                 flexDirection={"row"}
                 justifyContent="flex-end"
                 >
-                    <Button>SignUp</Button>
+                    <Button onClick={()=>{props.setSignUpComponent(true)}}>SignUp</Button>
                 </Flex>
                 <Flex flexDirection={"column"} className='loginPage'>
                     <div className="login">
@@ -97,7 +73,7 @@ const SignIn = () => {
                     </Button>
                     <div className='options'>
                         <p>Don't have an account?</p>
-                        <p onClick={()=>{setSignUpComponent(true)}}>Create an account</p>
+                        <p onClick={()=>{props.setSignUpComponent(true)}}>Create an account</p>
                     </div>
                     <form onSubmit={handleSubmit}>
                     <Stack
@@ -173,93 +149,8 @@ const SignIn = () => {
                             </Stack>
                     </form>
                 </Flex>
-                </Flex>:<div>
-                <p onClick={()=>{setSignUpComponent(false)}}>Create an account</p>
-                    </div>}
-            </Flex>
-        </div>
+                </Flex>
 	);
 };
-/*
-
-			<Stack
-				flexDir="column"
-				mb="2"
-				justifyContent="center"
-				alignItems="center"
-			>
-				<Avatar bg="teal.500" />
-				<Heading color="teal.400">Welcome</Heading>
-				<Box minW={{ base: '90%', md: '468px' }}>
-					<form onSubmit={handleSubmit}>
-						<Stack
-							spacing={4}
-							p="1rem"
-							backgroundColor="whiteAlpha.900"
-							boxShadow="md"
-						>
-							<FormControl>
-								<InputGroup>
-									<InputLeftElement
-										pointerEvents="none"
-										children={<CFaUserAlt color="gray.300" />}
-									/>
-									<Input
-										type="email"
-										placeholder="email address"
-										onChange={(evt) => {
-											setEmail(evt.target.value);
-										}}
-									/>
-								</InputGroup>
-							</FormControl>
-							<FormControl>
-								<InputGroup>
-									<InputLeftElement
-										pointerEvents="none"
-										color="gray.300"
-										children={<CFaLock color="gray.300" />}
-									/>
-									<Input
-										type={showPassword ? 'text' : 'password'}
-										placeholder="Password"
-										onChange={(evt) => {
-											setPassword(evt.target.value);
-										}}
-									/>
-									<InputRightElement width="4.5rem">
-										<Button h="1.75rem" size="sm" onClick={handleShowClick}>
-											{showPassword ? 'Hide' : 'Show'}
-										</Button>
-									</InputRightElement>
-								</InputGroup>
-								<FormHelperText textAlign="right">
-									<Link to="/repassword">forgot password?</Link>
-								</FormHelperText>
-							</FormControl>
-							<Button
-								borderRadius={0}
-								type="submit"
-								variant="solid"
-								colorScheme="teal"
-								width="full"
-								isDisabled={!email && !password}
-								isLoading={loginInProgress}
-							>
-								Login
-							</Button>
-						</Stack>
-					</form>
-				</Box>
-			</Stack>
-			<Box>
-				New to us?{' '}
-				<Link to="/signup" color="teal.500" replace>
-					Sign Up
-				</Link>
-			</Box>
-
-
-*/
 
 export default SignIn;

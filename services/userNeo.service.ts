@@ -1,4 +1,4 @@
-import { User as UserInstance } from '../models/UserNeoModel';
+import { User as UserInstance } from '../entity/UserNeoModel';
 
 export async function getFollowers(user_id: string) {
     const user = await UserInstance.findOne({

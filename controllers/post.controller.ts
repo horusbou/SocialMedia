@@ -1,10 +1,10 @@
-import { Response, Request, NextFunction } from 'express';
+import { Response, Request, NextFunction, Router } from 'express';
 import fs from 'fs/promises';
 import path from 'path';
-import { User, Like, Tweet, Retweet } from "../entity"
+import { User, Like, Tweet, Retweet, Comment } from "../entity"
 import HttpException from '../util/HttpException';
-import { omit } from 'lodash';
 import log from '../logger/log';
+import { omit } from 'lodash';
 import { getFollowers } from '../services/userNeo.service';
 
 export const getAllTweets = async (
@@ -12,7 +12,6 @@ export const getAllTweets = async (
     res: Response,
     next: NextFunction
 ) => {
-    //@ts-ignore
     const user = await User.find({ where: { user_id: req.user.user_id }, relations: ['tweets', 'tweets.user', 'tweets.comments', 'tweets.comments.user', 'retweets', 'retweets.user', 'retweets.tweet', 'retweets.tweet.user', 'tweets.source', 'tweets.source.user'] });
     if (!user)
         return next(new HttpException(404, "user not found"));
@@ -66,7 +65,6 @@ export const getRetweet = async (req: Request, res: Response) => {
 //[x] To post a retweet with a body
 export const postRetweetBody = async (req: Request, res: Response, next: NextFunction) => {
     const { tweet_id } = req.params;
-    //@ts-ignore
     const user_id = req.user.user_id
     const { tweet_body } = req.body;
     try {
@@ -89,7 +87,7 @@ export const postRetweetBody = async (req: Request, res: Response, next: NextFun
 };
 export const postRetweetNoBody = async (req: Request, res: Response, next: NextFunction) => {
     const { tweet_id } = req.params;
-    //@ts-ignore
+
     const user = await User.findOneBy({ user_id: req.user.user_id });
     if (!user)
         return res.json("user not found");
@@ -127,8 +125,8 @@ export const postTweet = async (req: Request, res: Response, next: NextFunction)
             pictures = (req.files as Express.Multer.File[]).map((file) => file.path);
         }
         const { tweet, gifSrc }: { tweet: string, gifSrc: string } = req.body;
-        //@ts-ignore
-        const user = await User.findOneBy({ user_id: req.user.user_id });
+        const { user_id } = req.user;
+        const user = await User.findOneBy({ user_id });
         if (!user)
             return res.json({ message: 'user not found!' });
         const tweetRow = Tweet.create({
@@ -148,7 +146,6 @@ export const postTweet = async (req: Request, res: Response, next: NextFunction)
 
 export const deleteTweet = async (req: Request, res: Response, next: NextFunction) => {
     const { tweet_id } = req.params;
-    // console.log(req.params.postId);
 
     const tweet = await Tweet.findOneBy({ tweet_id });
     if (!tweet)
@@ -187,10 +184,28 @@ export const updatePost = (req: Request, res: Response, next: NextFunction) => {
     //     .then(() => res.json({ message: 'tweet is updated' }))
     //     .catch((err: Error) => console.log(err));
 };
+export const deleteLike = async (req: Request, res: Response, next: NextFunction) => {
+    const { tweet_id } = req.params;
+
+    const user = await User.findOneBy({ user_id: req.user.user_id });
+    if (!user)
+        return next(new HttpException(404, "User not found"));
+    const tweet = await Tweet.findOneBy({ tweet_id });
+    if (!tweet)
+        return next(new HttpException(404, "Tweet not found"));
+
+    const like = await Like.findOne({ where: { tweet: { tweet_id }, user: { user_id: user.user_id } } });
+    if (!like)
+        return next(new HttpException(404, "like not found"));
+    await like.remove();
+    tweet.like_count--;
+    await tweet.save();
+    return res.status(200).json(tweet)
+}
 export const postLike = async (req: Request, res: Response) => {
     try {
         const { tweet_id } = req.params;
-        //@ts-ignore
+
         const user = await User.findOneBy({ user_id: req.user.user_id });
         if (!user) {
             return res.json("user not found");
@@ -207,3 +222,64 @@ export const postLike = async (req: Request, res: Response) => {
         return res.status(400).json({ message: 'error ' + error });
     }
 };
+
+export const getTweet = async (req: Request, res: Response, next: NextFunction) => {
+    const { tweet_id } = req.params;
+    const tweet = await Tweet.findOne({
+        where: { tweet_id }, relations: [
+            'tweet',
+            'tweet.user',
+            'tweet.comments',
+            'tweet.likes',
+            'tweet.retweets'
+        ]
+    })
+    if (!tweet)
+        return next(new HttpException(404, 'tweet not found'))
+    return res.status(200).json(tweet);
+}
+export const getTweetComments = async (req: Request, res: Response, next: NextFunction) => {
+    const { tweet_id } = req.params;
+    const comments = await Comment.findBy({ tweet: { tweet_id } });
+    if (!comments)
+        return next(new HttpException(404, "comments not found"));
+    log.info(comments);
+    return res.status(200).json(comments);
+}
+export const getComment = async (req: Request, res: Response, next: NextFunction) => {
+    const { tweet_id, comment_id } = req.params;
+    const comment = await Comment.findOneBy({ tweet: { tweet_id }, comment_id });
+    if (!comment)
+        return next(new HttpException(404, 'comment not found'));
+    return res.status(200).json(comment);
+}
+export const postComment = async (req: Request, res: Response, next: NextFunction) => {
+    const { tweet_id } = req.params;
+
+    let pictures: string | string[] = '';
+    if (req.files) {
+        pictures = (req.files as Express.Multer.File[]).map((file) => file.path);
+    }
+    const { comment, gifSrc }: { comment: string, gifSrc: string } = req.body;
+
+    const user = await User.findOneBy({ user_id: req.user.user_id });
+    if (!user)
+        return next(new HttpException(404, "user not found"));
+    const tweet = await Tweet.findOneBy({ tweet_id });
+    if (!tweet)
+        return next(new HttpException(404, "tweet not found"));
+
+    const commentData = Comment.create({
+        comment_body: {
+            comment,
+            gifSrc,
+            filesSrc: pictures
+        },
+        tweet,
+        user
+    })
+    tweet.comment_count++;
+    await tweet.save();
+    await commentData.save();
+    return res.status(200).json(tweet);
+}
