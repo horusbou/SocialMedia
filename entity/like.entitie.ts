@@ -15,7 +15,7 @@ export class Like extends BaseEntity {
     @JoinColumn({ name: 'tweet_id' })
     tweet: Tweet;
 
-    @OneToOne(() => User)
-    @JoinColumn({ name: 'user_id' })
+    @ManyToOne(() => User, user => user.likes)
+    @JoinColumn({ name: "user_id" })
     user: User;
 }

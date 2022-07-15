@@ -7,7 +7,7 @@ import UserRoutes from './routes/user.routes';
 import authRoutes from './routes/auth.routes';
 import deserializeUser from './middleware/deserializeUser';
 import HttpException from './util/HttpException';
-import { Tweet, Retweet, Like, User, Session, Comment } from './entity'
+import { Tweet, Retweet, Like, User, Session, Comment, Timeline } from './entity'
 import { createConnection } from "typeorm"
 
 //setting up multer
@@ -31,7 +31,7 @@ const main = async () => {
             username: "root",
             password: "compaq7550",
             database: "ensaTweet",
-            entities: [User, Tweet, Like, Comment, Retweet, Session],
+            entities: [User, Tweet, Like, Comment, Retweet, Session, Timeline],
             synchronize: true,
         })
 

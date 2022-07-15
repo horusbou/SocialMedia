@@ -51,7 +51,7 @@ export async function createUserhandler(req: Request, res: Response, next: NextF
     const salt = await bcrypt.genSalt(10);
     const hashed = await bcrypt.hash(req.body.password, salt);
     const userData = { ...req.body };
-    log.info(userData);
+    // log.info(userData);
     userData.username = userData.username.toLowerCase();
     userData.userAvatar = `https://robohash.org/${userData.firstName + userData.lastName + userData.username}.png`;
     userData.password = hashed;
@@ -88,9 +88,9 @@ export async function getUserData(req: Request, res: Response, next: NextFunctio
 
 export async function postFollow(req: Request, res: Response) {
     const { targetId } = req.body;
-    //@ts-ignore
+
     const user_id = req.user.user_id;
-    console.log(targetId, user_id);
+
     try {
         await UserNeo4J.relateTo({
             alias: 'Follows',
@@ -108,7 +108,7 @@ export async function postFollow(req: Request, res: Response) {
 
 export async function postUnfollow(req: Request, res: Response) {
     const { target_id } = req.body;
-    //@ts-ignore
+
     const user_id = req.user.user_id;
     if (target_id === user_id) {
         return res.json({ message: "you can't follow this account" });
@@ -127,8 +127,8 @@ export async function postUnfollow(req: Request, res: Response) {
     }
 }
 export async function getFollowers(req: Request, res: Response) {
-    //@ts-ignore
     const userId = req.user.user_id;
+
     const user = await UserNeo4J.findOne({
         where: {
             user_id: userId
@@ -144,8 +144,8 @@ export async function getFollowers(req: Request, res: Response) {
     res.json({ following, count: following.length });
 }
 export async function getFollowings(req: Request, res: Response) {
-    //@ts-ignore
     const user_id = req.user.user_id;
+
     const relationships = await UserNeo4J.findRelationships({
         alias: 'Follows',
         where: {

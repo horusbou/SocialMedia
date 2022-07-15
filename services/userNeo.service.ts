@@ -11,6 +11,6 @@ export async function getFollowers(user_id: string) {
     const following = relationship.map((follow: any) => {
         return follow.target.dataValues;
     });
-    console.log(following);
+    // console.log(following);
     return following;
 }

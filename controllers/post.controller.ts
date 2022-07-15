@@ -1,7 +1,7 @@
 import { Response, Request, NextFunction, Router } from 'express';
 import fs from 'fs/promises';
 import path from 'path';
-import { User, Like, Tweet, Retweet, Comment } from "../entity"
+import { User, Like, Tweet, Retweet, Comment, Timeline } from "../entity"
 import HttpException from '../util/HttpException';
 import log from '../logger/log';
 import { omit } from 'lodash';
@@ -12,14 +12,42 @@ export const getAllTweets = async (
     res: Response,
     next: NextFunction
 ) => {
-    const user = await User.find({ where: { user_id: req.user.user_id }, relations: ['tweets', 'tweets.user', 'tweets.comments', 'tweets.comments.user', 'retweets', 'retweets.user', 'retweets.tweet', 'retweets.tweet.user', 'tweets.source', 'tweets.source.user'] });
+    const user = await User.find({ where: { user_id: req.user.user_id } });
     if (!user)
         return next(new HttpException(404, "user not found"));
-    const tweets = [...user[0].tweets, ...user[0].retweets]
-
-    tweets.sort(function (a, b) {
-        return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
+    const timeline = await Timeline.findOneBy({ user: { user_id: req.user.user_id } });
+    if (!timeline)
+        return next(new HttpException(404, "timeline not found"));
+    const tweetsOfTimeline = await Tweet.find({
+        where: {
+            timeline: {
+                timeline_id: timeline.timeline_id
+            }
+        },
+        relations: ['timeline'],
+        order: {
+            created_at: 'DESC'
+        }
     })
+
+    const tweets: any = [];
+
+    for (let el of tweetsOfTimeline) {
+        tweets.push({
+            tweet_id: el.tweet_id,
+            tweet_body: el.tweet_body,
+            like_count: el.like_count,
+            retweet_count: el.retweet_count,
+            created_at: el.created_at,
+            updated_at: el.updated_at,
+            source_id: el.source_id,
+            source: el.source,
+            user: el.timeline.user,
+            is_liked: (await Like.findOneBy({ tweet: { tweet_id: el.tweet_id }, user: { user_id: req.user.user_id } })) !== null ? true : false
+        })
+    }
+
+
     return res.status(200).json(tweets);
 };
 
@@ -77,7 +105,8 @@ export const postRetweetBody = async (req: Request, res: Response, next: NextFun
         if (!tweet) {
             return res.json({ message: 'tweet not found' })
         }
-        const retweet = Tweet.create({ tweet_body, source: tweet, user })
+        const timeline = user.timeline;
+        const retweet = Tweet.create({ tweet_body, source: tweet, timeline })
 
         await retweet.save()
         return res.status(200).json(retweet);
@@ -110,12 +139,12 @@ export const profileTweets = async (req: Request, res: Response, next: NextFunct
     });
     if (!user)
         return next(new HttpException(404, "user not found"));
-    const tweets = [...user.tweets, ...user.retweets]
+    // const tweets = [...user.tweets, ...user.retweets]
 
-    tweets.sort(function (a, b) {
-        return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
-    })
-    return res.status(200).json(tweets);
+    // tweets.sort(function (a, b) {
+    //     return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
+    // })
+    return res.status(200).json(user);
 };
 
 export const postTweet = async (req: Request, res: Response, next: NextFunction) => {
@@ -129,16 +158,35 @@ export const postTweet = async (req: Request, res: Response, next: NextFunction)
         const user = await User.findOneBy({ user_id });
         if (!user)
             return res.json({ message: 'user not found!' });
+
+        const timeline = await Timeline.findOneBy({ user: { user_id } });
+        if (!timeline)
+            return res.json({ message: 'user not found!' });
+
         const tweetRow = Tweet.create({
             tweet_body: {
-                tweet,
-                gifSrc,
+                tweet: tweet ? tweet : undefined,
+                gifSrc: gifSrc ? gifSrc : undefined,
                 filesSrc: pictures ? pictures : undefined
             },
-            user
+            timeline
         });
         await tweetRow.save();
-        return res.json({ tweet: tweetRow, message: 'done' })
+        console.log(tweetRow)
+        return res.json(
+            {
+                tweet_id: tweetRow.tweet_id,
+                tweet_body: tweetRow.tweet_body,
+                like_count: tweetRow.like_count,
+                retweet_count: tweetRow.retweet_count,
+                created_at: tweetRow.created_at,
+                updated_at: tweetRow.updated_at,
+                source_id: tweetRow.source_id,
+                source: tweetRow.source,
+                user: tweetRow.timeline.user,
+                is_liked: false
+            }
+        )
     } catch (error) {
         return res.status(500).json({ error })
     }
@@ -187,14 +235,14 @@ export const updatePost = (req: Request, res: Response, next: NextFunction) => {
 export const deleteLike = async (req: Request, res: Response, next: NextFunction) => {
     const { tweet_id } = req.params;
 
-    const user = await User.findOneBy({ user_id: req.user.user_id });
-    if (!user)
-        return next(new HttpException(404, "User not found"));
+    // const user = await User.findOneBy({ user_id: req.user.user_id });
+    // if (!user)
+    //     return next(new HttpException(404, "User not found"));
     const tweet = await Tweet.findOneBy({ tweet_id });
     if (!tweet)
         return next(new HttpException(404, "Tweet not found"));
 
-    const like = await Like.findOne({ where: { tweet: { tweet_id }, user: { user_id: user.user_id } } });
+    const like = await Like.findOne({ where: { tweet: { tweet_id }, user: { user_id: req.user.user_id } } });
     if (!like)
         return next(new HttpException(404, "like not found"));
     await like.remove();
@@ -213,7 +261,7 @@ export const postLike = async (req: Request, res: Response) => {
         const tweet = await Tweet.findOneBy({ tweet_id });
         if (!tweet)
             return res.json("tweet not found");
-        const like = Like.create({ tweet })
+        const like = Like.create({ tweet, user })
         tweet.like_count++;
         await tweet.save();
         await like.save();

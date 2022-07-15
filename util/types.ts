@@ -9,9 +9,6 @@ export interface UserInterface {
     password: string;
     bio: string;
     isActive: boolean;
-    tweets: Tweet[];
-    retweets: Retweet[]
-    comments: Comment[];
     session: Session;
     created_at: Date;
     updated_at: Date;

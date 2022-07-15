@@ -1,9 +1,9 @@
 import { Entity, BaseEntity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany, OneToOne } from "typeorm";
 import { Retweet } from "./retweet.entitie";
-import { Tweet } from "./tweet.entitie";
 import { Comment } from "./comment.entitie";
 import { Session } from "./session.entitie";
-import { Like } from "./like.entitie";
+import { Timeline } from "./timeline.entite";
+import { Like } from "./like.entitie"
 
 @Entity('user')
 export class User extends BaseEntity {
@@ -34,11 +34,11 @@ export class User extends BaseEntity {
     @UpdateDateColumn()
     updated_at: Date;
 
-    @OneToMany(
-        () => Tweet,
-        tweet => tweet.user
-    )
-    tweets: Tweet[];
+    // @OneToMany(
+    //     () => Tweet,
+    //     tweet => tweet.user
+    // )
+    // tweets: Tweet[];
 
     @OneToMany(
         () => Comment,
@@ -51,4 +51,11 @@ export class User extends BaseEntity {
 
     @OneToOne(() => Session, session => session.user)
     session: Session
+
+    @OneToOne(() => Timeline, timeline => timeline.user)
+    timeline: Timeline
+
+    @OneToMany(() => Like, like => like.user)
+    likes: Like[]
+
 }

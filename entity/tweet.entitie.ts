@@ -1,8 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, BaseEntity, ManyToOne, JoinColumn, OneToMany } from 'typeorm'
-import { User } from './user.entitie';
 import { Like } from './like.entitie';
 import { Comment } from './comment.entitie';
 import { Retweet } from './retweet.entitie';
+import { Timeline } from './timeline.entite';
 
 @Entity("tweet")
 export class Tweet extends BaseEntity {
@@ -26,14 +26,22 @@ export class Tweet extends BaseEntity {
     @UpdateDateColumn()
     updated_at: Date;
 
+    // @ManyToOne(
+    //     () => User,
+    //     user => user.tweets
+    // )
+    // @JoinColumn({
+    //     name: 'user_id'
+    // })
+    // user: User;
     @ManyToOne(
-        () => User,
-        user => user.tweets
+        () => Timeline,
+        timeline => timeline.tweets
     )
     @JoinColumn({
-        name: 'user_id'
+        name: 'timeline_id'
     })
-    user: User;
+    timeline: Timeline;
 
     @Column({ nullable: true })
     source_id: string;
