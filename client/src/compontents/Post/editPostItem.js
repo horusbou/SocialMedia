@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import axios from 'axios';
+import {colors} from '../../lib'
 import {
 	AlertDialog,
 	AlertDialogBody,
@@ -21,14 +22,14 @@ export const AlertEditPostItem = (props)=> {
 		axios.put('/posts/' + props._id, { newTweet });
 	};
 	return (
-		<AlertDialog
+		<AlertDialog colorScheme="blackAlpha"
 			isOpen={props.isOpen}
 			onClose={props.onClose}
 			leastDestructiveRef={cancelRef}
 		>
 			<AlertDialogOverlay>
-				<AlertDialogContent>
-					<AlertDialogHeader fontSize="lg" fontWeight="bold">
+				<AlertDialogContent bg={colors.background} color={colors.white}>
+					<AlertDialogHeader fontSize="lg" fontWeight="bold" >
 						Edit Post
 					</AlertDialogHeader>
 
@@ -37,7 +38,7 @@ export const AlertEditPostItem = (props)=> {
 					</AlertDialogBody>
 
 					<AlertDialogFooter>
-						<Button ref={cancelRef} onClick={props.onClose}>
+						<Button ref={cancelRef} onClick={props.onClose} colorScheme="red">
 							Cancel
 						</Button>
 						<Button onClick={handleUpdatePost} colorScheme="green" ml={3}>

@@ -84,19 +84,20 @@ export const AddPost = (props) => {
 			formData.append('gifSrc', gifSrc);
 			for (let i = 0; i < currentFiles.length; i++)
 				formData.append('file', currentFiles[i]);
-			Client.postPost(formData);
+			Client.postPost(formData).then(res=>{
+                props.addToPost(res.data)});
 		} else {
 			Client.postPost({
 				tweet,
 				gifSrc,
-			})
+			}).then(res=>{
+            props.addToPost(res.data)});
 		}
 
 		setTweet('');
 		setGifSrc('');
 		setPreviewImages([]);
 		setCurrentFiles([]);
-		props.addPost();
 	};
 	useEffect(() => {
 		if (textareaRef && textareaRef.current) {
@@ -115,7 +116,7 @@ export const AddPost = (props) => {
 			<form className="post-item" onSubmit={handleSubmit}>
 				<div className="avatar">
 					{user ? (
-						<Avatar name={user.firstName + ' ' + user.lastName} src={user.userAvatar} />
+						<Avatar name={user.firstname + ' ' + user.lastname} src={user.userAvatar} />
 					) : null}
 				</div>
 				<div className="post-body">

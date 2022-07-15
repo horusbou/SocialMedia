@@ -63,6 +63,7 @@
 .post-item .post-body .post-actions .icon > .countes {
 	margin-left: 5px;
 	height: 20px;
+    color:rgb(169, 185, 185);
 }
 .post-item .post-body .post-actions .icon > .likecolor {
 	color: red;

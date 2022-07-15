@@ -21,7 +21,7 @@ return (<div className="options">
         <Icon w={6} h={6} as={MdOutlineMailOutline} />
         <Icon w={5} h={5} as={MdNotifications} />
         <Link to={user.username?`${user.username}`:`/`}>
-       <Avatar name={user.firstName + ' '+ user.lastName} src={user.userAvatar} />
+       <Avatar name={user.firstname + ' '+ user.lastname} src={user.userAvatar} />
         </Link>
     </div>)
 }

@@ -18,41 +18,46 @@ useEffect(() => {
 }, [])
 
 
-  useEffect(() => {
-    if(!postData.length){
-        setLoading(true);
-    }
+//   useEffect(() => {
+//     if(!postData.length){
+//         setLoading(true);
+//     }
+//     Client.getAllPosts()
+//       .then((response) => {
+//         setPostData(response);
+//       }).then(()=>setLoading(false))
+//     // eslint-disable-next-line react-hooks/exhaustive-deps
+//   }, [isPosted]);
+
+useEffect(() => {
+    console.log("loading tweets")
+    setLoading(true);
     Client.getAllPosts()
       .then((response) => {
         setPostData(response);
       }).then(()=>setLoading(false))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isPosted]);
-  return (
+  }, []);
+
+return (
     <div className="home main">
         <PageTitle title="Home"/>
       <AddPost
-        addPost={() => {
-            setIsPosted(!isPosted);
-        }}
+        addToPost={(post)=>{setPostData([post,...postData])}}
+
       />
         { loading  && (<LoadingSpinner />)
   }
       {!!postData && !loading
         ? postData.map((item, i) => (
           <PostItem
-            key={item.post_id + i}
-            _id={item.post_id}
-            isRetweeted={item.isRetweeted}
-            userId={item.user_id}
-            postOwner={item.owner.user_id}
-            fullName={`${item.owner.firstName} ${item.owner.lastName}`}
-            avatar={`${item.owner.userAvatar}`}
-            username={`${item.owner.username}`}
-            tweetBody={item.tweetBody}
-            likes={item.like}
-            retweet={item.retweet}
-            userLiked={item.userLikedPost}
+            key={item.tweet_id }
+            tweet_id={item.tweet_id}
+            isRetweeted={item.retweet_id}
+            user={item.user}
+            tweetBody={item.tweet_body}
+            likes={item.like_count}
+            retweet={item.retweet_count}
+            isLiked={item.is_liked}
           />
         ))
         : null}

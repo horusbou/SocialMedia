@@ -1,11 +1,12 @@
 import React from 'react';
 import { Menu, MenuButton, MenuList } from '@chakra-ui/react';
+import { colors } from '../../lib';
 
 export const MoreOption=({ Icon, children })=> {
 	return (
-		<Menu className="menu">
+		<Menu className="menu" >
 			<MenuButton>{Icon}</MenuButton>
-			<MenuList>{children}</MenuList>
+			<MenuList backgroundColor={colors.background}>{children}</MenuList>
 		</Menu>
 	);
 }

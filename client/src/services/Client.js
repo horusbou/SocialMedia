@@ -125,9 +125,8 @@ class Client {
   }
 
   static unlikePost(tweet_id) {
-    return axios.post(
+    return axios.delete(
       `/tweets/${tweet_id}/unlike`,
-      {},
       {
         headers: {
           'x-refresh': localStorage.getItem('refreshToken'),

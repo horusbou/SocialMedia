@@ -16,23 +16,19 @@ import { Link } from 'react-router-dom';
 import Client from '../../services/Client';
 
 export const PostItem = (props) => {
-  const [isLiked, setLike] = useState(false || props.userLiked);
+  const [isLiked, setLike] = useState(props.isLiked);
   const [isRetweeted, setIsRetweeted] = useState(false);
   const [likeCountes, setLikeCountes] = useState(props.likes);
   const [retweetCountes, setretweetCountes] = useState(props.retweet);
   const [isEdited, setisEdited] = useState(false);
   //eslint-disable-next-line
   const [postId, setPostId] = useState(null);
-  //eslint-disable-next-line
-  async function like(postId) {
-    console.log("POST ID", postId)
-    await Client.likePost(postId);
-  }
+    // console.log(props)
   return (
     <>
       {isEdited && (
         <AlertEditPostItem
-          _id={props._id}
+          _id={props.tweet_id}
           tweetBody={props.tweetBody}
           isOpen={isEdited}
           onClose={() => setisEdited(false)}
@@ -41,24 +37,23 @@ export const PostItem = (props) => {
 
       <div className="post-item">
         <div className="avatar">
-          <Avatar name={props.fullName} src={props.avatar} />
+          <Avatar name={props.user.firstname + ' '+ props.user.lastname} src={props.user.userAvatar} />
         </div>
         <div className="post-body">
           <div className="post-content">
             <div className="content-header">
-              <Link to={`/${props.username}`} className="header-data">
-                <span className="name">{props.fullName}</span>
-                <span className="username">@{props.username}</span>
+              <Link to={`/${props.user.username}`} className="header-data">
+                <span className="name">{props.user.firstname}</span>
+                <span className="username">@{props.user.username}</span>
               </Link>
-              {/*props.postOwner === props.userId */}
               {true? (
-                <MoreOption Icon="..." children={['Edit', 'Delete']}>
-                  <MenuItem onClick={() => setisEdited(true)}>
+                <MoreOption  Icon="..." children={['Edit', 'Delete']}>
+                  <MenuItem  _hover={{color:'black'}} onClick={() => setisEdited(true)}>
                     <p>Edit Post</p>
                   </MenuItem>
-                  <MenuItem
+                  <MenuItem _hover={{color:'black'}}
                     onClick={() => {
-                      axios.delete('/posts/' + props._id);
+                      axios.delete('/posts/' + props.tweet_id);
                     }}
                   >
                     Delete Post
@@ -72,7 +67,7 @@ export const PostItem = (props) => {
               </h3>}
               <PictureGif
                 gifSrc={props.tweetBody.gifSrc}
-                filesSrc={props.tweetBody.filesSrc}
+                filesSrc={props.tweetBody.filesSrc || []}
               />
             </div>
           </div>
@@ -111,12 +106,10 @@ export const PostItem = (props) => {
                 <AiFillHeart
                   className="icon-item liked"
                   color="#f91880"
-                  onClick={() => {
+                  onClick={ () => {
                     setLikeCountes(likeCountes - 1);
-                    // axios.put(`/likes/${props._id}`);
-                    Client.likePost(props._id);
-                    setPostId(props._id);
-                    return setLike(!isLiked);
+                    setLike(!isLiked);
+                    Client.unlikePost(props.tweet_id);
                   }}
                 />
               ) : (
@@ -124,13 +117,9 @@ export const PostItem = (props) => {
                   className="icon-item"
                   color="#a9b9b9"
                   onClick={() => {
-                    console.log(props)
-                    setLikeCountes(likeCountes + 1);
-                    //  axios.post(`/likes/${props._id}`);
-                    // await Client.likePost(props._id);
-                    Client.likePost(props._id);
-                    setPostId(props._id);
-                    return setLike(!isLiked);
+                      setLikeCountes(likeCountes + 1);
+                      setLike(!isLiked);
+                      Client.likePost(props.tweet_id);
                   }}
                 />
               )}
