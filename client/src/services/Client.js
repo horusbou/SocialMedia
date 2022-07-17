@@ -95,6 +95,22 @@ class Client {
     })
   }
 
+  static postRetweet(tweet_id,body){
+    return axios.post('/retweets/'+tweet_id, body, {
+        headers: {
+          'x-refresh': localStorage.getItem('refreshToken'),
+          Authorization: localStorage.getItem('accessToken'),
+        },
+      })
+  }
+  static deleteRetweet(tweet_id,body){
+    return axios.delete('/retweets/'+tweet_id, {
+        headers: {
+          'x-refresh': localStorage.getItem('refreshToken'),
+          Authorization: localStorage.getItem('accessToken'),
+        },
+      })
+  }
   static getFollowings(){
     return axios.get('/followings',{
         headers: {

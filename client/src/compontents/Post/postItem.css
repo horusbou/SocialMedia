@@ -1,17 +1,23 @@
+.container{
+    display: flex;
+    flex-direction: column;
+}
+.container .retweet{
+    margin-left:20px;
+    padding:5px;
+    color:rgb(241,241,241,0.5);
+    font-size: 12px;
+    font-family: OpenSansLight;
+}
 .post-item {
-	/* width: 400px; */
+    padding: 10px 10px;
 	border-bottom: solid #565656 1px;
 	display: flex;
 	align-items: flex-start;
-	padding: 10px 10px;
 	z-index: 0;
 }
 .post-item:hover {
 	z-index: 0;
-}
-.retweeted p {
-	font-size: 10px;
-	padding: 5px 10px;
 }
 .post-item .avatar {
 	margin-right: 10px;

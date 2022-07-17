@@ -45,21 +45,34 @@ return (
         addToPost={(post)=>{setPostData([post,...postData])}}
 
       />
-        { loading  && (<LoadingSpinner />)
-  }
+        { loading  && (<LoadingSpinner />)}
       {!!postData && !loading
-        ? postData.map((item, i) => (
-          <PostItem
-            key={item.tweet_id }
-            tweet_id={item.tweet_id}
-            isRetweeted={item.retweet_id}
-            user={item.user}
-            tweetBody={item.tweet_body}
-            likes={item.like_count}
-            retweet={item.retweet_count}
-            isLiked={item.is_liked}
-          />
-        ))
+        ? postData.map((item, i) => {
+            if(item.source_id===null)
+                {
+                return (<PostItem
+                key={item.tweet_id }
+                tweet_id={item.tweet_id}
+                user={item.user}
+                tweetBody={item.tweet_body}
+                likes={item.like_count}
+                retweet={item.retweet_count}
+                isLiked={item.is_liked}
+            />)}else{
+                return (<PostItem
+                    key={item.tweet_id }
+                    tweet_id={item.tweet_id}
+                    userRetweeted={item.user}
+                    user={item.source.timeline.user}
+                    tweetBody={item.source.tweet_body}
+                    likes={item.source.like_count}
+                    retweet={item.source.retweet_count}
+                    isLiked={item.is_liked}
+                    isRetweeted={item.source.timeline.user.user_id === item.user.user_id}
+                />)
+            }
+
+            })
         : null}
     </div>
   );
