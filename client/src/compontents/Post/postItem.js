@@ -4,16 +4,18 @@ import { MenuItem, Avatar } from '@chakra-ui/react';
 import {
   AiFillHeart,
   AiOutlineHeart,
-  AiOutlineComment,
   AiOutlineShareAlt,
   AiOutlineRetweet,
 } from 'react-icons/ai';
+
+import {FaRegComment,FaRetweet} from 'react-icons/fa';
 import {PictureGif} from './imageBloc';
 import {MoreOption} from './moreOption';
 import {AlertEditPostItem} from './editPostItem';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import Client from '../../services/Client';
+import { useHistory } from "react-router-dom";
 
 export const PostItem = (props) => {
   const [isLiked, setLike] = useState(props.isLiked);
@@ -21,9 +23,12 @@ export const PostItem = (props) => {
   const [likeCountes, setLikeCountes] = useState(props.likes);
   const [retweetCountes, setretweetCountes] = useState(props.retweet);
   const [isEdited, setisEdited] = useState(false);
-  //eslint-disable-next-line
-  const [postId, setPostId] = useState(null);
-    // console.log(props)
+//   const [redirect, setRedirect] = useState(false);
+  const history = useHistory();
+
+//   if(redirect)
+//   return <Redirect to={"/tweets/"+props.tweet_id} />
+
   return (
     <>
       {isEdited && (
@@ -34,7 +39,9 @@ export const PostItem = (props) => {
           onClose={() => setisEdited(false)}
         />
       )}
-      <div className="container">
+
+
+      <div className="container" onClick={()=>history.push("/tweets/"+props.tweet_id)}>
       {props.userRetweeted? <div className="retweet"><Link to={`/${props.userRetweeted.username}`}>{props.userRetweeted.username} retweted</Link></div>:null}
         <div className="post-item">
             <div className="avatar">
@@ -74,10 +81,15 @@ export const PostItem = (props) => {
             </div>
             <div className="post-actions">
                 <div className="comments icon">
-                <AiOutlineComment className="icon-item" color="#a9b9b9"/>
+                <FaRegComment className="icon-item" color="#a9b9b9"/>
+                <span
+                    className={'countes'}
+                >
+                    {props.comments||''}
+                </span>
                 </div>
                 <div className="retweet icon">
-                    {console.log(isRetweeted)}
+                    {/* {console.log(isRetweeted)} */}
                 {isRetweeted ? (
 
                     <AiOutlineRetweet

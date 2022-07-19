@@ -24,20 +24,20 @@ export const getAllTweets = async (
                 timeline_id: timeline.timeline_id
             }
         },
-        relations: ['timeline', 'source', 'source.timeline'],
+        relations: ['timeline', 'source', 'source.timeline', 'comments'],
         order: {
             created_at: 'DESC'
         }
     })
 
     const tweets: any = [];
-    console.log(tweetsOfTimeline[0])
     for (let el of tweetsOfTimeline) {
         tweets.push({
             tweet_id: el.tweet_id,
             tweet_body: el.tweet_body,
             like_count: el.like_count,
             retweet_count: el.retweet_count,
+            comments_count: el.comments.length,
             created_at: el.created_at,
             updated_at: el.updated_at,
             source_id: el.source_id,
@@ -201,7 +201,6 @@ export const postTweet = async (req: Request, res: Response, next: NextFunction)
             timeline
         });
         await tweetRow.save();
-        console.log(tweetRow)
         return res.json(
             {
                 tweet_id: tweetRow.tweet_id,
@@ -304,11 +303,11 @@ export const getTweet = async (req: Request, res: Response, next: NextFunction) 
     const { tweet_id } = req.params;
     const tweet = await Tweet.findOne({
         where: { tweet_id }, relations: [
-            'tweet',
-            'tweet.user',
-            'tweet.comments',
-            'tweet.likes',
-            'tweet.retweets'
+            'timeline.user',
+            'comments',
+            'comments.user',
+            'likes',
+            'source'
         ]
     })
     if (!tweet)

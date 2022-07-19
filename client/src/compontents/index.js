@@ -6,3 +6,5 @@ export * from './Followers'
 export * from './other'
 export * from './context'
 export * from './Button'
+export * from "./Comment"
+export * from "./AddComment"

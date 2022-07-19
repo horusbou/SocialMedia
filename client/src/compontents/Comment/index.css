@@ -1,0 +1,38 @@
+.comment{
+    border-bottom:solid #565656 1px;
+}
+.comment .container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding:10px;
+}
+.comment .container .leftSide{
+    margin-right:10px;
+}
+
+.comment .container .commentContent{
+    color:white;
+    flex:1;
+    padding:5;
+}
+.comment .container .commentContent .commentHeader{
+    margin-bottom: 10px;
+}
+.comment .container .commentContent .commentHeader .userData{
+    display: flex;
+}
+.comment .container .commentContent .commentHeader .name{
+    text-transform: uppercase;
+    font-family: PoppinsBold;
+    font-size: 15px;
+}
+.comment .container .commentContent .commentHeader .username{
+    font-family: 'OpenSansLight';
+    font-size: 15px;
+}
+
+.comment .container .commentContent .commentBody{
+    font-family: OpenSansRegular;
+    font-size: 17px;
+}

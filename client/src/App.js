@@ -1,9 +1,8 @@
 import './App.css';
 import { ChakraProvider } from '@chakra-ui/react';
 import Home from './pages/Home';
-// import SignIn from './pages/SignIn';
-// import SignUp from './pages/Signup';
 import LoginSignUp from './pages/index'
+import TweetPage from './pages/TweetPage'
 import {Nav,Followers,UserDetailsProvider} from './compontents';
 import Profile from './pages/Profile';
 import {
@@ -40,9 +39,8 @@ const PublicRoute = (props)=>{
 }
 
 function App() {
-
     const [FetchFollowers,setFetchFollowers] = useState(false);
-  const privateRoutes = ['/home', '/notifications', '/bookmarks', `/:username`];
+  const privateRoutes = ['/home', '/notifications', '/bookmarks', '/tweets/:tweet_id' ,`/:username`];
   return (
     <div className="app">
     <div className="appBody">
@@ -60,16 +58,16 @@ function App() {
                 Component={LoginSignUp}
            />
 
-          {/* <PublicRoute
-                exact
-                path="/"
-                Component={SignIn}
-           /> */}
 
             <PrivateRoute
               exact
               path="/home"
               Component={Home}
+            />
+            <PrivateRoute
+              exact
+              path="/tweets/:tweet_id"
+              Component={TweetPage}
             />
             <PrivateRoute
             exact

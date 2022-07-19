@@ -1,0 +1,58 @@
+.comment{
+    border-bottom:solid #565656 1px;
+}
+.comment .container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding:10px;
+}
+.comment .container .leftSide{
+    margin-right:10px;
+}
+
+.comment .container .commentContent{
+    color:white;
+    flex:1;
+    padding:5;
+}
+.comment .container .commentContent .commentHeader{
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+}
+.comment .container .commentContent .commentHeader .name{
+    text-transform: uppercase;
+    font-family: PoppinsBold;
+    font-size: 15px;
+}
+.comment .container .commentContent .commentHeader .username{
+    font-family: 'OpenSansLight';
+    font-size: 15px;
+}
+
+.comment .container .commentContent .commentBody{
+    font-family: OpenSansRegular;
+    font-size: 17px;
+}
+.comment .container .commentContent .commentBody .loading-icon{
+    animation-name: rotate;
+    animation-duration: 900ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+.comment .container .commentContent .commentBody input{
+    width: 100%;
+    height: 50px;
+    white-space: pre;
+    word-break: break-word;
+}
+@keyframes rotate {
+    from{
+        transform:rotate(0deg)
+    }
+    to{
+        transform:rotate(360deg)
+    }
+}

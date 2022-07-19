@@ -14,7 +14,7 @@ const queryRunner = new QueryRunner({
     /* --> a driver needs to be passed */
     driver: neogma.driver,
     /* --> (optional) logs every query that this QueryRunner instance runs, using the given function */
-    logger: console.log,
+    // logger: console.log,
 });
 
 export const createUserWithNeo4j = async (userData: UserInterface) => {

@@ -6,7 +6,15 @@ class Client {
     if (accessToken && refreshToken) return true;
     return false;
   }
-
+  static postComment(tweet_id,body){
+    return axios
+      .post(`/tweets/${tweet_id}/comment`,body, {
+        headers: {
+          'x-refresh': localStorage.getItem('refreshToken'),
+          Authorization: localStorage.getItem('accessToken'),
+        },
+      })
+  }
   static userValidation(username){
     return axios
     .get(`/userverification/${username}`)
@@ -103,8 +111,16 @@ class Client {
         },
       })
   }
-  static deleteRetweet(tweet_id,body){
+  static deleteRetweet(tweet_id){
     return axios.delete('/retweets/'+tweet_id, {
+        headers: {
+          'x-refresh': localStorage.getItem('refreshToken'),
+          Authorization: localStorage.getItem('accessToken'),
+        },
+      })
+  }
+  static getTweet(tweet_id){
+    return axios.get(`/tweets/${tweet_id}`, {
         headers: {
           'x-refresh': localStorage.getItem('refreshToken'),
           Authorization: localStorage.getItem('accessToken'),

@@ -4,5 +4,6 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 15px auto;
+    border-left:solid #565656 1px;
+    border-right:solid #565656 1px;
 }
