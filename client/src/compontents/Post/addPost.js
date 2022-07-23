@@ -298,6 +298,9 @@ export const AddPost = (props) => {
 								type="submit"
 								backgroundColor={colors.pink}
 								color="white"
+                                _hover={{}}
+                                _focus={{}}
+                                _active={{}}
 								isDisabled={
 									!tweet && !gifSrc && tweetButtonTest(currentFiles.length)
 								}

@@ -6,16 +6,18 @@ import {AiOutlineLoading3Quarters} from "react-icons/ai"
 import "./index.css"
 import Client from "../../services/Client";
 
-export function AddComment({tweet_id}) {
+export function AddComment({tweet_id,showComment}) {
     const ref = useRef(null);
 
     const handleSubmit=(evt)=>{
         setLoading(true);
+        const CommentData ={user,comment_body:{comment}};
        Client.postComment(tweet_id,{comment}).then(()=>{
         setLoading(false)
         setComment('');
         ref.current.value='';
     })
+    showComment(CommentData)
     }
     const handleCommentChange =(evt)=>{
         const {value} = evt.target;

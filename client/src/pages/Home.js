@@ -26,13 +26,11 @@ useEffect(() => {
         setPostData(response);
       }).then(()=>setLoading(false))
     }, []);
-
 return (
     <div className="home main">
         <PageTitle title="Home"/>
       <AddPost
         addToPost={(post)=>{setPostData([post,...postData])}}
-
       />
         { loading  && (<LoadingSpinner />)}
       {!!postData && !loading
@@ -52,16 +50,17 @@ return (
                 />
 
             )}else{
+                console.log(item)
                 return (<PostItem
                     key={item.tweet_id }
                     tweet_id={item.tweet_id}
                     userRetweeted={item.user}
                     user={item.source.timeline.user}
                     tweetBody={item.source.tweet_body}
-                    likes={item.source.like_count}
-                    retweet={item.source.retweet_count}
+                    likes={item.source.like_count + item.like_count}
+                    retweet={item.source.retweet_count+item.retweet_count}
                     isLiked={item.is_liked}
-                    isRetweeted={item.source.timeline.user.user_id === item.user.user_id}
+                    isRetweeted={item.is_retweeted}
                 />)
             }
 

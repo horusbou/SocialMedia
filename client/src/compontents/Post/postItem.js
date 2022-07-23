@@ -7,8 +7,8 @@ import {
   AiOutlineShareAlt,
   AiOutlineRetweet,
 } from 'react-icons/ai';
-
-import {FaRegComment,FaRetweet} from 'react-icons/fa';
+import { HoverUser } from '../Hover';
+import {FaRegComment} from 'react-icons/fa';
 import {PictureGif} from './imageBloc';
 import {MoreOption} from './moreOption';
 import {AlertEditPostItem} from './editPostItem';
@@ -23,7 +23,13 @@ export const PostItem = (props) => {
   const [likeCountes, setLikeCountes] = useState(props.likes);
   const [retweetCountes, setretweetCountes] = useState(props.retweet);
   const [isEdited, setisEdited] = useState(false);
-//   const [redirect, setRedirect] = useState(false);
+  const [isMouseOver,setIsMouseOver] = useState(false)
+
+  const handleEnter = () => {
+    setIsMouseOver(true)
+  }
+
+
   const history = useHistory();
 
 //   if(redirect)
@@ -40,17 +46,19 @@ export const PostItem = (props) => {
         />
       )}
 
-
-      <div className="container" onClick={()=>history.push("/tweets/"+props.tweet_id)}>
+        {console.log(props)}
+      <div className="container" onMouseLeave={()=>setIsMouseOver(false)}>
       {props.userRetweeted? <div className="retweet"><Link to={`/${props.userRetweeted.username}`}>{props.userRetweeted.username} retweted</Link></div>:null}
-        <div className="post-item">
-            <div className="avatar">
-            <Avatar name={props.user.firstname + ' '+ props.user.lastname} src={props.user.userAvatar} />
+        <div className={`post-item ${isMouseOver?'relative':''}`}>
+                {isMouseOver?<HoverUser onMouseLeave={()=>setIsMouseOver(false)} username={props.user.username}/>:null}
+            <div className="avatar" >
+            <Avatar name={props.user.firstname + ' '+ props.user.lastname} src={props.user.userAvatar} >
+            </Avatar>
             </div>
             <div className="post-body">
             <div className="post-content">
                 <div className="content-header">
-                <Link to={`/${props.user.username}`} className="header-data">
+                <Link to={`/${props.user.username}`} className="header-data" onMouseEnter={handleEnter} >
                     <span className="name">{props.user.firstname}</span>
                     <span className="username">@{props.user.username}</span>
                 </Link>
@@ -69,7 +77,7 @@ export const PostItem = (props) => {
                     </MoreOption>
                 ) : null}
                 </div>
-                <div className="content-body">
+                <div className="content-body" onClick={()=>history.push("/tweets/"+props.tweet_id)}>
                 {props.tweetBody.tweet && <h3 style={{ whiteSpace: 'pre-line' }}>
                     {props.tweetBody.tweet}
                 </h3>}
@@ -89,9 +97,7 @@ export const PostItem = (props) => {
                 </span>
                 </div>
                 <div className="retweet icon">
-                    {/* {console.log(isRetweeted)} */}
                 {isRetweeted ? (
-
                     <AiOutlineRetweet
                     className="icon-item"
                     color="green"

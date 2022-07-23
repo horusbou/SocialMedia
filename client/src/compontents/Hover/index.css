@@ -1,0 +1,94 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  .loading .card{
+    width: 100%;
+  }
+  .hoverCard {
+      position:absolute;
+      top:55px;
+      left:55px;
+      display: flex;
+      width:400px;
+    justify-content: center;
+    align-items: center;
+
+}
+.card {
+    box-shadow: 1px 1px 10px 1px #F43B86;
+    background-color: #1C1C1C;
+    border-radius: 20px;
+    padding: 20px;
+    width:100%;
+  }
+
+  .profile-card{
+    display:flex;
+    justify-content: space-between;
+  }
+  .data-profile{
+    width:80%;
+    display: flex;
+    flex-direction: column;
+  }
+  .main-profile {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .user-info{
+    width:100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .user-info h3 {
+    font-size: 15px;
+    font-family: PoppinsBold;
+    color:white;
+  }
+
+  .user-info p {
+    color: #FFFFFF;
+    font-family: OpenSansLight;
+    font-size: 15px;
+  }
+  .follow-btn  {
+    color:white;
+  }
+
+  .user-bio {
+    color: #FFFFFF;
+    font-family: OpenSansRegular;
+    margin-bottom: 10px;
+    width:100%;
+  }
+
+  .user-bio a {
+    text-decoration: none;
+  }
+
+  .user-bio a:hover {
+    text-decoration: underline;
+  }
+  .user-follows {
+    display: flex;
+    font-family: OpenSansSemiBold;
+    color: #FFFFFF;
+    width:100%;
+    justify-content: space-between;
+  }
+  .user-follows p b{
+    color: #FFFFFF;
+  }
+  .user-follows div {
+    margin-right: 10px;
+  }
+
+  .user-follows b {
+    color: black;
+  }

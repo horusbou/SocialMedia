@@ -3,6 +3,7 @@ import { Like } from './like.entitie';
 import { Comment } from './comment.entitie';
 import { Retweet } from './retweet.entitie';
 import { Timeline } from './timeline.entite';
+import { User } from './user.entitie'
 
 @Entity("tweet")
 export class Tweet extends BaseEntity {
@@ -45,6 +46,10 @@ export class Tweet extends BaseEntity {
 
     @Column({ nullable: true })
     source_id: string;
+
+    @ManyToOne(() => User, user => user.tweets)
+    @JoinColumn({ name: "user_id" })
+    public user: User;
 
     @ManyToOne(() => Tweet, tweet => tweet.tweet_id)
     @JoinColumn({ name: "source_id" })

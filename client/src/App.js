@@ -40,6 +40,7 @@ const PublicRoute = (props)=>{
 
 function App() {
     const [FetchFollowers,setFetchFollowers] = useState(false);
+
   const privateRoutes = ['/home', '/notifications', '/bookmarks', '/tweets/:tweet_id' ,`/:username`];
   return (
     <div className="app">

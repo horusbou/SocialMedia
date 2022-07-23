@@ -2,7 +2,7 @@
     width: 100%;
     position: sticky;
     top: 0;
-    z-index: 2;
+    z-index: 20;
     border-bottom: solid rgba(255, 255, 255, 0.3) 1px;
     font-family: PoppinsBold;
     font-size: 20px;

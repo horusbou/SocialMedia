@@ -10,17 +10,25 @@
     font-family: OpenSansLight;
 }
 .post-item {
+	z-index: 0;
     padding: 10px 10px;
 	border-bottom: solid #565656 1px;
 	display: flex;
 	align-items: flex-start;
-	z-index: 0;
 }
 .post-item:hover {
-	z-index: 0;
+	z-index: 10;
+}
+.relative{
+    position: relative;
+}
+.relative .hoverCard{
+    display: flex;
+    z-index: 100;
 }
 .post-item .avatar {
 	margin-right: 10px;
+    z-index: -10;
 }
 .post-item .post-body {
 	padding: 0 5px 5px 5px;

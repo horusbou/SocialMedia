@@ -18,11 +18,12 @@ export default function TweetPage() {
     const tweet_id = location.pathname.split("/")[2];
     const [loading,setLoading] = useState(true);
     const [PostData,setPostData] = useState({});
-
+    const [comments,setComments] = useState([]);
     useEffect(()=>{
         Client.getTweet(tweet_id)
         .then(res=>{
             setPostData(res.data);
+            setComments(res.data.comments);
             setLoading(false);
         })
     },[tweet_id]);
@@ -119,8 +120,8 @@ return (<div className="tweetPage main">
         </div>
                 {/*comment Section*/}
                 <div className="comments">
-                {PostData.comments&&PostData.comments.map((el)=><Comment CommentData={el} key={el.comment_id}/>)}
-                    <AddComment tweet_id={tweet_id}/>
+                {comments&&comments.map((el,i)=><Comment CommentData={el} key={el.comment_id||i}/>)}
+                    <AddComment tweet_id={tweet_id} showComment={(commentData)=> setComments([...comments,commentData])} />
                 </div>
         </div>
     </div>)

@@ -14,6 +14,7 @@ export default function Profile(props) {
 
 	useEffect(() => {
 		Client.getUserData(username).then((userData) => {
+            console.log('getUserData=>',userData)
 			setUserData(userData.data);
 		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -22,6 +23,8 @@ export default function Profile(props) {
 	useEffect(() => {
 		if (!!username) {
 			Client.getProfilePosts(username).then((posts) => {
+                console.log('getProfilePosts=>',posts)
+                console.log(posts.data.filter(el=>el.source_id!=null))
 				setProfilePosts(posts.data);
 				setIsLoading(false);
 			});
@@ -41,7 +44,7 @@ export default function Profile(props) {
 					<div className="avatar">
                         {userData.firstName?
                         <Avatar
-							name={`${userData.firstName} ${userData.lastName}`}
+							name={`${userData.firstname} ${userData.lastname}`}
 							size="2xl"
 							src={userData.userAvatar}
 						/>:<Avatar
@@ -55,7 +58,7 @@ export default function Profile(props) {
 						</div>
 						<div className="fullname">
 							<span>
-								{userData.firstName} {userData.lastName}
+								{userData.firstname} {userData.lastname}
 							</span>
 						</div>
 						<div className="bio">
@@ -76,25 +79,40 @@ export default function Profile(props) {
 				) : (
 					<>
 						{!!profilePosts
-							? profilePosts.map((item, i) => (
-									<PostItem
-										key={item._id || i}
-										_id={item._id}
-										userId={userData.user_id}
-										postOwner={userData.user_id}
-										fullName={`${userData.firstName} ${userData.lastName}`}
-										avatar={`${userData.userAvatar}`}
-										username={`${userData.username}`}
-										tweetBody={item.tweetBody}
-										likes={item.like}
-										retweet={item.retweet}
+							? profilePosts.map((item, i) => {
+                                if(item.source_id===null){
+                                    return <PostItem
+                                    key={item.tweet_id}
+                                    tweet_id={item.tweet_id}
+                                    user={item.user}
+                                    tweetBody={item.tweet_body}
+                                    likes={item.like_count}
+                                    retweet={item.retweet_count}
+                                    comments={item.comments_count}
+                                    isLiked={item.is_liked}
 									/>
-							  ))
-							: null}
+                                }else{
+                                    console.log('retweeted',item,item.is_retweeted);
+                                   return (<PostItem
+                                    key={item.tweet_id }
+                                    tweet_id={item.tweet_id}
+                                    userRetweeted={item.user}
+                                    user={item.source.timeline.user}
+                                    tweetBody={item.source.tweet_body}
+                                    likes={item.source.like_count}
+                                    retweet={item.source.retweet_count}
+                                    isLiked={item.is_liked}
+                                    isRetweeted={true}
+                                />)
+                                }
+
+							  })
+							: null
+                            }
 						{userData.user_id == null ? (
 							<Flex mt="20px" justify="center" align="center">
 								<Box className="content">
-									<Heading>This account doesn’t exist</Heading>
+									<Heading>This account doesn't exist</Heading>
 									<Text className="subHeading" color="gray.500">
 										Try searching for another.
 									</Text>

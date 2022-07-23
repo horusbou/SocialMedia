@@ -1,6 +1,6 @@
 import { Response, Request, NextFunction } from 'express';
 import bcrypt from 'bcryptjs';
-import { omit } from 'lodash';
+import { omit, sample } from 'lodash';
 import log from '../logger/log';
 import { QueryBuilder, QueryRunner } from 'neogma';
 import neogma from '../util/neo4j';
@@ -53,7 +53,7 @@ export async function createUserhandler(req: Request, res: Response, next: NextF
     const userData = { ...req.body };
     // log.info(userData);
     userData.username = userData.username.toLowerCase();
-    userData.userAvatar = `https://robohash.org/${userData.firstName + userData.lastName + userData.username}.png`;
+    userData.userAvatar = `https://robohash.org/${userData.firstname + userData.lastname + userData.username}.png`;
     userData.password = hashed;
     try {
         const user = User.create(userData);
@@ -75,15 +75,18 @@ export async function getUserData(req: Request, res: Response, next: NextFunctio
         const options = {
             user_id: null,
             username: 'untrovable',
-            firstName: 'untrovable',
-            lastName: 'untrovable',
+            firstname: 'untrovable',
+            lastname: 'untrovable',
             userAvatar: '',
             email: 'untrovable',
             bio: 'untrovable',
         };
         return next(new HttpException(404, "username not found", options))
     }
-    return res.json(omit(user, 'password', 'createdAt', 'updatedAt'));
+    const userNeo4j = await UserNeo4J.findOne({ where: { user_id: user.user_id } });
+    // console.log({ ...user, followers: userNeo4j.followers, followings: userNeo4j.following })
+    const isFollowing = '';
+    return res.json(omit({ ...user, followers: userNeo4j.followers || 0, followings: userNeo4j.following || 0 }, 'password', 'createdAt', 'updatedAt'));
 }
 
 export async function postFollow(req: Request, res: Response) {
@@ -99,6 +102,9 @@ export async function postFollow(req: Request, res: Response) {
                 target: { user_id: targetId },
             },
         });
+        const userNeo4j = await UserNeo4J.findOne({ where: { user_id } });
+        userNeo4j.followers++;
+        await userNeo4j.save();
 
         return res.status(200).json({ message: 'user Followed!' });
     } catch (error) {
@@ -121,6 +127,9 @@ export async function postUnfollow(req: Request, res: Response) {
             `match (n:User {user_id:'${user_id}'})-[f:Follows]->(u:User {user_id:'${target_id}'}) delete f`
         );
         queryBuilder.run(queryRunner);
+        const userNeo4j = await UserNeo4J.findOne({ where: { user_id } });
+        userNeo4j.followers--;
+        await userNeo4j.save();
         return res.status(200).json({ message: 'user Unfollowed!' });
     } catch (error) {
         return res.status(400).json({ message: 'ERROR : ', error });
@@ -143,6 +152,7 @@ export async function getFollowers(req: Request, res: Response) {
     });
     res.json({ following, count: following.length });
 }
+//should change it with getFollowers
 export async function getFollowings(req: Request, res: Response) {
     const user_id = req.user.user_id;
 

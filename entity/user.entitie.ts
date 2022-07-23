@@ -4,6 +4,7 @@ import { Comment } from "./comment.entitie";
 import { Session } from "./session.entitie";
 import { Timeline } from "./timeline.entite";
 import { Like } from "./like.entitie"
+import { Tweet } from './tweet.entitie'
 
 @Entity('user')
 export class User extends BaseEntity {
@@ -34,11 +35,11 @@ export class User extends BaseEntity {
     @UpdateDateColumn()
     updated_at: Date;
 
-    // @OneToMany(
-    //     () => Tweet,
-    //     tweet => tweet.user
-    // )
-    // tweets: Tweet[];
+    @OneToMany(
+        () => Tweet,
+        tweet => tweet.user
+    )
+    tweets: Tweet[];
 
     @OneToMany(
         () => Comment,
