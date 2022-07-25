@@ -1,0 +1,63 @@
+.source-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border:solid 1px #565656;
+    border-radius: 15px;
+
+}
+.source-item {
+    margin: 10px 0;
+    padding: 0 10px;
+	z-index: 0;
+	display: flex;
+	align-items: center;
+}
+.source-item:hover {
+	z-index: 10;
+}
+.relative{
+    position: relative;
+}
+.relative .hoverCard{
+    display: flex;
+    z-index: 100;
+}
+
+.source-item .source-body {
+	flex: 1;
+    height: 100%;
+	display: flex;
+	flex-direction: column;
+    justify-content:center;
+    /* border: solid wheat; */
+}
+.source-item .source-body .source-content {
+    color:#F1F1F1;
+}
+.source-item .source-body .source-content .content-header {
+	display: flex;
+	justify-content: space-between;
+	align-items:center;
+}
+.source-item .source-body .source-content .content-header .header-data{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.source-item .source-body .source-content .content-header .header-data .name {
+	text-transform: capitalize;
+    font-family:'PoppinsBold';
+    font-size: 15px;
+    color:white;
+    margin-right:10px;
+}
+.source-item .source-body .source-content .content-header .header-data .username {
+    font-family: 'OpenSansLight';
+	font-size: 15px;
+    color:'#FFFFFF'
+}
+.source-container .source-content-body{
+    font-family: OpenSansRegular;
+    font-size: 15px;
+}

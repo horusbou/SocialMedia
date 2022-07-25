@@ -4,9 +4,9 @@ import { colors } from '../../lib';
 
 export const MoreOption=({ Icon, children })=> {
 	return (
-		<Menu className="menu" >
+		<Menu>
 			<MenuButton>{Icon}</MenuButton>
-			<MenuList backgroundColor={colors.background}>{children}</MenuList>
+			<MenuList style={{color:'white'}} backgroundColor={colors.background}>{children}</MenuList>
 		</Menu>
 	);
 }

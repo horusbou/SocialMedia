@@ -6,7 +6,7 @@ import {
     LoadingSpinner
 } from '../compontents';
 import Client from '../services/Client';
-
+import { RetweetItem } from '../compontents/Retweet';
 
 export default function Home() {
 
@@ -33,6 +33,7 @@ return (
         addToPost={(post)=>{setPostData([post,...postData])}}
       />
         { loading  && (<LoadingSpinner />)}
+        {/* {!!postData && !loading ?<RetweetItem user={postData[0].user} tweetBody={postData[0].tweet_body} />:null} */}
       {!!postData && !loading
         ? postData.map((item, i) => {
             if(item.source_id===null)
@@ -49,8 +50,11 @@ return (
                 isLiked={item.is_liked}
                 />
 
-            )}else{
-                console.log(item)
+            )}else if(item.source_id!==null && Object.keys(item.tweet_body).length>0){
+                return <RetweetItem user={item.user} tweetBody={item.tweet_body} />
+            }
+            else{
+
                 return (<PostItem
                     key={item.tweet_id }
                     tweet_id={item.tweet_id}

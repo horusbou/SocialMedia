@@ -20,7 +20,7 @@ export const Followers= (props)=>{
     <h1 color={colors.white}>Followers</h1>
   </div>
 
-  {followings.length && followings.map((el,i)=>{
+  { followings.length>0 && followings.map((el,i)=>{
     return <ContactItem key={i}
     userAvatar={el?.avatar}
     username={el?.username}

@@ -69,9 +69,17 @@ class Client {
     .catch(this.catchError)
   }
   static logout() {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    this.removeClientData();
+    return axios
+    .delete('/sessions', {
+      headers: {
+        'x-refresh': localStorage.getItem('refreshToken'),
+        Authorization: localStorage.getItem('accessToken'),
+      },
+    }).then((data)=>{
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        return data
+    })
   }
   static getUser() {
     return axios

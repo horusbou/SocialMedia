@@ -23,7 +23,7 @@ export async function createUserSessionhandler(req: Request, res: Response, next
         req.get('user-agent') || ''
     ));
     if (!session)
-        return next(new HttpException(404, "something went wrong"));
+        return next(new HttpException(404, "you are connected in other browser or something went wrong"));
     //create access token
     const accessToken = createAccessToken({
         user,
@@ -39,12 +39,13 @@ export async function invalidateUserSessionHandler(
     req: Request,
     res: Response
 ) {
-    const session_id = get(req, 'user.session');
+    const { session_id } = get(req, 'user.session');
     const session = await Session.findOneBy({ session_id });
     if (!session)
         return res.json("session not found");
     session.valid = false;
-    await session.save();
+    // await session.save();
+    await session.remove();
     return res.sendStatus(200);
 }
 

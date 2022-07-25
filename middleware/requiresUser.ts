@@ -9,7 +9,6 @@ const requiresUser = async (
 ) => {
     // const usser = get(req, 'user');
     const user = req.user;
-
     if (!user) {
         return next(new HttpException(403, "Forbidden: user not found"))
     }

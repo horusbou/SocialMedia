@@ -1,7 +1,6 @@
 import {useState,useEffect  } from "react"
 import './index.css'
 import { Avatar,Button } from "@chakra-ui/react"
-import {LoadingSpinner} from "../Spinner"
 import Client from "../../services/Client";
 export function HoverUser({username,onMouseLeave}) {
     const [loading,setLoading] = useState(true);

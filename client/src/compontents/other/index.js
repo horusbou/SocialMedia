@@ -1,21 +1,46 @@
-import React,{useContext} from "react"
+import React,{useContext,useState} from "react"
+import { colors } from "../../lib"
 import './index.css'
-import {Avatar,Icon} from '@chakra-ui/react'
+import {Avatar,
+    Icon,
+    Popover,
+    PopoverTrigger,
+    PopoverContent,
+    PopoverBody,
+    PopoverArrow,
+    Button
+} from '@chakra-ui/react'
+import { Redirect } from "react-router-dom"
+import Client from '../../services/Client'
 import {MdOutlineMailOutline,MdNotifications} from 'react-icons/md'
 import { userContext } from '../context'
 import { PostDialog } from "../Post/postDialog"
 
 export const Header =()=>{
-
 const user = useContext(userContext);
+const [redirect,setRedirect] = useState(false)
+if(redirect)
+    return <Redirect to="/" />
 
 return (<div className="options">
         <PostDialog />
-        {/* addToPost={(post)=>{setPostData([post,...postData])}} */}
         <Icon w={6} h={6} as={MdOutlineMailOutline} />
         <Icon w={5} h={5} as={MdNotifications} />
-        {/* <Link to={user.username?`${user.username}`:`/`}> */}
-       <Avatar name={user.firstname + ' '+ user.lastname} src={user.userAvatar} />
-        {/* </Link> */}
+        <Popover _hover={{}} _focus={{}} _active={{}}   matchWidth={true}>
+            <PopoverTrigger>
+                {Object.keys(user).length>0?<Avatar name={user.firstname + ' '+ user.lastname} src={user.userAvatar} />:<Avatar/>}
+            </PopoverTrigger>
+        <PopoverContent  _hover={{}} _focus={{}} _active={{}} width={"200px"} textAlign="center" bgColor={colors.background}>
+            <PopoverArrow />
+            <PopoverBody>
+                <Button onClick={()=>{
+                    Client.logout()
+                    .then(()=>{
+                        setRedirect(true)
+                    })
+                }} _hover={{}} _focus={{}} _active={{}} variant='ghost'>Log out @{user.username}</Button>
+            </PopoverBody>
+        </PopoverContent>
+        </Popover>
     </div>)
 }

@@ -115,9 +115,7 @@ export const AddPost = (props) => {
 			) : null}
 			<form className="post-item" onSubmit={handleSubmit}>
 				<div className="avatar">
-					{user ? (
-						<Avatar name={user.firstname + ' ' + user.lastname} src={user.userAvatar} />
-					) : null}
+                {Object.keys(user).length>0?<Avatar name={user.firstname + ' '+ user.lastname} src={user.userAvatar} />:<Avatar bg={colors.background}/>}
 				</div>
 				<div className="post-body">
 					<div className="post-content">
