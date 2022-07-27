@@ -8,9 +8,9 @@ import {
 } from 'react-icons/ai';
 import { HoverUser } from '../Hover';
 import {FaRegComment} from 'react-icons/fa';
-import {PictureGif} from '../Post/imageBloc';
+// import {PictureGif} from '../Post/imageBloc';
 import {MoreOption} from '../Post/moreOption';
-import {AlertEditPostItem} from '../Post/editPostItem';
+// import {AlertEditPostItem} from '../Post/editPostItem';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import Client from '../../services/Client';

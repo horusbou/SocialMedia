@@ -1,25 +1,37 @@
 import {
     AiOutlineRetweet,
-  } from 'react-icons/ai';
-import {useState} from "react"
-import { MenuItem } from '@chakra-ui/react';
-import { MoreOption } from '../Post/moreOption';
+} from 'react-icons/ai';
 import './index.css'
-export function RetweetButton(props){
-    const [retweetCountes, setretweetCountes] = useState(0);
-    const [isRetweeted, setIsRetweeted] = useState(0);
-
+import {useState,useRef} from "react"
+import { MenuItem,useDisclosure } from '@chakra-ui/react';
+import { MoreOption } from '../Post/moreOption';
+import { RetweetPopUp } from '../RetweetPopUp';
+export function RetweetButton({count,userRetweeted,tweet}){
+    const [retweetCountes, setretweetCountes] = useState(count);
+    const [isRetweeted, setIsRetweeted] = useState(userRetweeted);
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    const cancelRef = useRef()
     return <>
     {!isRetweeted?
             <MoreOption Icon={<AiOutlineRetweet className="icon-item" color="rgb(169, 185, 185)"/>}>
-                    <MenuItem _hover={{color:"black"}}><p>Retweet</p></MenuItem>
-                    <MenuItem _hover={{color:"black"}}><p>Retweet with quote</p></MenuItem>
+                    <MenuItem  onClick={()=>{setIsRetweeted(!isRetweeted);setretweetCountes(retweetCountes+1)}} _hover={{color:"black"}}><p>Retweet</p></MenuItem>
+                    <MenuItem onClick={()=>{onOpen();setIsRetweeted(!isRetweeted);setretweetCountes(retweetCountes+1)}} _hover={{color:"black"}}><p>Retweet with quote</p></MenuItem>
+                    <RetweetPopUp isOpen={isOpen} cancelRef={cancelRef} onClose={onClose} tweet={tweet}/>
             </MoreOption>
             :
             <AiOutlineRetweet
             className="icon-item"
             color="green"
+            onClick={()=>{
+                setIsRetweeted(!isRetweeted);
+                setretweetCountes(retweetCountes-1)
+            }}
         />}
+            <span
+        className={isRetweeted ? 'countes retweetcolor' : 'countes'}
+    >
+        {!retweetCountes ? '' : retweetCountes}
+    </span>
     </>
 
 }

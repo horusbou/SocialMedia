@@ -5,7 +5,7 @@ import {
   AiFillHeart,
   AiOutlineHeart,
   AiOutlineShareAlt,
-  AiOutlineRetweet,
+//   AiOutlineRetweet,
 } from 'react-icons/ai';
 
 import { HoverUser } from '../Hover';
@@ -21,9 +21,9 @@ import { RetweetButton } from '../RetweetButton';
 
 export const PostItem = (props) => {
   const [isLiked, setLike] = useState(props.isLiked);
-  const [isRetweeted, setIsRetweeted] = useState(props.isRetweeted);
+//   const [isRetweeted, setIsRetweeted] = useState(props.isRetweeted);
   const [likeCountes, setLikeCountes] = useState(props.likes);
-  const [retweetCountes, setretweetCountes] = useState(props.retweet);
+//   const [retweetCountes, setretweetCountes] = useState(props.retweet);
   const [isEdited, setisEdited] = useState(false);
   const [isMouseOver,setIsMouseOver] = useState(false)
 
@@ -98,35 +98,9 @@ export const PostItem = (props) => {
                 </span>
                 </div>
                 <div className="retweet-icon icon">
-                    <RetweetButton />
+                    <RetweetButton tweet={props} />
                 </div>
-                {/* <div className="retweet icon">
-                {isRetweeted ? (
-                    <AiOutlineRetweet
-                    className="icon-item"
-                    color="green"
-                    onClick={() => {
-                        setretweetCountes(retweetCountes - 1);
-                        return setIsRetweeted(!isRetweeted);
-                    }}
-                    />
-                ) : (
-                    <AiOutlineRetweet
-                    className="icon-item"
-                    color="#a9b9b9"
-                    onClick={() => {
-                        Client.postRetweet(props.tweet_id,{tweet_body:{}})
-                        setretweetCountes(retweetCountes + 1);
-                        return setIsRetweeted(!isRetweeted);
-                    }}
-                    />
-                )}
-                <span
-                    className={isRetweeted ? 'countes retweetcolor' : 'countes'}
-                >
-                    {!retweetCountes ? '' : retweetCountes}
-                </span>
-                </div> */}
+
                 <div className="heart icon">
                 {isLiked ? (
                     <AiFillHeart

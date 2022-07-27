@@ -137,6 +137,7 @@ export const AddPost = (props) => {
 								value={tweet}
 								onChange={handleChange}
 							/>
+                            {console.log('currentFiles',currentFiles)}
 							{!!gifSrc || !!currentFiles.length > 0 ? (
 								<Box className="image-container">
 									{!!gifSrc ? (
@@ -244,6 +245,7 @@ export const AddPost = (props) => {
 							)}
 						</div>
 					</div>
+                    {props.children}
 					<div className="post-options">
 						<div className="icons">
 							<IconButton
@@ -275,7 +277,6 @@ export const AddPost = (props) => {
 								multiple
 								id="file"
 								onChange={(evt) => {
-									console.log(evt.target.files.length > 4);
 									if (evt.target.files.length > 4) {
 										evt.preventDefault();
 										setMaxFileWarning(true);

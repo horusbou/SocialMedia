@@ -1,0 +1,16 @@
+.retweetPopUp{
+    padding:40px 0px 20px 0;
+}
+.retweetPopUp .retweetPopUp-body{
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+.retweetPopUp .retweetPopUp-body .avatar{
+    margin-right: 10px;
+}
+.retweetPopUp .retweetPopUp-body .content{
+    flex:1;
+    display: flex;
+    flex-direction: column;
+}
