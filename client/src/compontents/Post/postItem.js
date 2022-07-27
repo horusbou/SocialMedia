@@ -130,7 +130,7 @@ export const PostItem = (props) => {
                 <div className="share icon">
                 <MoreOption  Icon={<AiOutlineShareAlt className="icon-item" color="#a9b9b9"/>}>
                     <MenuItem>Share It</MenuItem>
-                    <MenuItem>Bookmake it</MenuItem>
+                    <MenuItem onClick={()=>{Client.bookmarkATweet(props.tweet_id)}}>Bookmake it</MenuItem>
                 </MoreOption>
                 </div>
             </div>

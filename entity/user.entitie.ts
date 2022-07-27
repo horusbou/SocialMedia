@@ -5,6 +5,7 @@ import { Session } from "./session.entitie";
 import { Timeline } from "./timeline.entite";
 import { Like } from "./like.entitie"
 import { Tweet } from './tweet.entitie'
+import { Bookmark } from "./bookMark.entitie";
 
 @Entity('user')
 export class User extends BaseEntity {
@@ -59,4 +60,6 @@ export class User extends BaseEntity {
     @OneToMany(() => Like, like => like.user)
     likes: Like[]
 
+    @OneToMany(() => Bookmark, bookmark => bookmark.tweet)
+    bookmarks: Bookmark[];
 }

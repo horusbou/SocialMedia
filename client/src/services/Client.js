@@ -175,6 +175,36 @@ class Client {
       }
     );
   }
+  static getBookmarks(){
+    return axios.get(`/bookmarks`,{
+        headers: {
+          'x-refresh': localStorage.getItem('refreshToken'),
+          Authorization: localStorage.getItem('accessToken'),
+        },
+      }).then((res)=>{
+        return res.data;
+      })
+  }
+  static bookmarkATweet(tweet_id){
+    return axios.post(`/bookmarks/${tweet_id}`,{},{
+        headers: {
+          'x-refresh': localStorage.getItem('refreshToken'),
+          Authorization: localStorage.getItem('accessToken'),
+        },
+      }).then((res)=>{
+        return res.data;
+      })
+  }
+  static deleteABookmark(tweet_id){
+    return axios.delete(`/bookmarks/${tweet_id}`,{
+        headers: {
+          'x-refresh': localStorage.getItem('refreshToken'),
+          Authorization: localStorage.getItem('accessToken'),
+        },
+      }).then((res)=>{
+        return res.data;
+      })
+  }
 
   static checkStatus(response) {
     if (response.status >= 200 && response.status < 300) {

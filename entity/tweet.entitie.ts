@@ -4,6 +4,7 @@ import { Comment } from './comment.entitie';
 import { Retweet } from './retweet.entitie';
 import { Timeline } from './timeline.entite';
 import { User } from './user.entitie'
+import { Bookmark } from './bookMark.entitie';
 
 @Entity("tweet")
 export class Tweet extends BaseEntity {
@@ -63,4 +64,7 @@ export class Tweet extends BaseEntity {
 
     @OneToMany(() => Retweet, retweet => retweet.tweet)
     retweets: Retweet[];
+
+    @OneToMany(() => Bookmark, bookmark => bookmark.tweet)
+    bookmarks: Bookmark[];
 }

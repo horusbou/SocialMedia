@@ -5,9 +5,10 @@ import path from 'path';
 import PostRoutes from './routes/post.routes';
 import UserRoutes from './routes/user.routes';
 import authRoutes from './routes/auth.routes';
+import bookmarkRouters from './routes/bookmark.routes'
 import deserializeUser from './middleware/deserializeUser';
 import HttpException from './util/HttpException';
-import { Tweet, Retweet, Like, User, Session, Comment, Timeline } from './entity'
+import { Tweet, Retweet, Like, User, Session, Comment, Timeline, Bookmark } from './entity'
 import { createConnection } from "typeorm"
 
 //setting up multer
@@ -31,7 +32,7 @@ const main = async () => {
             username: "root",
             password: "compaq7550",
             database: "ensaTweet",
-            entities: [User, Tweet, Like, Comment, Retweet, Session, Timeline],
+            entities: [User, Tweet, Like, Comment, Retweet, Session, Timeline, Bookmark],
             synchronize: true,
         })
 
@@ -54,6 +55,7 @@ const main = async () => {
         app.use(PostRoutes);
         app.use(authRoutes);
         app.use(UserRoutes);
+        app.use(bookmarkRouters);
         app.use((err: HttpException, req: Request, res: Response, next: NextFunction) => {
             log.error(err.message)
             next(err);

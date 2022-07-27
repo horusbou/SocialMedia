@@ -3,6 +3,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import Home from './pages/Home';
 import LoginSignUp from './pages/index'
 import TweetPage from './pages/TweetPage'
+import Bookmark from './pages/Bookmark';
 import {Nav,Followers,UserDetailsProvider} from './compontents';
 import Profile from './pages/Profile';
 import {
@@ -64,6 +65,11 @@ function App() {
               exact
               path="/home"
               Component={Home}
+            />
+             <PrivateRoute
+              exact
+              path="/bookmarks"
+              Component={Bookmark}
             />
             <PrivateRoute
               exact
