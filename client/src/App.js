@@ -14,6 +14,7 @@ import {
 } from 'react-router-dom';
 import { useState } from 'react';
 import Client from './services/Client';
+import { Notifications } from './pages/Notification';
 
 const PrivateRoute = (props) => {
   const { Component, ...rest } = props;
@@ -42,7 +43,7 @@ const PublicRoute = (props)=>{
 function App() {
     const [FetchFollowers,setFetchFollowers] = useState(false);
 
-  const privateRoutes = ['/home', '/notifications', '/bookmarks', '/tweets/:tweet_id' ,`/:username`];
+  const privateRoutes = ['/home', '/notifications', '/bookmarks',`/:username`, '/tweets/:tweet_id' ];
   return (
     <div className="app">
     <div className="appBody">
@@ -66,21 +67,28 @@ function App() {
               path="/home"
               Component={Home}
             />
+            <PrivateRoute
+              exact
+              path="/notifications"
+              Component={Notifications}
+            />
              <PrivateRoute
               exact
               path="/bookmarks"
               Component={Bookmark}
             />
+
             <PrivateRoute
               exact
               path="/tweets/:tweet_id"
               Component={TweetPage}
             />
             <PrivateRoute
-            exact
-            path={`/:username`}
-            FetchFollowers={()=>{setFetchFollowers(!FetchFollowers)}}
-            Component={Profile}/>
+                exact
+                path={`/:username`}
+                FetchFollowers={()=>{setFetchFollowers(!FetchFollowers)}}
+                Component={Profile}
+            />
 
           </Switch>
           <PrivateRoute

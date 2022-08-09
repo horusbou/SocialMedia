@@ -9,3 +9,4 @@ export * from './Button'
 export * from "./Comment"
 export * from "./AddComment"
 export * from "./PopOver"
+export * from './Avatar'

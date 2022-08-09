@@ -42,7 +42,7 @@ export const Nav = ()=>{
             <Icon className="icon" as={AiFillBook} />:
             <Icon className="icon" as={AiOutlineBook} />}
             Bookmarks</NavLink>
-        <NavLink className="nav-item"  to={user.username?`${user.username}`:`/`}>
+        <NavLink className="nav-item"  to={user.username?`/${user.username}`:`/`}>
             {`/${user.username}`===location.pathname ?
             <Icon className="icon" as={HiUser}/>:
             <Icon className="icon" as={HiOutlineUser} />}

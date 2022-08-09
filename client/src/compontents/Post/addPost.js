@@ -137,7 +137,6 @@ export const AddPost = (props) => {
 								value={tweet}
 								onChange={handleChange}
 							/>
-                            {console.log('currentFiles',currentFiles)}
 							{!!gifSrc || !!currentFiles.length > 0 ? (
 								<Box className="image-container">
 									{!!gifSrc ? (

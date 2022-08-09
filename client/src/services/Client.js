@@ -185,6 +185,16 @@ class Client {
         return res.data;
       })
   }
+  static getUserLikes(username){
+    return axios.get(`/users/${username}/likes`,{
+        headers: {
+          'x-refresh': localStorage.getItem('refreshToken'),
+          Authorization: localStorage.getItem('accessToken'),
+        },
+      }).then((res)=>{
+        return res.data;
+      })
+  }
   static bookmarkATweet(tweet_id){
     return axios.post(`/bookmarks/${tweet_id}`,{},{
         headers: {
