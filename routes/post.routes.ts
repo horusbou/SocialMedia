@@ -1,5 +1,6 @@
 import express from 'express';
 import * as postController from '../controllers/post.controller';
+import * as userController from '../controllers/user.controller'
 import requiresUser from '../middleware/requiresUser';
 
 const router = express.Router();
@@ -19,4 +20,5 @@ router.delete('/retweets/:tweet_id', requiresUser, postController.deleteRetweet)
 
 // router.put('/tweets/:tweet_id', requiresUser, postController.updatePost);
 // router.delete('/tweets/:tweet_id', requiresUser, postController.deleteTweet);
+router.get('/users/:username/likes', requiresUser, userController.userLikedPost)
 export default router;

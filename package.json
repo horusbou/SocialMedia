@@ -6,9 +6,10 @@
 	"type": "module",
 	"scripts": {
 		"start": "ts-node-dev ./server.ts ",
+        "pub":"ts-node-dev ./notification/publisher/index.ts",
+        "sub":"ts-node-dev ./notification/subscriber/index.ts",
 		"seed": "ts-node-dev ./util/seede.ts",
-        "dev": "nodemon --watch './**/*.ts' --exec 'ts-node' server.ts"
-
+		"dev": "nodemon --watch './**/*.ts' --exec 'ts-node' server.ts"
 	},
 	"devDependencies": {
 		"@types/axios": "^0.14.0",
@@ -43,6 +44,7 @@
 		"multer": "^1.4.3",
 		"mysql2": "^2.3.0",
 		"neogma": "^1.9.1",
+		"redis": "^4.2.0",
 		"sequelize": "^6.6.5",
 		"typeorm": "^0.3.7"
 	}

@@ -7,7 +7,7 @@ import neogma from '../util/neo4j';
 import { User as UserNeo4J } from '../entity/UserNeoModel';
 import { validationResult } from 'express-validator';
 import HttpException from '../util/HttpException';
-import { User } from '../entity'
+import { Like, Tweet, User } from '../entity'
 import { UserInterface } from '../util/types'
 
 const queryRunner = new QueryRunner({
@@ -171,4 +171,11 @@ export async function getFollowings(req: Request, res: Response) {
         followers,
         count: followers.length
     });
+}
+export async function userLikedPost(req: Request, res: Response) {
+    const { username } = req.params;
+
+    const postLiked = await Like.find({ where: { user: { username } }, relations: ['tweet', 'tweet.user'] })
+    const posts = postLiked.map(el => { return { ...el.tweet, is_liked: true } })
+    return res.json(posts)
 }
