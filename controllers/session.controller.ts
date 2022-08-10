@@ -21,7 +21,7 @@ export async function createUserSessionhandler(req: Request, res: Response, next
     const session = (await createSession(
         user.user_id,
         req.get('user-agent') || ''
-    ));
+    )) as (Session | null);
     if (!session)
         return next(new HttpException(404, "you are connected in other browser or something went wrong"));
     //create access token

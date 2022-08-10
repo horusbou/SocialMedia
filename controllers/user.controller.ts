@@ -9,6 +9,7 @@ import { validationResult } from 'express-validator';
 import HttpException from '../util/HttpException';
 import { Like, Tweet, User } from '../entity'
 import { UserInterface } from '../util/types'
+import { Like as likeOperator } from "typeorm";
 
 const queryRunner = new QueryRunner({
     /* --> a driver needs to be passed */
@@ -178,4 +179,27 @@ export async function userLikedPost(req: Request, res: Response) {
     const postLiked = await Like.find({ where: { user: { username } }, relations: ['tweet', 'tweet.user'] })
     const posts = postLiked.map(el => { return { ...el.tweet, is_liked: true } })
     return res.json(posts)
+}
+export async function SearchForUser(req: Request, res: Response) {
+
+    const username = req.query.username as string;
+
+    const users = await User.find({
+        where: [{ username: likeOperator(`%${username}%`) },
+        { email: likeOperator(`${username}`) },
+        { firstname: likeOperator(`%${username}%`) },
+        { lastname: likeOperator(`%${username}%`) }
+        ]
+    });
+    if (!users) {
+        return new HttpException(404, "user not found")
+    }
+    const fetchedUsers = users.map(el => ({
+        user_id: el.user_id,
+        userAvatar: el.userAvatar,
+        username: el.username,
+        firstname: el.firstname,
+        lastname: el.lastname
+    }))
+    return res.json(fetchedUsers)
 }

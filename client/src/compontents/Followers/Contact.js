@@ -4,6 +4,7 @@ import ContactItem from './contactItem'
 import {colors} from '../../lib'
 import './contact.css'
 import Client from '../../services/Client';
+import {SearchBar} from "../Search"
 
 
 export const Followers= (props)=>{
@@ -16,6 +17,7 @@ export const Followers= (props)=>{
 
   return (<div className="contact-aside">
     <Header />
+    <SearchBar />
   <div className="header">
     <h1 color={colors.white}>Followers</h1>
   </div>
@@ -27,6 +29,7 @@ export const Followers= (props)=>{
     firstName={el?.firstName}
     lastName={el?.lastName} />
   })}
+
 
   </div>)
 }

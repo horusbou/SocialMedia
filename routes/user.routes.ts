@@ -5,6 +5,7 @@ import {
     postUnfollow,
     getFollowers,
     getFollowings,
+    SearchForUser
 } from '../controllers/user.controller';
 const router = express.Router();
 
@@ -12,4 +13,5 @@ router.post('/follow', requiresUser, postFollow);
 router.post('/unfollow', requiresUser, postUnfollow);
 router.get('/followings', requiresUser, getFollowers);
 router.get('/followers', requiresUser, getFollowings);
+router.get('/searchuser', SearchForUser)
 export default router;

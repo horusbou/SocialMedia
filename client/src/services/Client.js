@@ -215,7 +215,15 @@ class Client {
         return res.data;
       })
   }
-
+  static async searchForUser(query){
+    const users = await axios.get(`/searchuser?username=${query}`,{
+        headers: {
+          'x-refresh': localStorage.getItem('refreshToken'),
+          Authorization: localStorage.getItem('accessToken'),
+        },
+      })
+      return users;
+  }
   static checkStatus(response) {
     if (response.status >= 200 && response.status < 300) {
       return response;

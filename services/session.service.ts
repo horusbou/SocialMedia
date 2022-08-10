@@ -2,19 +2,25 @@ import { sign, decode } from '../util/jwt.utils';
 import { get } from 'lodash';
 import { User, Session } from '../entity';
 import { UserInterface, SessionInterface } from '../util/types';
+import HttpException from '../util/HttpException';
 
 
 export async function createSession(user_id: string, userAgent: string) {
     const user = await User.findOneBy({ user_id });
     if (!user)
         return null;
-    const session = Session.create({
-        valid: true,
-        userAgent,
-        user
-    })
-    await session.save();
-    return session
+    try {
+        const session = Session.create({
+            valid: true,
+            userAgent,
+            user
+        })
+        await session.save();
+        return session
+    } catch (err) {
+        return new HttpException(300, "user already connected")
+    }
+
 }
 export function createAccessToken({
     user,
