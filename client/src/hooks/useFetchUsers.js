@@ -29,7 +29,9 @@ const useFetchUsers = () => {
     setLoading(false)
       }, 1000);
       return () => clearTimeout(timeoutId);
-    }else {setLoading(false)}
+    }else {
+        setLoading(false);
+    }
   }, [data.slug]);
 
   return { loading,data, setData };

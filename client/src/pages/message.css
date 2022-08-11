@@ -1,0 +1,37 @@
+.message{
+    height:100vh;
+    display: flex;
+    flex-direction: column;
+}
+.messages-content{
+    flex-grow: 2;
+    color:white;
+    display: flex;
+    flex-direction: row;
+}
+.messages-content .users{
+    border-right: solid rgba(255, 255, 255, 0.3) 1px;
+    width:40%;
+
+}
+.messages-content .message-body{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+.messages-content .message-body .message-container{
+    width:80%;
+    text-align: left;
+}
+.messages-content .message-body .message-container h3{
+    font-size: 30px;
+    font-family: PoppinsBold;
+}
+.messages-content .message-body .message-container p{
+    word-wrap: break-word;
+    font-family: openSansLight;
+    font-size: 14px;
+    color:#F1F1F1;
+}

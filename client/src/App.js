@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import LoginSignUp from './pages/index'
 import TweetPage from './pages/TweetPage'
 import Bookmark from './pages/Bookmark';
+import MessagesPage from './pages/Message'
 import {Nav,Followers,UserDetailsProvider} from './compontents';
 import Profile from './pages/Profile';
 import {
@@ -11,6 +12,7 @@ import {
   Route,
   Switch,
   Redirect,
+  useHistory
 } from 'react-router-dom';
 import { useState } from 'react';
 import Client from './services/Client';
@@ -42,8 +44,7 @@ const PublicRoute = (props)=>{
 
 function App() {
     const [FetchFollowers,setFetchFollowers] = useState(false);
-
-  const privateRoutes = ['/home', '/notifications', '/bookmarks',`/:username`, '/tweets/:tweet_id' ];
+  const privateRoutes = ['/home', '/notifications', '/bookmarks','/messages',`/:username`, '/tweets/:tweet_id' ];
   return (
     <div className="app">
     <div className="appBody">
@@ -60,7 +61,11 @@ function App() {
                 path="/"
                 Component={LoginSignUp}
            />
-
+            <PrivateRoute
+                exact
+                path={`/messages`}
+                Component={MessagesPage}
+            />
 
             <PrivateRoute
               exact

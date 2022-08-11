@@ -6,8 +6,8 @@
 	"type": "module",
 	"scripts": {
 		"start": "ts-node-dev ./server.ts ",
-        "pub":"ts-node-dev ./notification/publisher/index.ts",
-        "sub":"ts-node-dev ./notification/subscriber/index.ts",
+		"pub": "ts-node-dev ./notification/publisher/index.ts",
+		"sub": "ts-node-dev ./notification/subscriber/index.ts",
 		"seed": "ts-node-dev ./util/seede.ts",
 		"dev": "nodemon --watch './**/*.ts' --exec 'ts-node' server.ts"
 	},
@@ -33,6 +33,7 @@
 		"typescript": "^4.4.3"
 	},
 	"dependencies": {
+		"aws-sdk": "^2.1192.0",
 		"axios": "^0.27.2",
 		"bcryptjs": "^2.4.3",
 		"express-validator": "^6.13.0",
