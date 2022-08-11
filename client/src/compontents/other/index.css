@@ -1,9 +1,5 @@
 .options{
-    width: 300px;
-    margin:10px auto;
-    margin-bottom: 30px;
-    padding:0 10px;
-    /* border: solid white 1px; */
+    margin-bottom: 20px;
     color:white;
     display: flex;
     justify-content: space-between;

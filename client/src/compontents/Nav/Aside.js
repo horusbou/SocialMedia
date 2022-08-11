@@ -19,7 +19,7 @@ export const Nav = ()=>{
     const location = useLocation();
     const user = useContext(userContext);
   return (
-    <div className="aside">
+    <div className="aside" >
     <div className="logo">
         <Link to="/home" ><Icon className="icon" /></Link>
         </div>

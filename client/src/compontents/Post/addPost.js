@@ -110,7 +110,7 @@ export const AddPost = (props) => {
 		<>
 			{maxFileWarning ? (
 				<div className={`${maxFileWarning ? 'warningBlock' : 'hide'}`}>
-					You are only allowed to upload a maximum of 2 files at a time
+					You are only allowed to upload a maximum of 4 files at a time
 				</div>
 			) : null}
 			<form className="post-item" onSubmit={handleSubmit}>
@@ -275,6 +275,7 @@ export const AddPost = (props) => {
 								accept="image/*"
 								multiple
 								id="file"
+
 								onChange={(evt) => {
 									if (evt.target.files.length > 4) {
 										evt.preventDefault();

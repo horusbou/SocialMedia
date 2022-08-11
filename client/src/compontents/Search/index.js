@@ -1,6 +1,7 @@
 import {Input,InputGroup,InputLeftElement} from "@chakra-ui/react"
 import {Search2Icon} from "@chakra-ui/icons"
 import {colors} from "../../lib"
+import './index.css'
 import {
     Popover,
     PopoverTrigger,
@@ -20,8 +21,8 @@ export function SearchBar(){
     const [isEditing, setIsEditing] = useBoolean()
     const { loading ,data, setData } = useFetchUsers();
     let paddingButtom = data.results.length===0 && '20px';
-return (<div>
-                <Popover autoFocus={false} isOpen={true||isEditing} onOpen={setIsEditing.on}>
+return (<div className="searchBar">
+                <Popover autoFocus={false} isOpen={isEditing} onOpen={setIsEditing.on}>
                     <PopoverTrigger>
                         <InputGroup>
                             <InputLeftElement children={<Search2Icon color='RGBA(255, 255, 255, 0.5)'/>} />
@@ -37,7 +38,6 @@ return (<div>
                             onChange={(e)=>setData({ ...data, slug: e.target.value })}
                             onBlur={()=>{setIsEditing.off();setData({ slug: '',results:[] })}}
                             />
-
                         </InputGroup>
                     </PopoverTrigger>
 
