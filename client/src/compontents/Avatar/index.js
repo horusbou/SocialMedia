@@ -171,7 +171,7 @@ export const PopUpAvatar = ({userData})=>{
             <ModalHeader >Update profile picture</ModalHeader>
             <ModalCloseButton _focus={{}} _active={{}} />
             <ModalBody>
-                {console.log(previewPhoto.length)}
+                {/* {console.log(previewPhoto.length)} */}
                 {/* {
                                        <GridItem className="image-border image-border-fit-content">
                         <CloseButton

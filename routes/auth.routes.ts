@@ -2,6 +2,7 @@ import express from 'express';
 import {
     createUserhandler,
     getUserData,
+    getAllUsers
 } from '../controllers/user.controller';
 import {
     createUserSessionhandler,
@@ -16,7 +17,8 @@ const router = express.Router();
 
 //get connected User
 router.get('/user', getUserHandler);
-
+//get Allusers
+router.get('/users', requiresUser, getAllUsers)
 //get userData
 router.get('/users/:username', requiresUser, getUserData);
 

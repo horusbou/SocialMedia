@@ -203,3 +203,7 @@ export async function SearchForUser(req: Request, res: Response) {
     }))
     return res.json(fetchedUsers)
 }
+export async function getAllUsers(req: Request, res: Response) {
+    const users = await User.find();
+    return res.json(users)
+}

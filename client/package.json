@@ -21,6 +21,7 @@
 		"react-icons": "^4.3.1",
 		"react-router-dom": "^5.3.0",
 		"react-scripts": "4.0.3",
+		"socket.io-client": "^4.5.1",
 		"use-file-upload": "^1.0.11",
 		"web-vitals": "^1.0.1",
 		"yup": "^0.32.11"

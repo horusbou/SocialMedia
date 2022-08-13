@@ -48,6 +48,15 @@ class Client {
         return posts.data;
       }).catch(this.catchError);
   }
+  static getParticipent(){
+    return axios
+    .get('/messages', {
+      headers: {
+        'x-refresh': localStorage.getItem('refreshToken'),
+        Authorization: localStorage.getItem('accessToken'),
+      },
+    })
+  }
   static signUp(values) {
     return axios.post('/users', values).then((data)=>{
         console.log(data)
@@ -101,7 +110,22 @@ class Client {
       },
     });
   }
-
+  static sendMessage({message,reciever_id}){
+    return axios.post(`/messages/${reciever_id}`, {message}, {
+        headers: {
+          'x-refresh': localStorage.getItem('refreshToken'),
+          Authorization: localStorage.getItem('accessToken'),
+        },
+      })
+}
+static getMessages({reciever_id}){
+    return axios.get(`/messages/${reciever_id}`, {
+        headers: {
+          'x-refresh': localStorage.getItem('refreshToken'),
+          Authorization: localStorage.getItem('accessToken'),
+        },
+      })
+}
   static postPost(body) {
     return axios.post('/tweet', body, {
       headers: {
@@ -217,6 +241,15 @@ class Client {
   }
   static async searchForUser(query){
     const users = await axios.get(`/searchuser?username=${query}`,{
+        headers: {
+          'x-refresh': localStorage.getItem('refreshToken'),
+          Authorization: localStorage.getItem('accessToken'),
+        },
+      })
+      return users;
+  }
+  static async getAllUsers(){
+    const users = await axios.get(`/users`,{
         headers: {
           'x-refresh': localStorage.getItem('refreshToken'),
           Authorization: localStorage.getItem('accessToken'),

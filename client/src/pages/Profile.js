@@ -45,17 +45,6 @@ export default function Profile(props) {
 				<div className="profile-header-content">
 					<div className="avatar">
                         <PopUpAvatar userData={userData} />
-                    {
-                    //     <Avatar
-					// 		name={`${userData.firstname} ${userData.lastname}`}
-					// 		size="2xl"
-					// 		src={userData.userAvatar}
-                    //         onClick={()=>console.log('pic hited')}
-					// 	/>:<Avatar
-                    //     size="2xl"
-                    // />
-                }
-
                         <div className="avatar-footer">
                             {userData.username === username?<Button _active={{}} _focus={{}}>Edit profile</Button>:<>
                                 <Button onClick={()=>{

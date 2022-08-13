@@ -35,3 +35,29 @@
     font-size: 14px;
     color:#F1F1F1;
 }
+.messages-content .message-user{
+    flex-grow: 1;
+    position:relative;
+}
+.messages-content .message-user .message-input{
+    background-color: black;
+    width:100%;
+    padding:10px 5px;
+    position:sticky;
+    bottom:0px;
+}
+.message-item{
+    padding:5px 20px;
+    border-bottom:solid white 1px;
+    height:80px;
+    display: flex;
+    align-items: center;
+}
+.mine{
+    /* border:red solid 1px; */
+    flex-direction: row-reverse;
+}
+.message-item .message-data{
+    margin-right: 10px;
+    margin-left: 10px;
+}

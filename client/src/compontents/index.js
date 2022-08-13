@@ -11,3 +11,5 @@ export * from "./AddComment"
 export * from "./PopOver"
 export * from './Avatar'
 export * from './Search'
+export * from './chat'
+export * from './socket'

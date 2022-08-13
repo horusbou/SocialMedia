@@ -13,10 +13,10 @@ const deserializeUser = async (
         ''
     );
     const refreshToken = get(req, 'headers.x-refresh');
+
     if (!refreshToken) return next();
 
     const { decoded, expired } = decode(accessToken);
-
     if (decoded) {
         //@ts-ignore
         req.user = decoded;
