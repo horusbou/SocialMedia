@@ -6,7 +6,7 @@ import { User } from "./user.entitie";
 export class Message extends BaseEntity {
     @PrimaryGeneratedColumn('uuid')
     message_id: string
-    @Column()
+    @Column("longtext")
     message: string
     @ManyToOne(() => Room, room => room.messages)
     @JoinColumn({ name: "room_id" })

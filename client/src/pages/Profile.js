@@ -1,7 +1,7 @@
-import React, { useState, useEffect} from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect, useContext} from 'react';
+import { Redirect, useParams } from 'react-router-dom';
 import {  Heading, Flex, Box, Text,Button } from '@chakra-ui/react';
-import {PostItem,PageTitle,LoadingSpinner,PopUpAvatar} from '../compontents';
+import {PostItem,PageTitle,LoadingSpinner,PopUpAvatar, userContext} from '../compontents';
 import { AiOutlineLeft} from "react-icons/ai"
 import './Profile.css';
 import Client from '../services/Client';
@@ -14,29 +14,28 @@ export default function Profile(props) {
     const [showTweets,setShowTweets]=useState(true);
     const [userLikes ,setUserLike] = useState([]);
 	const { username } = useParams();
+    const userConnected = useContext(userContext);
+    const [shouldRedirectToMessages,setShouldRedirectToMessages] = useState(false)
 
 	useEffect(() => {
+        document.title = `${username}`;
 		Client.getUserData(username).then((userData) => {
 			setUserData(userData.data);
 		});
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [username]);
-
-	useEffect(() => {
-		if (!!username) {
 			Client.getProfilePosts(username).then((posts) => {
 				setProfilePosts(posts.data);
 				setIsLoading(false);
 			});
-		}
+
         Client.getUserLikes(username).then(data=>{
             setUserLike(data)
         })
-	}, [username]);
-    useEffect(() => {
-        document.title = `${username}`;
-      },[username]);
-
+    }, [username]);
+    if(shouldRedirectToMessages)
+        return <Redirect to={{
+            pathname:"/messages",
+            state: { user: userData }
+        }} />
 	return (
 		<div className="profile main">
             <PageTitle title={"Posted"} to="/home" icon={AiOutlineLeft} />
@@ -46,13 +45,16 @@ export default function Profile(props) {
 					<div className="avatar">
                         <PopUpAvatar userData={userData} />
                         <div className="avatar-footer">
-                            {userData.username === username?<Button _active={{}} _focus={{}}>Edit profile</Button>:<>
-                                <Button onClick={()=>{
-                                    Client.postFollow(userData.user_id).then(()=>props.FetchFollowers());
-                                }}>Follow</Button>
-
-                            </> }
+                            <div className='items'>
+                                {userConnected.username === username?<Button _active={{}} _focus={{}}>Edit profile</Button>:
+                                <>
+                                    <Button onClick={()=>setShouldRedirectToMessages(true)}>Message</Button>
+                                    <Button onClick={()=>{Client.postFollow(userData.user_id).then(()=>props.FetchFollowers());}}>Follow</Button>
+                                </>
+                                }
+                             </div>
                         </div>
+
 					</div>
 					<div className="userData">
 						<div className="header">

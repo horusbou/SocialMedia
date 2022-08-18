@@ -28,9 +28,9 @@ return (<div className="options">
         <PostDialog />
         <Icon w={6} h={6} as={MdOutlineMailOutline} style={{cursor:'pointer'}} onClick={()=>{history.push('/messages')}} />
         <Icon w={5} h={5} as={MdNotifications} />
-        <Popover _hover={{}} _focus={{}} _active={{}}   matchWidth={true}>
-            <PopoverTrigger>
-                {Object.keys(user).length>0?<Avatar name={user.firstname + ' '+ user.lastname} src={user.userAvatar} />:<Avatar/>}
+        <Popover _hover={{}} _focus={{}} _active={{}} matchWidth={true}>
+            <PopoverTrigger >
+                {Object.keys(user).length>0?<Avatar style={{cursor:'pointer'}} name={user.firstname + ' '+ user.lastname} src={user.userAvatar} />:<Avatar style={{cursor:'pointer'}} />}
             </PopoverTrigger>
         <PopoverContent  _hover={{}} _focus={{}} _active={{}} width={"200px"} textAlign="center" bgColor={colors.background}>
             <PopoverArrow />

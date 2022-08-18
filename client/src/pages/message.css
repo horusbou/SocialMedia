@@ -1,26 +1,83 @@
 .message{
-    height:100vh;
     display: flex;
     flex-direction: column;
+    height:100vh;
 }
 .messages-content{
-    flex-grow: 2;
+    height:100%;
+    /* flex-grow: 1; */
     color:white;
     display: flex;
     flex-direction: row;
+    position: relative;
+}
+.messages-content .user-content{
+    display:flex;
+    align-items: center;
+    padding:10px 20px;
+    border-bottom:solid rgba(255, 255, 255, 0.3) 1px;
+    position: sticky;
+    top:0;
+    z-index:1000;
+    background-color: #1C1C1C;
+}
+.messages-content .message-user .message-content .loadingMessages{
+    display: flex;
+    flex-grow: 1;
+    justify-content: center;
+    align-items: center;
+}
+.messages-content .user-content .user-details{
+    margin-left: 20px;
+}
+.messages-content .user-content .user-details p{
+    font-family: OpenSansRegular;
+    font-size: 20px;
+}
+.messages-content .user-content .user-details span{
+    font-size:14px;
+    font-family: OpenSansLight;
+    color:#a9b9b9;
 }
 .messages-content .users{
     border-right: solid rgba(255, 255, 255, 0.3) 1px;
-    width:40%;
-
+    max-width:30%;
+    min-width: 30%;
+    display: flex;
+    flex-direction: column;
 }
+.loadingUsers{
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+}
+.messages-content .users .allUsers{
+    display: flex;
+    flex-grow: 1;
+}
+.messages-content .users .allUsers .usersList{
+    flex-grow: 1;
+}
+.message-content{
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+.message-content .messageslist{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    overflow: auto;
+}
+
 .messages-content .message-body{
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100%;
+    width:50%;
 }
+
 .messages-content .message-body .message-container{
     width:80%;
     text-align: left;
@@ -36,28 +93,53 @@
     color:#F1F1F1;
 }
 .messages-content .message-user{
-    flex-grow: 1;
+    width:100%;
+    height:100vh;
+    overflow:scroll;
+    overflow-x: hidden;
     position:relative;
+    display: flex;
+    flex-direction: column;
 }
 .messages-content .message-user .message-input{
-    background-color: black;
-    width:100%;
-    padding:10px 5px;
+    background-color: #1C1C1C;
     position:sticky;
+    width:100%;
+    padding:10px  10px;
     bottom:0px;
+}
+.messages-content .message-user .message-input input{
+    border-color: rgba(255, 255, 255, 0.3);
 }
 .message-item{
     padding:5px 20px;
-    border-bottom:solid white 1px;
-    height:80px;
+    min-height:80px;
     display: flex;
     align-items: center;
 }
 .mine{
-    /* border:red solid 1px; */
-    flex-direction: row-reverse;
+    justify-content: flex-end;
 }
-.message-item .message-data{
+.message-item .mine{
+    justify-content: flex-end;
+}
+.other{
+    justify-content: flex-start;
+}
+.message-item .other{
+    justify-content: flex-start;
+}
+.message-item .message-body{
+    display: flex;
+    flex-direction: row;
+}
+.message-item .message-body .message-data{
+    border:solid rgba(255, 255, 255, 0.3) 1px;
     margin-right: 10px;
     margin-left: 10px;
+    padding:15px;
+    border-radius: 30px;
+}
+.message-item .message-body .message-data p{
+    word-break: break-word;
 }

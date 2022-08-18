@@ -14,7 +14,7 @@ import {
 import useFetchUsers from "../../hooks/useFetchUsers";
 import ContactItem from '../Followers/contactItem'
 import {LoadingSpinner} from '../Spinner'
-
+import {Link} from "react-router-dom"
 
 export function SearchBar(){
 
@@ -35,8 +35,10 @@ return (<div className="searchBar">
                             color={"white"}
                             value={data.slug}
                             onFocus={()=>{setIsEditing.on()}}
-                            onChange={(e)=>setData({ ...data, slug: e.target.value })}
-                            onBlur={()=>{setIsEditing.off();setData({ slug: '',results:[] })}}
+                            onBlur={()=>setIsEditing.off()}
+                            onChange={(e)=>{
+                                setData({ ...data, slug: e.target.value })
+                            }}
                             />
                         </InputGroup>
                     </PopoverTrigger>
@@ -46,7 +48,7 @@ return (<div className="searchBar">
                     {!data.slug && <PopoverHeader style={{fontSize:'13px', textAlign:'center',color: 'RGBA(255, 255, 255, 0.5)' ,border:'none'}}>Try searching for people, topics, or keywords</PopoverHeader>}
                     <PopoverBody>
                         {loading&&<LoadingSpinner />}
-                        {data.results.map((el)=><ContactItem key={el.user_id} username={el.username} firstName={el.firstname} lastName={el.lastname} userAvatar={el.userAvatar} />)}
+                        {!loading && data.results.map((el)=><Link onClick={()=>setData({ slug: '',results:[] })}  key={el.user_id} to={`/${el.username}`}> <ContactItem  username={el.username} firstName={el.firstname} lastName={el.lastname} userAvatar={el.userAvatar} /> </Link>)}
                     </PopoverBody>
                 </PopoverContent>
                 </Popover>

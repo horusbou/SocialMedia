@@ -6,7 +6,7 @@ import './contactItem.css'
 export default function ContactItem(props) {
   const {userAvatar,username,firstName,lastName}=props;
   return (
-        <div className="contact-item" >
+        <div className="contact-item">
         {/* <Link to={`/${username}`} > */}
             <Box className="item-body">
                 <div className="userDataContainer">

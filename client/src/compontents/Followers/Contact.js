@@ -5,7 +5,7 @@ import {colors} from '../../lib'
 import './contact.css'
 import Client from '../../services/Client';
 import {SearchBar} from "../Search"
-import { useHistory } from 'react-router-dom'
+import { useHistory,Link } from 'react-router-dom'
 
 export const Followers= (props)=>{
     const history = useHistory()
@@ -25,11 +25,11 @@ if(history.location.pathname==='/messages')
   </div>
 
   { followings.length>0 && followings.map((el,i)=>{
-    return <ContactItem key={i}
-    userAvatar={el?.avatar}
+    return <Link to={`/${el?.username}`} key={el.user_id}><ContactItem key={i}
+    userAvatar={el?.userAvatar}
     username={el?.username}
-    firstName={el?.firstName}
-    lastName={el?.lastName} />
+    firstName={el?.firstname}
+    lastName={el?.lastname} /></Link>
   })}
 
 
