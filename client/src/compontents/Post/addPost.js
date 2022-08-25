@@ -73,7 +73,7 @@ export const AddPost = (props) => {
 	const [previewImages, setPreviewImages] = useState([]);
 	const [currentFiles, setCurrentFiles] = useState([]);
 	const [maxFileWarning, setMaxFileWarning] = useState(false);
-    const user = useContext(userContext);
+    const {userData:user} = useContext(userContext);
 
 	const handleChange = (evt) => setTweet(evt.target.value);
 	const handleSubmit = (evt) => {

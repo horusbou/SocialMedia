@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useContext} from 'react';
 import { Redirect, useParams } from 'react-router-dom';
-import {  Heading, Flex, Box, Text,Button } from '@chakra-ui/react';
-import {PostItem,PageTitle,LoadingSpinner,PopUpAvatar, userContext} from '../compontents';
+import {  Heading, Flex, Box, Text,Button ,Image,Badge,Icon} from '@chakra-ui/react';
+import {PostItem,PageTitle,LoadingSpinner,PopUpAvatar, userContext,Banner} from '../compontents';
 import { AiOutlineLeft} from "react-icons/ai"
+import { BsCamera} from "react-icons/bs"
 import './Profile.css';
 import Client from '../services/Client';
+import NoTweetFound from '../compontents/NoTweets';
 
 export default function Profile(props) {
 
@@ -14,7 +16,7 @@ export default function Profile(props) {
     const [showTweets,setShowTweets]=useState(true);
     const [userLikes ,setUserLike] = useState([]);
 	const { username } = useParams();
-    const userConnected = useContext(userContext);
+    const {userData:userConnected} = useContext(userContext);
     const [shouldRedirectToMessages,setShouldRedirectToMessages] = useState(false)
 
 	useEffect(() => {
@@ -36,11 +38,15 @@ export default function Profile(props) {
             pathname:"/messages",
             state: { user: userData }
         }} />
+        if(userData.length===0 && isLoading)
+            return <div className="main" style={{display:'flex',alignItems:'center'}}>
+                <LoadingSpinner/>
+            </div>
 	return (
 		<div className="profile main">
             <PageTitle title={"Posted"} to="/home" icon={AiOutlineLeft} />
 			<div className="profile-header">
-				<div className="profile-header-bg-image"></div>
+				<Banner username={username} userData={userData} />
 				<div className="profile-header-content">
 					<div className="avatar">
                         <PopUpAvatar userData={userData} />
@@ -54,7 +60,6 @@ export default function Profile(props) {
                                 }
                              </div>
                         </div>
-
 					</div>
 					<div className="userData">
 						<div className="header">
@@ -91,11 +96,7 @@ export default function Profile(props) {
 			</div>
             {showTweets?
                     <div className="profile-content">
-                    {isLoading ? (
-                        <LoadingSpinner />
-                    ) : (
-                        <>
-                            {!!profilePosts
+                            {profilePosts.length>0
                                 ? profilePosts.map((item, i) => {
                                     if(item.source_id===null){
                                         return <PostItem
@@ -109,7 +110,6 @@ export default function Profile(props) {
                                         isLiked={item.is_liked}
                                         />
                                     }else{
-
                                     return (<PostItem
                                         key={item.tweet_id }
                                         tweet_id={item.tweet_id}
@@ -124,9 +124,11 @@ export default function Profile(props) {
                                     }
 
                                 })
-                                : null
+                                : <>
+                                    <NoTweetFound />
+                                </>
                                 }
-                            {userData.user_id == null ? (
+                            {userData.user_id === null ? (
                                 <Flex mt="20px" justify="center" align="center">
                                     <Box className="content">
                                         <Heading>This account doesn't exist</Heading>
@@ -136,8 +138,7 @@ export default function Profile(props) {
                                     </Box>
                                 </Flex>
                             ) : null}
-                        </>
-                    )}
+
                 </div>
             :
                 <div>

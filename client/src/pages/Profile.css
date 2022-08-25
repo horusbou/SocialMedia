@@ -5,6 +5,10 @@
 .profile .profile-header .profile-header-bg-image{
   height:200px;
   background-color: black;
+  position: relative;
+}
+.profile .profile-header .profile-header-bg-image img{
+    height:100%;
 }
 .profile .profile-header .profile-header-content{
   width:80%;

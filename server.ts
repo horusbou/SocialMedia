@@ -61,6 +61,8 @@ const main = async () => {
         app.use(express.urlencoded({ extended: false }));
 
         app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+        app.use('/uploads/horus', express.static(path.join(__dirname, 'uploads')));
+
         app.use(PostRoutes);
         app.use(authRoutes);
         app.use(UserRoutes);

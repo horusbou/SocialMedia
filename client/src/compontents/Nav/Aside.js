@@ -17,7 +17,7 @@ import { userContext } from '../context'
 
 export const Nav = ()=>{
     const location = useLocation();
-    const user = useContext(userContext);
+    const {userData:user} = useContext(userContext);
   return (
     <div className="aside" >
     <div className="logo">

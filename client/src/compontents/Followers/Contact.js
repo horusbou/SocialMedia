@@ -23,7 +23,6 @@ if(history.location.pathname==='/messages')
   <div className="header">
     <h1 color={colors.white}>Followers</h1>
   </div>
-
   { followings.length>0 && followings.map((el,i)=>{
     return <Link to={`/${el?.username}`} key={el.user_id}><ContactItem key={i}
     userAvatar={el?.userAvatar}

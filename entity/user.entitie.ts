@@ -25,8 +25,10 @@ export class User extends BaseEntity {
     email: string;
     @Column()
     password: string;
-    @Column()
+    @Column('longtext')
     userAvatar: string;
+    @Column('longtext')
+    profileBanner: string;
     @Column({ default: '' })
     bio: string;
     @Column({

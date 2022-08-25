@@ -57,6 +57,26 @@ class Client {
       },
     })
   }
+  static async changeAvatar(imageUrl){
+    const res = await  axios
+    .post('/users/user/avatar',{imageUrl}, {
+      headers: {
+        'x-refresh': localStorage.getItem('refreshToken'),
+        Authorization: localStorage.getItem('accessToken'),
+      }
+    })
+    return res.data.cropedPicture;
+  }
+  static async changeBanner(body){
+    const res = await  axios
+    .post('/users/user/banner',body, {
+      headers: {
+        'x-refresh': localStorage.getItem('refreshToken'),
+        Authorization: localStorage.getItem('accessToken'),
+      }
+    })
+    return await res.data.cropedBanner;
+  }
   static signUp(values) {
     return axios.post('/users', values).then((data)=>{
         console.log(data)

@@ -27,7 +27,7 @@ export default function TweetPage() {
             setLoading(false);
         })
     },[tweet_id]);
-
+    console.log('PostData',PostData)
 if(loading)
     return <LoadingSpinner/>
 return (<div className="tweetPage main">
@@ -77,7 +77,8 @@ return (<div className="tweetPage main">
                 <FaRegComment className="icon-item" color="#a9b9b9"/>
                 </div>
                 <div className="retweet icon">
-                {{isRetweeted:false} ? (
+                    {/* isRetweeted */}
+                {false ? (
                     <AiOutlineRetweet
                     className="icon-item"
                     color="green"/>
@@ -94,7 +95,8 @@ return (<div className="tweetPage main">
                 </span>
                 </div>
                 <div className="heart icon">
-                {{isLiked:false} ? (
+                {/* isLiked */}
+                {false ? (
                     <AiFillHeart
                     className="icon-item liked"
                     color="#f91880"

@@ -44,7 +44,7 @@ const PublicRoute = (props)=>{
     );
 }
 const HandleSocketConnection=()=>{
-    const user = useContext(userContext)
+    const {userData:user} = useContext(userContext)
 
     useEffect(()=>{
         if(Object.keys(user).length>0){

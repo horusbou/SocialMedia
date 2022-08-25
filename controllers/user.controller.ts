@@ -2,6 +2,7 @@ import { Response, Request, NextFunction } from 'express';
 import bcrypt from 'bcryptjs';
 import { omit, sample } from 'lodash';
 import log from '../logger/log';
+import { writeFile } from 'node:fs/promises'
 import { QueryBuilder, QueryRunner } from 'neogma';
 import neogma from '../util/neo4j';
 import { User as UserNeo4J } from '../entity/UserNeoModel';
@@ -206,4 +207,36 @@ export async function SearchForUser(req: Request, res: Response) {
 export async function getAllUsers(req: Request, res: Response) {
     const users = await User.find();
     return res.json(users)
+}
+export async function ChangeUserProfilePicture(req: Request, res: Response, next: NextFunction) {
+    const user_id = req.user.user_id;
+    const { imageUrl } = req.body;
+    const user = await User.findOne({ where: { user_id } })
+    if (!user)
+        return next(new HttpException(404, "user not found"))
+
+    let base64Data = imageUrl.replace(/^data:image\/png;base64,/, "");
+    const picName = `./uploads/${user.username}/${Date.now()}.png`
+    try {
+        await writeFile(picName, base64Data, 'base64');
+        user.userAvatar = picName;
+        await user.save()
+    } catch (error) {
+        return next(new HttpException(404, error.toString()))
+    }
+
+    return res.status(200).json({ cropedPicture: picName })
+}
+export async function ChangeUserProfileBanner(req: Request, res: Response, next: NextFunction) {
+    let pictures: string | string[] = '';
+    if (req.files) {
+        pictures = (req.files as Express.Multer.File[]).map((file) => file.path);
+    }
+    const { user_id } = req.user;
+    const user = await User.findOneBy({ user_id });
+    if (!user)
+        return res.json({ message: 'user not found!' });
+    user.profileBanner = pictures[0];
+    await user.save();
+    return res.status(200).json({ cropedBanned: pictures[0] })
 }

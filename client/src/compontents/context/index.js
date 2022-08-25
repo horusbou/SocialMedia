@@ -13,7 +13,7 @@ const UserDetailsProvider = ({children})=>{
         getUserData();
       }, []);
 
-    return (<userContext.Provider value={userData}>
+    return (<userContext.Provider value={{userData,setUserData}}>
         {children}
     </userContext.Provider>)
 }

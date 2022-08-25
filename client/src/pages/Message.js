@@ -22,7 +22,7 @@ const MessageItem = ({mine=true,user,message})=>{
 }
 
 export default function MessagesPage(props){
-    const user = useContext(userContext)
+    const {userData:user} = useContext(userContext)
     const [selectedUser,setSelectedUser]=useState(null)
     const [privateMessage,setPrivateMessage]=useState('')
     const [messages,setMessages]=useState([])

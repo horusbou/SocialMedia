@@ -23,15 +23,16 @@ export function AddComment({tweet_id,showComment}) {
         const {value} = evt.target;
         setComment(value);
     }
-    const user = useContext(userContext);
+    const {userData:user} = useContext(userContext);
     const [loading,setLoading] = useState(false);
     const [comment,setComment] = useState('');
+    console.log('user addComent',user)
     return (
         <div className="comment">
             <div className="container">
                 <div className="leftSide">
                 <div className="avatar">
-                        <Avatar src={user.userAvatar} name={`${user.firstname} ${user.lastname}`} />
+                        {Object.keys(user).length?<Avatar src={user.userAvatar} name={`${user.firstname} ${user.lastname}`} />:null}
                     </div>
                 </div>
                 <div className="commentContent">
