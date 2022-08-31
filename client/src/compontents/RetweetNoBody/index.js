@@ -1,37 +1,39 @@
-import React, { useState } from 'react';
-import './postItem.css';
+import React, { useState } from "react"
 import { MenuItem, Avatar } from '@chakra-ui/react';
 import {
   AiFillHeart,
   AiOutlineHeart,
   AiOutlineShareAlt,
+  AiOutlineRetweet,
 } from 'react-icons/ai';
-
 import { HoverUser } from '../Hover';
 import { FaRegComment } from 'react-icons/fa';
-import { PictureGif } from './imageBloc';
-import { MoreOption } from './moreOption';
-import { AlertEditPostItem } from './editPostItem';
+import { MoreOption } from '../Post/moreOption';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import Client from '../../services/Client';
 import { useHistory } from "react-router-dom";
+import { SourceItem } from "../Retweet/sourceItem";
+import { PictureGif } from '../Post/imageBloc';
+import { AlertEditPostItem } from '../Post/editPostItem';
 import { RetweetButton } from '../RetweetButton';
+// import {AlertEditPostItem} from '../Post/editPostItem';
+// import {PictureGif} from '../Post/imageBloc';
 
-export const PostItem = (props) => {
+
+export function RetweetNoBody(props) {
+  const { user, tweetBody } = props
   const [isLiked, setLike] = useState(props.isLiked);
-  //   const [isRetweeted, setIsRetweeted] = useState(props.isRetweeted);
+  const [isRetweeted, setIsRetweeted] = useState(props.isRetweeted);
   const [likeCountes, setLikeCountes] = useState(props.likes);
-  //   const [retweetCountes, setretweetCountes] = useState(props.retweet);
+  const [retweetCountes, setretweetCountes] = useState(props.retweet);
   const [isEdited, setisEdited] = useState(false);
   const [isMouseOver, setIsMouseOver] = useState(false)
+  const history = useHistory();
 
   const handleEnter = () => {
     setIsMouseOver(true)
   }
-
-
-  const history = useHistory();
 
   return (
     <>
@@ -45,6 +47,10 @@ export const PostItem = (props) => {
       )}
 
       <div className="container" onMouseLeave={() => setIsMouseOver(false)}>
+        {props.userRetweeted ? <div className="retweet">
+          <Link to={`/${props.userRetweeted.username}`}>{props.userRetweeted.username} retweted</Link>
+        </div>
+          : null}
         <div className={`post-item ${isMouseOver ? 'relative' : ''}`}>
           {isMouseOver ? <HoverUser onMouseLeave={() => setIsMouseOver(false)} username={props.user.username} /> : null}
           <div className="avatar" >
@@ -134,5 +140,6 @@ export const PostItem = (props) => {
       </div>
 
     </>
-  );
+
+  )
 }

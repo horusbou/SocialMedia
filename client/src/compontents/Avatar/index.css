@@ -14,6 +14,3 @@
     height: 100%;
     cursor: pointer;
 }
-.iconLabel:hover svg{
-    border:solid red;
-}
