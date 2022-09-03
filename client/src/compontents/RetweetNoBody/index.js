@@ -34,6 +34,7 @@ export function RetweetNoBody(props) {
   const handleEnter = () => {
     setIsMouseOver(true)
   }
+  console.log("props of retweet", props)
 
   return (
     <>
