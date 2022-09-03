@@ -37,7 +37,7 @@ export default function Profile(props) {
       pathname: "/messages",
       state: { user: userData }
     }} />
-  if (userData.length === 0 && isLoading)
+  if (isLoading)
     return <div className="main" style={{ display: 'flex', alignItems: 'center' }}>
       <LoadingSpinner />
     </div>

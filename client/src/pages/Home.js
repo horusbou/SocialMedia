@@ -21,7 +21,9 @@ export default function Home() {
     Client.getAllPosts()
       .then((response) => {
         setPostData(response);
+        console.log(response)
       }).then(() => setLoading(false))
+      .catch(() => setLoading(true))
   }, []);
 
   return (
@@ -56,7 +58,7 @@ export default function Home() {
               key={item.tweet_id}
               tweet_id={item.tweet_id}
               userRetweeted={item.user}
-              user={item.source.timeline.user}
+              user={item.user}
               tweetBody={item.source.tweet_body}
               likes={item.like_count}
               retweet={item.source.retweet_count + item.retweet_count}

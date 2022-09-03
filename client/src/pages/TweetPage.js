@@ -25,6 +25,7 @@ export default function TweetPage() {
   useEffect(() => {
     Client.getTweet(tweet_id)
       .then(res => {
+        console.log(res.data)
         setPostData(res.data);
         setComments(res.data.comments);
         setLikeCountes(res.data.like_count)
@@ -85,7 +86,6 @@ export default function TweetPage() {
               <FaRegComment className="icon-item" color="#a9b9b9" />
             </div>
             <div className="retweet icon">
-              {console.log(PostData)}
               <RetweetButton count={PostData.retweetCountes} userRetweeted={PostData.is_retweeted} tweet={PostData} />
               {/* isRetweeted 
               {PostData.is_retweeted ? (
