@@ -15,7 +15,8 @@ router.get('/tweets/:tweet_id/comments/:comment_id', requiresUser, postControlle
 router.get('/tweets/profile/:username', requiresUser, postController.profileTweets);
 router.post('/tweet', requiresUser, postController.postTweet);
 // router.post('/retweets/body/:tweet_id', requiresUser, postController.postRetweetBody);
-router.post('/retweets/:tweet_id', requiresUser, postController.postRetweet);
+router.post('/retweets/body/:tweet_id', requiresUser, postController.postRetweet);
+router.post('/retweets/:tweet_id', requiresUser, postController.postRetweetNoBody)
 router.delete('/retweets/:tweet_id', requiresUser, postController.deleteRetweet);
 
 // router.put('/tweets/:tweet_id', requiresUser, postController.updatePost);

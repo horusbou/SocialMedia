@@ -100,7 +100,7 @@ export function RetweetNoBody(props) {
                 </span>
               </div>
               <div className="retweet-icon icon">
-                <RetweetButton tweet={props} />
+                <RetweetButton tweet={props} userRetweeted={props.isRetweeted} count={props.retweet} />
               </div>
 
               <div className="heart icon">

@@ -73,49 +73,15 @@ export const getAllTweets = async (req: Request, res: Response, next: NextFuncti
 // };
 //
 export const getRetweet = async (req: Request, res: Response) => {
-  // const { postId } = req.params;
-  // let foundedUser: any;
-  // let retweetedPosts: any = [];
-  // //@ts-ignore
-  // User.findByPk(req.user.user_id)
-  //     .then((user: any) => {
-  //         if (!user) return res.json({ message: 'user not found' });
-  //         return user.getRetweets({ raw: true });
-  //     })
-  //     .then((retweets: any[]) => {
-  //         for (let retweet of retweets) {
-  //             User.findByPk(retweet.userId, { raw: true }).then(
-  //                 (user: UserInterface) => {
-  //                     foundedUser = omit(
-  //                         user,
-  //                         'password',
-  //                         'bio',
-  //                         'createdAt',
-  //                         'updatedAt'
-  //                     );
-  //                 }
-  //             );
-  //             return Post.findByPk(retweet.post_id, { raw: true }).then(
-  //                 (post: PostIterface) => {
-  //                     retweetedPosts.push({
-  //                         isRetweeted: true,
-  //                         post,
-  //                         owner: foundedUser,
-  //                     });
-  //                 }
-  //             );
-  //         }
-  //     })
-  //     .then(() => {
-  //         res.json(retweetedPosts);
-  //     });
 };
 
 //[x] To post a retweet with a body
 export const postRetweet = async (req: Request, res: Response, next: NextFunction) => {
+  console.log("testing this")
   const { tweet_id } = req.params;
   const user_id = req.user.user_id
   const { tweet_body } = req.body;
+  console.log(tweet_body)
   try {
     const user = await User.findOneBy({ user_id })
 
@@ -123,7 +89,7 @@ export const postRetweet = async (req: Request, res: Response, next: NextFunctio
       return res.json({ message: 'user not found' })
     }
     const tweet = await Tweet.findOneBy({ tweet_id })
-
+    console.log(tweet, tweet_id)
     if (!tweet) {
       return res.json({ message: 'tweet not found' })
     }
@@ -132,11 +98,12 @@ export const postRetweet = async (req: Request, res: Response, next: NextFunctio
     if (!timeline)
       return next(new HttpException(404, "timeline not found"));
 
-    const retweet = Tweet.create({ tweet_body: tweet_body || {}, source: tweet, timeline, user })
+    const retweet = Tweet.create({ tweet_body: tweet_body, source: tweet, timeline, user })
+    console.log(retweet)
     tweet.retweet_count++;
     await tweet.save();
     await retweet.save()
-    const resp = await axios.post(fanoutService + `postTweet/${retweet.tweet_id}/${req.user.user_id}`)
+    await axios.post(fanoutService + `postTweet/${retweet.tweet_id}/${req.user.user_id}`)
     return res.status(200).json(retweet);
   } catch (error) {
     throw new HttpException(404, "something went wrong")
@@ -171,26 +138,42 @@ export const deleteRetweet = async (req: Request, res: Response, next: NextFunct
 };
 
 export const postRetweetNoBody = async (req: Request, res: Response, next: NextFunction) => {
+  const { tweet_id } = req.params;
+  const user_id = req.user.user_id
   try {
-    const { tweet_id } = req.params;
-    const user = await User.findOneBy({ user_id: req.user.user_id });
-    if (!user)
-      return res.json("user not found");
-    const tweet = await Tweet.findOneBy({ tweet_id: tweet_id })
-    if (!tweet)
-      return res.json("tweet not found");
-    const retweet = Retweet.create({ user, tweet })
-    await retweet.save();
-    tweet.retweet_count++;
-    await tweet.save();
-    // return res.json(tweet);
+    const user = await User.findOneBy({ user_id })
 
-    const resp = await axios.post(fanoutService + `postTweet/${tweet.tweet_id}/${req.user.user_id}`)
-    //const resp = await axios.get(timelineService + '5fbfbd22-8517-49c2-87be-64d680bd8f8e')
-    return res.send(tweet)
-  } catch (e) {
-    console.log(e)
-    return new HttpException(404, "error in posting Retweet ", e.toString())
+    if (!user) {
+      return res.json({ message: 'user not found' })
+    }
+    const tweet = await Tweet.findOneBy({ tweet_id })
+
+    if (!tweet) {
+      return res.json({ message: 'tweet not found' })
+    }
+    const timeline = await Timeline.findOneBy({ user: { user_id: req.user.user_id } });
+    if (!timeline)
+      return next(new HttpException(404, "timeline not found"));
+    let retweet: Tweet;
+    if (!tweet.source_id) {
+      retweet = Tweet.create({ tweet_body: {}, source: tweet, timeline, user })
+      tweet.retweet_count++;
+      await tweet.save();
+      await retweet.save()
+    } else {
+      const source = await Tweet.findOneBy({ tweet_id: tweet.source_id })
+      if (!source) {
+        return new HttpException(404, "source tweet not found")
+      }
+      retweet = Tweet.create({ tweet_body: {}, source, timeline, user })
+      source.retweet_count++;
+      await source.save();
+      await retweet.save();
+    }
+    await axios.post(fanoutService + `postTweet/${retweet.tweet_id}/${req.user.user_id}`)
+    return res.status(200).json(retweet);
+  } catch (error) {
+    throw new HttpException(404, "something went wrong")
   }
 }
 // export const postRetweetNoBody = async (req: Request, res: Response, next: NextFunction) => {
@@ -329,7 +312,8 @@ export const postTweet = async (req: Request, res: Response, next: NextFunction)
         source_id: tweetRow.source_id,
         source: tweetRow.source,
         user: tweetRow.timeline.user,
-        is_liked: false
+        is_liked: false,
+        is_retweeted: false,
       }
     )
   } catch (error) {
@@ -445,6 +429,7 @@ export const deleteLike = async (req: Request, res: Response, next: NextFunction
     sourceTweet.like_count--;
     await sourceTweet.save()
   }
+  axios.delete(fanoutService + `likes/${tweet_id}/${req.user.user_id}`)
   await tweet.save();
   return res.status(200).json(tweet)
 }
@@ -471,6 +456,7 @@ export const postLike = async (req: Request, res: Response) => {
       sourceTweet.like_count++;
       await sourceTweet.save()
     }
+    axios.post(fanoutService + `likes/${tweet_id}/${user.user_id}`)
     return res.json(like);
   } catch (error) {
     return res.status(400).json({ message: 'error ' + error });

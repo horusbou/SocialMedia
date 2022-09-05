@@ -24,10 +24,12 @@ const gettingTweetData = async (data: string[]) => {
       const user_id = item.split(':')[1];
       const tweet_id = item.split(':')[0];
       const tweet = await Tweet.findOneBy({ tweet_id });
+      if (!tweet)
+        return new Error('tweet not found')
       feed.push(
         {
           ...tweet,
-          source: tweet?.source_id && await Tweet.findOneBy({ tweet_id: tweet?.source_id }),
+          source: tweet.source_id && await Tweet.findOneBy({ tweet_id: tweet.source_id }),
           is_liked: false,
           is_retweeted: false,
           user: omit(await User.findOneBy({ user_id }), 'password')
@@ -45,20 +47,26 @@ export const hydrateTimeline = async (req: Request, res: Response) => {
   if (data.length) {
     const feed = [];
     for (let item of data) {
-      const user_id = item.split(':')[1];
+      const user = item.split(':')[1];
       const tweet_id = item.split(':')[0];
-      const tweet = await Tweet.findOneBy({ tweet_id });
+      const tweet = await Tweet.findOne({ where: { tweet_id }, relations: ['user'] });
+      if (!tweet) {
+        return new Error('404 Error')
+      }
       feed.push(
         {
           ...tweet,
-          source: tweet?.source_id && await Tweet.findOneBy({ tweet_id: tweet?.source_id }),
-          is_liked: false,
+          source: tweet.source_id && await Tweet.findOne({ where: { tweet_id: tweet.source_id }, relations: ['user'] }),
+          is_liked: (await redisClient.lPos('likes', `${user_id}:likes:${tweet.tweet_id}`)) === null ? false : true,
           is_retweeted: false,
-          user: omit(await User.findOneBy({ user_id }), 'password')
+          user: await User.findOneBy({ user_id: tweet.user?.user_id })
+          //user: tweet.source_id ? omit(await User.findOneBy({ user_id: tweet.user?.user_id })) : omit(await User.findOneBy({ user_id: user }), 'password')
         }
       )
 
     }
+    // console.log(await redisClient.lPos('likes', `${user_id}:likes:${feed[0].tweet_id}`))
+    //console.log(await Tweet.findOne({ where: { tweet_id: '17f8c28d-8a7a-4f31-892c-aa39cd86207a' }, relations: ['user'] }))
     return res.send(feed)
   } else {
     const follwingsId = await usersFollowings(user_id);

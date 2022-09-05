@@ -35,7 +35,7 @@ export default function Home() {
       {loading && (<LoadingSpinner />)}
       {/* {!!postData && !loading ?<RetweetItem user={postData[0].user} tweetBody={postData[0].tweet_body} />:null} */}
       {!!postData && !loading
-        ? postData.map((item) => {
+        ? postData.map((item, i) => {
           if (item.source_id === null) {
             return (
               <PostItem
@@ -47,18 +47,19 @@ export default function Home() {
                 retweet={item.retweet_count}
                 comments={item.comments_count}
                 isLiked={item.is_liked}
+                isRetweeted={item.is_retweeted}
               />
 
             )
           } else if (item.source_id !== null && Object.keys(item.tweet_body).length > 0) {
-            return <RetweetItem user={item.user} tweetBody={item.tweet_body} />
+            return <RetweetItem key={item.tweet_id + i} user={item.user} tweetBody={item.tweet_body} source={item.source} />
           }
           else {
             return <RetweetNoBody
               key={item.tweet_id}
               tweet_id={item.tweet_id}
               userRetweeted={item.user}
-              user={item.user}
+              user={item.source.user}
               tweetBody={item.source.tweet_body}
               likes={item.like_count}
               retweet={item.source.retweet_count + item.retweet_count}

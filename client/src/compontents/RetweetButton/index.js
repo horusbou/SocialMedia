@@ -20,7 +20,7 @@ export function RetweetButton({ count = 0, userRetweeted, tweet }) {
         <MenuItem onClick={() => {
           setIsRetweeted(!isRetweeted);
           setretweetCountes(retweetCountes + 1)
-          Client.postRetweet(tweet.tweet_id)
+          Client.postRetweet(tweet.tweet_id, undefined)
         }
         }
           _hover={{ color: "black" }}>

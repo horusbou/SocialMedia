@@ -19,7 +19,7 @@ import { SourceItem } from "../Retweet/sourceItem";
 
 
 export function RetweetItem(props) {
-  const { user, tweetBody } = props
+  const { user, tweetBody, source } = props
   const [isLiked, setLike] = useState(props.isLiked);
   const [isRetweeted, setIsRetweeted] = useState(props.isRetweeted);
   const [likeCountes, setLikeCountes] = useState(props.likes);
@@ -27,7 +27,6 @@ export function RetweetItem(props) {
   const [isEdited, setisEdited] = useState(false);
   const [isMouseOver, setIsMouseOver] = useState(false)
   const history = useHistory();
-
   return (<div className="container">
     <div className={`post-item ${isMouseOver ? 'relative' : ''}`}>
       {isMouseOver ? <HoverUser onMouseLeave={() => setIsMouseOver(false)} username={''} /> : null}
@@ -58,9 +57,10 @@ export function RetweetItem(props) {
             ) : null}
           </div>
           <div className="content-body" onClick={() => history.push("/tweets/" + props.tweet_id)}>
+            <p>{tweetBody.tweet}</p>
             <SourceItem
-              tweetBody={tweetBody}
-              user={user}
+              tweetBody={source.tweet_body}
+              user={source.user}
             />
           </div>
         </div>

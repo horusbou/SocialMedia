@@ -156,12 +156,22 @@ class Client {
   }
 
   static postRetweet(tweet_id, body) {
-    return axios.post('/retweets/' + tweet_id, body, {
-      headers: {
-        'x-refresh': localStorage.getItem('refreshToken'),
-        Authorization: localStorage.getItem('accessToken'),
-      },
-    })
+    console.log(body)
+    if (body === undefined) {
+      return axios.post("/retweets/" + tweet_id, body, {
+        headers: {
+          'x-refresh': localStorage.getItem('refreshToken'),
+          Authorization: localStorage.getItem('accessToken')
+        }
+      })
+    } else {
+      return axios.post('/retweets/body/' + tweet_id, body, {
+        headers: {
+          'x-refresh': localStorage.getItem('refreshToken'),
+          Authorization: localStorage.getItem('accessToken'),
+        },
+      })
+    }
   }
   static deleteRetweet(tweet_id) {
     return axios.delete('/retweets/' + tweet_id, {
