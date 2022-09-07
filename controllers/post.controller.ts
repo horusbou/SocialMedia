@@ -16,7 +16,6 @@ export const getAllTweets = async (req: Request, res: Response, next: NextFuncti
   try {
     const resp = await axios.get(timelineService + `${req.user.user_id}`)
     //const resp = await axios.get(timelineService + '5fbfbd22-8517-49c2-87be-64d680bd8f8e')
-    console.log(resp.data)
     res.send(resp.data)
   } catch (e) {
     console.log(e)
@@ -81,7 +80,6 @@ export const postRetweet = async (req: Request, res: Response, next: NextFunctio
   const { tweet_id } = req.params;
   const user_id = req.user.user_id
   const { tweet_body } = req.body;
-  console.log(tweet_body)
   try {
     const user = await User.findOneBy({ user_id })
 
@@ -89,17 +87,25 @@ export const postRetweet = async (req: Request, res: Response, next: NextFunctio
       return res.json({ message: 'user not found' })
     }
     const tweet = await Tweet.findOneBy({ tweet_id })
-    console.log(tweet, tweet_id)
     if (!tweet) {
       return res.json({ message: 'tweet not found' })
     }
-
     const timeline = await Timeline.findOneBy({ user: { user_id: req.user.user_id } });
     if (!timeline)
       return next(new HttpException(404, "timeline not found"));
 
+    if (tweet.source_id) {
+      const sourceTweet = await Tweet.findOneBy({ tweet_id: tweet.source_id })
+      if (!sourceTweet)
+        return next(new HttpException(404, "source Tweet not found"))
+      const retweet = Tweet.create({ tweet_body, source: sourceTweet, timeline, user })
+      sourceTweet.retweet_count++;
+      await sourceTweet.save();
+      await retweet.save()
+      await axios.post(fanoutService + `postTweet/${retweet.tweet_id}/${req.user.user_id}`)
+      return res.status(200).json(retweet);
+    }
     const retweet = Tweet.create({ tweet_body: tweet_body, source: tweet, timeline, user })
-    console.log(retweet)
     tweet.retweet_count++;
     await tweet.save();
     await retweet.save()
