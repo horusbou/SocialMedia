@@ -82,10 +82,13 @@ export function PostDialog() {
   const [currentPics, setCurrentPics] = useState([]);
   const [maxFileWarning, setMaxFileWarning] = useState(false);
   const { userData: user } = useContext(userContext);
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const cancelRef = useRef()
 
   const handleChange = (evt) => setTweet(evt.target.value);
   const handleSubmit = (evt) => {
     evt.preventDefault();
+    onClose();
     if (currentPics.length) {
       let formData = new FormData();
       formData.append('tweet', tweet);
@@ -112,8 +115,6 @@ export function PostDialog() {
       textareaRef.current.style.height = scrollHeight + 'px';
     }
   }, [tweet]);
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  const cancelRef = useRef()
   return (
     <>
       <Button backgroundColor={colors.pink}

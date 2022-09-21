@@ -286,6 +286,7 @@ export const postTweet = async (req: Request, res: Response, next: NextFunction)
     if (req.files) {
       pictures = (req.files as Express.Multer.File[]).map((file) => file.path);
     }
+    console.log("FILES: [", req.files, "]")
     const { tweet, gifSrc }: { tweet: string, gifSrc: string } = req.body;
     const { user_id } = req.user;
     const user = await User.findOneBy({ user_id });

@@ -26,15 +26,18 @@ export function RetweetButton({ count = 0, userRetweeted, tweet }) {
           _hover={{ color: "black" }}>
           <p>Retweet</p>
         </MenuItem>
-        <MenuItem onClick={() => {
-          onOpen();
-          setIsRetweeted(!isRetweeted);
-          setretweetCountes(retweetCountes + 1)
-        }}
+        <MenuItem
+          onClick={onOpen}
+          // onClick={() => {
+          //   onOpen();
+          //   setIsRetweeted(!isRetweeted);
+          //   setretweetCountes(retweetCountes + 1)
+          // }}
           _hover={{ color: "black" }}>
+          {console.log({ isOpen })}
           <p>Retweet with quote</p>
+          <RetweetPopUp isOpen={isOpen} cancelRef={cancelRef} onClose={onClose} tweet={tweet} />
         </MenuItem>
-        <RetweetPopUp isOpen={isOpen} cancelRef={cancelRef} onClose={onClose} tweet={tweet} />
       </MoreOption>
       :
       <AiOutlineRetweet

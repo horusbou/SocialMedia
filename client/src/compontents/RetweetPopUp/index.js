@@ -31,6 +31,7 @@ export function RetweetPopUp(props) {
     evt.preventDefault();
     Client.postRetweet(props.tweet.tweet_id, { tweet_body: { tweet: retweet } })
     setRetweet('');
+    onClose()
   };
 
   useEffect(() => {
