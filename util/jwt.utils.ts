@@ -1,5 +1,4 @@
 import jwt from 'jsonwebtoken';
-import log from '../logger/log';
 import { privateKey } from './config.utils';
 
 export function sign(object: Object, options?: jwt.SignOptions | undefined) {

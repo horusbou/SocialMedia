@@ -44,6 +44,7 @@ const gettingTweetData = async (data: string[]) => {
 export const hydrateTimeline = async (req: Request, res: Response) => {
   const { user_id } = req.params;
   const data = await redisClient.lRange(user_id, 0, -1)
+  console.log('hydrateTimeline=>', data)
   if (data.length) {
     const feed = [];
     for (let item of data) {
@@ -70,6 +71,7 @@ export const hydrateTimeline = async (req: Request, res: Response) => {
     return res.send(feed)
   } else {
     const follwingsId = await usersFollowings(user_id);
+    console.log('followingsId=>', follwingsId)
     if (follwingsId && follwingsId.length) {
       const data = [];
       for (let follower of follwingsId) {

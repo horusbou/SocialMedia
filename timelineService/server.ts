@@ -1,5 +1,4 @@
 import express from "express"
-import { createServer } from "http";
 import { createConnection } from "typeorm"
 import router from "./routes"
 import { Tweet, Retweet, Like, User, Session, Comment, Timeline, Bookmark, Message, Room } from '../entity'

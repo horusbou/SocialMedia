@@ -32,11 +32,12 @@ export default function Profile(props) {
       setUserLike(data)
     })
   }, [username]);
-  if (shouldRedirectToMessages)
+  if (shouldRedirectToMessages) {
     return <Redirect to={{
       pathname: "/messages",
       state: { user: userData }
     }} />
+  }
   if (isLoading)
     return <div className="main" style={{ display: 'flex', alignItems: 'center' }}>
       <LoadingSpinner />
@@ -109,11 +110,13 @@ export default function Profile(props) {
                   isLiked={item.is_liked}
                 />
               } else {
+                console.log("ITEM=>", item)
                 return (<PostItem
                   key={item.tweet_id}
                   tweet_id={item.tweet_id}
                   userRetweeted={item.user}
-                  user={item.source.timeline.user}
+                  // user={item.source.timeline.user}
+                  user={item.user}
                   tweetBody={item.source.tweet_body}
                   likes={item.source.like_count}
                   retweet={item.source.retweet_count}

@@ -21,7 +21,7 @@ export default function Home() {
     Client.getAllPosts()
       .then((response) => {
         setPostData(response);
-        console.log(response)
+        console.log('posts', response)
       }).then(() => setLoading(false))
       .catch(() => setLoading(true))
   }, []);
@@ -52,7 +52,7 @@ export default function Home() {
 
             )
           } else if (item.source_id !== null && Object.keys(item.tweet_body).length > 0) {
-            console.log('item with retweet',item)
+            console.log('item with retweet', item)
             return <RetweetItem key={item.tweet_id + i} user={item.user} tweetBody={item.tweet_body} source={item.source} />
           }
           else {

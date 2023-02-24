@@ -1,6 +1,6 @@
 import { Response, Request, NextFunction } from 'express';
 import bcrypt from 'bcryptjs';
-import { omit, sample } from 'lodash';
+import { omit } from 'lodash';
 import log from '../logger/log';
 import { writeFile } from 'node:fs/promises'
 import { QueryBuilder, QueryRunner } from 'neogma';
@@ -8,7 +8,7 @@ import neogma from '../util/neo4j';
 import { User as UserNeo4J } from '../entity/UserNeoModel';
 import { validationResult } from 'express-validator';
 import HttpException from '../util/HttpException';
-import { Like, Tweet, User } from '../entity'
+import { Like, User } from '../entity'
 import { UserInterface } from '../util/types'
 import { Like as likeOperator } from "typeorm";
 
@@ -29,6 +29,8 @@ export const createUserWithNeo4j = async (userData: UserInterface) => {
       email: userData.email,
       bio: userData.bio || '',
       userAvatar: userData.userAvatar,
+      followers: 0,
+      following: 0
     });
     await user.save();
   } catch (error) {
@@ -60,7 +62,7 @@ export async function createUserhandler(req: Request, res: Response, next: NextF
   try {
     const user = User.create(userData);
     await user.save();
-    createUserWithNeo4j(user);
+    await createUserWithNeo4j(user);
     return res.send(omit(user, 'password'));
   } catch (error) {
     log.error(error);

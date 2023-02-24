@@ -11,68 +11,68 @@ import { Message } from "./message.entitie";
 
 @Entity('user')
 export class User extends BaseEntity {
-    @PrimaryGeneratedColumn('uuid')
-    user_id: string;
-    @Column({ unique: true })
-    username: string;
-    @Column()
-    firstname: string;
-    @Column()
-    lastname: string;
-    @Column({
-        unique: true
-    })
-    email: string;
-    @Column()
-    password: string;
-    @Column('longtext')
-    userAvatar: string;
-    @Column('longtext')
-    profileBanner: string;
-    @Column({ default: '' })
-    bio: string;
-    @Column({
-        default: false
-    })
-    isActive: boolean
-    @CreateDateColumn()
-    created_at: Date;
-    @UpdateDateColumn()
-    updated_at: Date;
+  @PrimaryGeneratedColumn('uuid')
+  user_id: string;
+  @Column({ unique: true })
+  username: string;
+  @Column()
+  firstname: string;
+  @Column()
+  lastname: string;
+  @Column({
+    unique: true
+  })
+  email: string;
+  @Column()
+  password: string;
+  @Column({ default: '' })
+  userAvatar: string;
+  @Column({ default: '' })
+  profileBanner: string;
+  @Column({ default: '' })
+  bio: string;
+  @Column({
+    default: false
+  })
+  isActive: boolean
+  @CreateDateColumn()
+  created_at: Date;
+  @UpdateDateColumn()
+  updated_at: Date;
 
-    @OneToMany(
-        () => Tweet,
-        tweet => tweet.user
-    )
-    tweets: Tweet[];
+  @OneToMany(
+    () => Tweet,
+    tweet => tweet.user
+  )
+  tweets: Tweet[];
 
-    @OneToMany(
-        () => Comment,
-        comment => comment.user
-    )
-    comments: Comment[];
+  @OneToMany(
+    () => Comment,
+    comment => comment.user
+  )
+  comments: Comment[];
 
-    @OneToMany(
-        () => Room,
-        room => room.participant_1
-    )
-    rooms: Room[]
+  @OneToMany(
+    () => Room,
+    room => room.participant_1
+  )
+  rooms: Room[]
 
-    @OneToMany(() => Retweet, retweet => retweet.user)
-    retweets: Retweet[]
+  @OneToMany(() => Retweet, retweet => retweet.user)
+  retweets: Retweet[]
 
-    @OneToOne(() => Session, session => session.user)
-    session: Session
+  @OneToOne(() => Session, session => session.user)
+  session: Session
 
-    @OneToOne(() => Timeline, timeline => timeline.user)
-    timeline: Timeline
+  @OneToOne(() => Timeline, timeline => timeline.user)
+  timeline: Timeline
 
-    @OneToMany(() => Like, like => like.user)
-    likes: Like[]
+  @OneToMany(() => Like, like => like.user)
+  likes: Like[]
 
-    @OneToMany(() => Message, message => message.user)
-    messages: Message[]
+  @OneToMany(() => Message, message => message.user)
+  messages: Message[]
 
-    @OneToMany(() => Bookmark, bookmark => bookmark.tweet)
-    bookmarks: Bookmark[];
+  @OneToMany(() => Bookmark, bookmark => bookmark.tweet)
+  bookmarks: Bookmark[];
 }

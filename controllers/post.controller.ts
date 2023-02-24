@@ -1,7 +1,7 @@
 import { Response, Request, NextFunction, Router } from 'express';
 import fs from 'fs/promises';
 import path from 'path';
-import { User, Like, Tweet, Retweet, Comment, Timeline } from "../entity"
+import { User, Like, Tweet, Retweet, Comment } from "../entity"
 import HttpException from '../util/HttpException';
 import log from '../logger/log';
 import { at, omit, sortBy } from 'lodash';
@@ -90,22 +90,23 @@ export const postRetweet = async (req: Request, res: Response, next: NextFunctio
     if (!tweet) {
       return res.json({ message: 'tweet not found' })
     }
-    const timeline = await Timeline.findOneBy({ user: { user_id: req.user.user_id } });
-    if (!timeline)
-      return next(new HttpException(404, "timeline not found"));
+    //const timeline = await Timeline.findOneBy({ user: { user_id: req.user.user_id } });
+
+    //if (!timeline)
+    // return next(new HttpException(404, "timeline not found"));
 
     if (tweet.source_id) {
       const sourceTweet = await Tweet.findOneBy({ tweet_id: tweet.source_id })
       if (!sourceTweet)
         return next(new HttpException(404, "source Tweet not found"))
-      const retweet = Tweet.create({ tweet_body, source: sourceTweet, timeline, user })
+      const retweet = Tweet.create({ tweet_body, source: sourceTweet, user })
       sourceTweet.retweet_count++;
       await sourceTweet.save();
       await retweet.save()
       await axios.post(fanoutService + `postTweet/${retweet.tweet_id}/${req.user.user_id}`)
       return res.status(200).json(retweet);
     }
-    const retweet = Tweet.create({ tweet_body: tweet_body, source: tweet, timeline, user })
+    const retweet = Tweet.create({ tweet_body: tweet_body, source: tweet, user })
     tweet.retweet_count++;
     await tweet.save();
     await retweet.save()
@@ -157,12 +158,9 @@ export const postRetweetNoBody = async (req: Request, res: Response, next: NextF
     if (!tweet) {
       return res.json({ message: 'tweet not found' })
     }
-    const timeline = await Timeline.findOneBy({ user: { user_id: req.user.user_id } });
-    if (!timeline)
-      return next(new HttpException(404, "timeline not found"));
     let retweet: Tweet;
     if (!tweet.source_id) {
-      retweet = Tweet.create({ tweet_body: {}, source: tweet, timeline, user })
+      retweet = Tweet.create({ tweet_body: {}, source: tweet, user })
       tweet.retweet_count++;
       await tweet.save();
       await retweet.save()
@@ -171,7 +169,7 @@ export const postRetweetNoBody = async (req: Request, res: Response, next: NextF
       if (!source) {
         return new HttpException(404, "source tweet not found")
       }
-      retweet = Tweet.create({ tweet_body: {}, source, timeline, user })
+      retweet = Tweet.create({ tweet_body: {}, source, user })
       source.retweet_count++;
       await source.save();
       await retweet.save();
@@ -208,11 +206,9 @@ export const profileTweets = async (req: Request, res: Response, next: NextFunct
     return next(new HttpException(404, "user not found"));
   const tweetsOfTimeline = await Tweet.find({
     where: {
-      timeline: {
-        timeline_id: user.timeline.timeline_id
-      }
+      user: { user_id: user.user_id }
     },
-    relations: ['timeline', 'source', 'source.timeline', 'comments'],
+    relations: ['timeline', 'source', 'user', 'source.timeline', 'comments'],
     order: {
       created_at: 'DESC'
     }
@@ -229,7 +225,7 @@ export const profileTweets = async (req: Request, res: Response, next: NextFunct
       updated_at: el.updated_at,
       source_id: el.source_id,
       source: el.source,
-      user: el.timeline.user,
+      user: el.user,
       is_liked: (await Like.findOneBy({ tweet: { tweet_id: el.tweet_id }, user: { user_id: req.user.user_id } })) !== null ? true : false,
       is_retweeted: true
     })
@@ -248,16 +244,12 @@ export const postTweet2 = async (req: Request, res: Response) => {
     const user = await User.findOneBy({ user_id });
     if (!user)
       return new HttpException(404, "user not found")
-    const timeline = await Timeline.findOneBy({ user: { user_id } });
-    if (!timeline)
-      return new HttpException(404, "timeline not found")
     const tweetRow = Tweet.create({
       tweet_body: {
         tweet: tweet ? tweet : undefined,
         gifSrc: gifSrc ? gifSrc : undefined,
         filesSrc: pictures ? pictures : undefined
       },
-      timeline,
       user
     });
     await tweetRow.save();
@@ -286,16 +278,13 @@ export const postTweet = async (req: Request, res: Response, next: NextFunction)
     if (req.files) {
       pictures = (req.files as Express.Multer.File[]).map((file) => file.path);
     }
-    console.log("FILES: [", req.files, "]")
+
     const { tweet, gifSrc }: { tweet: string, gifSrc: string } = req.body;
     const { user_id } = req.user;
     const user = await User.findOneBy({ user_id });
     if (!user)
       return res.json({ message: 'user not found!' });
 
-    const timeline = await Timeline.findOneBy({ user: { user_id } });
-    if (!timeline)
-      return res.json({ message: 'user not found!' });
 
     const tweetRow = Tweet.create({
       tweet_body: {
@@ -303,7 +292,6 @@ export const postTweet = async (req: Request, res: Response, next: NextFunction)
         gifSrc: gifSrc ? gifSrc : undefined,
         filesSrc: pictures ? pictures : undefined
       },
-      timeline,
       user
     });
     await tweetRow.save();
@@ -318,12 +306,13 @@ export const postTweet = async (req: Request, res: Response, next: NextFunction)
         updated_at: tweetRow.updated_at,
         source_id: tweetRow.source_id,
         source: tweetRow.source,
-        user: tweetRow.timeline.user,
+        user: tweetRow.user,
         is_liked: false,
         is_retweeted: false,
       }
     )
   } catch (error) {
+    console.log("error", error)
     return res.status(500).json({ error })
   }
 };

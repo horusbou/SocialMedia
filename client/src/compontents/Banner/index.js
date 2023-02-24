@@ -3,6 +3,7 @@ import { BsCamera } from "react-icons/bs"
 import { userContext } from '../context';
 import Client from "../../services/Client";
 import toBlob from "canvas-to-blob";
+import uploadFileToBlob from "../../azure-storage-blob"
 
 import {
   Box,
@@ -55,7 +56,8 @@ export const Banner = ({ username, userData }) => {
         croppedImg: croppedImg
       });
       let formData = new FormData();
-      formData.append('file', blobImage, 'myimage.png')
+      //formData.append('file', blobImage, 'myimage.png')
+      uploadFileToBlob(blobImage, userConnected.user_id, "Banner")
       Client.changeBanner(formData)
     }
   };

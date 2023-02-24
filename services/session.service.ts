@@ -48,10 +48,11 @@ export async function reIssueAccessToken({
     if (!decoded || !get(decoded, 'session_id')) return false;
 
     //get session
-    const session = await Session.findOne({ where: { session_id: get(decoded, 'session_id') }, relations: ['user'] });
+    const session = await Session.findOne({
+        where: { session_id: get(decoded, 'session_id') }, relations: ['user']
+    });
     if (!session)
         return false;
-    if (!session) return false;
     if (!session.valid) return false;
 
     const user = await User.findOneBy({ user_id: session.user.user_id });

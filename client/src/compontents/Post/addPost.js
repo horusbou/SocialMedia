@@ -96,14 +96,13 @@ export const AddPost = (props) => {
       //new way
       for await (let file of currentFiles)
         uploadFileToBlob(file, user.user_id)
-      console.log('currentFiles', currentFiles[0])
     } else {
       Client.postPost({
         tweet,
         gifSrc,
       }).then(res => {
         props.addToPost(res.data)
-      });
+      }).catch(console.log);
     }
 
     setTweet('');
